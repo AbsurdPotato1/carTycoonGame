@@ -23,7 +23,7 @@ public class Player extends Entity{
     }
     public void setDefaultValues(){
         worldX = 50;
-        worldY = 50;
+        worldY = 500;
         speedHor = 2 * 60.0 / gp.FPS;
         speedVert = 2 * 60.0 / gp.FPS;
     }
@@ -36,56 +36,6 @@ public class Player extends Entity{
         }
     }
     public void snapPlayerLoc() {
-        if (upCollisionOn) {
-            // Snap player to the nearest tile below
-            int playerTopY = worldY; // Calculate the bottom Y-coordinate of the player
-            int nearestTileAboveY = ((playerTopY) / gp.tileSize) * gp.tileSize; // Calculate nearest tile above
-
-            // Calculate the distance to the nearest tile above
-            int nearestTileBelowY = nearestTileAboveY + gp.tileSize;
-            int distToTileAbove = worldY - nearestTileAboveY; // should always be positive
-
-            // Calculate the distance to the nearest tile below
-            int distToTileBelow = nearestTileBelowY - worldY;
-
-            // Snap to the nearest tile (above or below)
-            if(distToTileAbove < 6){
-                worldY = (nearestTileAboveY + 6) / gp.tileSize * gp.tileSize;
-            }else if(distToTileBelow < 6){
-                worldY = (nearestTileBelowY + 6) / gp.tileSize * gp.tileSize;
-            }
-//            if (distToTileAbove < distToTileBelow) {
-//                worldY = (nearestTileAboveY + 6) / gp.tileSize * gp.tileSize;
-//            } else {
-//                worldY = (nearestTileBelowY + 6) / gp.tileSize * gp.tileSize;
-//            }
-            gp.cChecker.checkTile(this);
-        }
-        if (rightCollisionOn) {
-            // Snap player to the nearest tile below
-            int playerRightX = worldX + solidArea.x + solidArea.width; // Calculate the right X-coordinate of the player
-            int nearestTileRightX = ((playerRightX + gp.tileSize - 1) / gp.tileSize) * gp.tileSize; // Calculate nearest tile right
-
-            // Calculate the distance to the nearest tile above
-            int nearestTileLeftX = nearestTileRightX - gp.tileSize;
-            int distToTileLeft = worldX + solidArea.x + solidArea.width - nearestTileLeftX; // should always be positive
-
-            // Calculate the distance to the nearest tile below
-            int distToTileRight = nearestTileRightX - (worldX + solidArea.width);
-
-            // Snap to the nearest tile (above or below)
-            if(distToTileLeft < 6){
-                worldX = (nearestTileLeftX + 6) / gp.tileSize * gp.tileSize - solidArea.width;
-            }else if(distToTileRight < 6){
-                worldX = (nearestTileRightX + 6) / gp.tileSize * gp.tileSize - solidArea.width;
-            }
-//            if (distToTileLeft < distToTileRight) {
-//                worldX = (nearestTileLeftX + 6) / gp.tileSize * gp.tileSize - solidArea.width;
-//            } else {
-//                worldX = (nearestTileRightX + 6) / gp.tileSize * gp.tileSize - solidArea.width;
-//            }
-            gp.cChecker.checkTile(this);
-        }
         if (downCollisionOn) {
             // Snap player to the nearest tile below
             int playerBottomY = worldY + solidArea.y + solidArea.height; // Calculate the bottom Y-coordinate of the player
@@ -104,13 +54,47 @@ public class Player extends Entity{
             }else if(distToTileBelow < 6){
                 worldY = (nearestTileBelowY + 6) / gp.tileSize * gp.tileSize - solidArea.height;;
             }
-//            if (distToTileAbove < distToTileBelow) {
-//                worldY = (nearestTileAboveY + 6) / gp.tileSize * gp.tileSize - solidArea.height;
-//            } else {
-//                worldY = (nearestTileBelowY + 6) / gp.tileSize * gp.tileSize - solidArea.height;
-//            }
-            gp.cChecker.checkTile(this);
         }
+        if (upCollisionOn) {
+            // Snap player to the nearest tile below
+            int playerTopY = worldY; // Calculate the bottom Y-coordinate of the player
+            int nearestTileAboveY = ((playerTopY) / gp.tileSize) * gp.tileSize; // Calculate nearest tile above
+
+            // Calculate the distance to the nearest tile above
+            int nearestTileBelowY = nearestTileAboveY + gp.tileSize;
+            int distToTileAbove = worldY - nearestTileAboveY; // should always be positive
+
+            // Calculate the distance to the nearest tile below
+            int distToTileBelow = nearestTileBelowY - worldY;
+
+            // Snap to the nearest tile (above or below)
+            if(distToTileAbove < 6){
+                worldY = (nearestTileAboveY + 6) / gp.tileSize * gp.tileSize;
+            }else if(distToTileBelow < 6){
+                worldY = (nearestTileBelowY + 6) / gp.tileSize * gp.tileSize;
+            }
+        }
+
+        if (rightCollisionOn) {
+            // Snap player to the nearest tile below
+            int playerRightX = worldX + solidArea.x + solidArea.width; // Calculate the right X-coordinate of the player
+            int nearestTileRightX = ((playerRightX + gp.tileSize - 1) / gp.tileSize) * gp.tileSize; // Calculate nearest tile right
+
+            // Calculate the distance to the nearest tile above
+            int nearestTileLeftX = nearestTileRightX - gp.tileSize;
+            int distToTileLeft = worldX + solidArea.x + solidArea.width - nearestTileLeftX; // should always be positive
+
+            // Calculate the distance to the nearest tile below
+            int distToTileRight = nearestTileRightX - (worldX + solidArea.width);
+
+            // Snap to the nearest tile (above or below)
+            if(distToTileLeft < 6){
+                worldX = (nearestTileLeftX + 6) / gp.tileSize * gp.tileSize - solidArea.width;
+            }else if(distToTileRight < 6){
+                worldX = (nearestTileRightX + 6) / gp.tileSize * gp.tileSize - solidArea.width;
+            }
+        }
+
         if (leftCollisionOn) {
             // Snap player to the nearest tile below
             int playerLeftX = worldX; // Calculate the left X-coordinate of the player
@@ -129,12 +113,6 @@ public class Player extends Entity{
             }else if(distToTileRight < 6){
                 worldX = (nearestTileRightX + 6) / gp.tileSize * gp.tileSize;
             }
-//            if (distToTileLeft < distToTileRight) {
-//                worldX = (nearestTileLeftX + 6) / gp.tileSize * gp.tileSize;
-//            } else {
-//                worldX = (nearestTileRightX + 6) / gp.tileSize * gp.tileSize;
-//            }
-            gp.cChecker.checkTile(this);
         }
     }
     public void update(){
@@ -164,12 +142,14 @@ public class Player extends Entity{
         downCollisionOn = false;
         leftCollisionOn = false;
         gp.cChecker.checkTile(this);
-        // TODO: player locks to one pixel higher than they should on downCollision if left or right movement is happening, can't jump as a result.
         // IF COLLISION IS FALSE, PLAYER CAN MOVE
 
-        snapPlayerLoc();
+
         System.out.println("X: " + worldX + ", Y: " + worldY);
-//        System.out.println(upCollisionOn);
+        System.out.print("UP: " + upCollisionOn);
+        System.out.print(", RIGHT: " + rightCollisionOn);
+        System.out.print(", DOWN: " + downCollisionOn);
+        System.out.println(", LEFT: " + leftCollisionOn);
         if(!upCollisionOn) {
             if (keyH.jumpPressed) {
                 worldY -= speedVert;
@@ -188,8 +168,11 @@ public class Player extends Entity{
         if(!leftCollisionOn) {
             if (keyH.leftPressed) {
                 worldX -= speedHor;
+//                System.out.println("HI");
             }
         }
+        gp.cChecker.checkTile(this);
+        snapPlayerLoc();
     }
 
     public void draw(Graphics2D g2){
