@@ -21,8 +21,6 @@ public class CollisionChecker {
         int entityTopRow = (entityTopWorldY)/gp.tileSize;
         int entityBottomRow = (entityBottomWorldY-1)/gp.tileSize;
         int tileNum1;
-        // TODO: PROBLEM DISCOVERED HERE: leftcol / rightcol and toprow / bottomrow correspond incorrectly - movement incorrect on walls during multi-direction
-        // DISCOVERY: GLOBAL VARIABLERS entityLeftCol, entityRightCol, entityTopRow, entityBottomRow are being reassigned during collision, thus issues occur.
         if(entity.direction[0]){ // up
             entityTopRow  = (int)((entityTopWorldY - entity.speedVert)/gp.tileSize);
             System.out.println("leftCol - rightCol: " + entityLeftCol + " " + entityRightCol);
