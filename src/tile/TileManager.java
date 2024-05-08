@@ -22,7 +22,7 @@ public class TileManager {
         mapTileNum = new int[gp.maxWorldRow][gp.maxWorldCol];
 
         getTileImage();
-        loadMap("maps/map01.txt");
+        loadMap("maps/map02.txt");
     }
 
     public void getTileImage(){
@@ -97,16 +97,16 @@ public class TileManager {
 
             int worldX = worldCol * gp.tileSize;
             int worldY = worldRow * gp.tileSize;
-//            int screenX = worldX - gp.player.worldX + gp.player.screenX;
-//            int screenY = worldY - gp.player.worldY + gp.player.screenY;
+            int screenX = worldX - gp.player.worldX + gp.player.screenX;
+            int screenY = worldY - gp.player.worldY + gp.player.screenY;
 
-//            if(worldX > gp.player.worldX - gp.player.screenX - gp.tileSize &&
-//               worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
-//               worldY > gp.player.worldY - gp.player.screenY - gp.tileSize &&
-//               worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
-//                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
-//            }
-            g2.drawImage(tile[tileNum].image, worldX, worldY, gp.tileSize, gp.tileSize, null);
+            if(worldX > gp.player.worldX - gp.player.screenX - gp.tileSize &&
+               worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
+               worldY > gp.player.worldY - gp.player.screenY - gp.tileSize &&
+               worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
+                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            }
+            g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
             worldCol++;
 //            x += gp.tileSize;

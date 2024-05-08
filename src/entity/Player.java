@@ -12,9 +12,14 @@ public class Player extends Entity{
     GamePanel gp;
     KeyHandler keyH;
 
+    public final int screenX, screenY;
+
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
+
+        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
+        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
         solidArea = new Rectangle(0, 0, gp.tileSize, gp.tileSize); //436 /4
 
@@ -145,11 +150,11 @@ public class Player extends Entity{
         // IF COLLISION IS FALSE, PLAYER CAN MOVE
 
 
-        System.out.println("X: " + worldX + ", Y: " + worldY);
-        System.out.print("UP: " + upCollisionOn);
-        System.out.print(", RIGHT: " + rightCollisionOn);
-        System.out.print(", DOWN: " + downCollisionOn);
-        System.out.println(", LEFT: " + leftCollisionOn);
+//        System.out.println("X: " + worldX + ", Y: " + worldY);
+//        System.out.print("UP: " + upCollisionOn);
+//        System.out.print(", RIGHT: " + rightCollisionOn);
+//        System.out.print(", DOWN: " + downCollisionOn);
+//        System.out.println(", LEFT: " + leftCollisionOn);
         if(!upCollisionOn) {
             if (keyH.jumpPressed) {
                 worldY -= speedVert;
@@ -180,7 +185,7 @@ public class Player extends Entity{
         BufferedImage image = null;
 
         image = car1;
-        g2.drawImage(image, (int)worldX, (int)worldY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
 
     }

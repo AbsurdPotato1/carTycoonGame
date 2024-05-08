@@ -23,7 +23,7 @@ public class CollisionChecker {
         int tileNum1;
         if(entity.direction[0]){ // up
             entityTopRow  = (int)((entityTopWorldY - entity.speedVert)/gp.tileSize);
-            System.out.println("leftCol - rightCol: " + entityLeftCol + " " + entityRightCol);
+//            System.out.println("leftCol - rightCol: " + entityLeftCol + " " + entityRightCol);
             for(int i = entityLeftCol; i <= entityRightCol; i++){
                 tileNum1 = gp.tileM.mapTileNum[entityTopRow][i];
                 if(gp.tileM.tile[tileNum1].collision) {
@@ -36,7 +36,7 @@ public class CollisionChecker {
         entityTopRow = (entityTopWorldY)/gp.tileSize;
         if(entity.direction[1]){ // right
             entityRightCol  = (int)((entityRightWorldX + entity.speedHor)/gp.tileSize);
-            System.out.println("topRow - BottomRow: " + entityTopRow + " " + entityBottomRow);
+//            System.out.println("topRow - BottomRow: " + entityTopRow + " " + entityBottomRow);
             for(int i = entityTopRow; i <= entityBottomRow; i++) {
                 tileNum1 = gp.tileM.mapTileNum[i][entityRightCol];
                 if(gp.tileM.tile[tileNum1].collision) {
@@ -48,7 +48,7 @@ public class CollisionChecker {
         entityRightCol = (entityRightWorldX-1)/gp.tileSize;
         if(entity.direction[3]){ // left
             entityLeftCol  = (int)((entityLeftWorldX - entity.speedHor)/gp.tileSize);
-            System.out.println("topRow - BottomRow: " + entityTopRow + " " + entityBottomRow);
+//            System.out.println("topRow - BottomRow: " + entityTopRow + " " + entityBottomRow);
             for(int i = entityTopRow; i <= entityBottomRow; i++) {
 
                 tileNum1 = gp.tileM.mapTileNum[i][entityLeftCol];
@@ -61,7 +61,7 @@ public class CollisionChecker {
         entityLeftCol = (entityLeftWorldX)/gp.tileSize;
         if(entity.direction[2]){ // bottom
             entityBottomRow  = (int)((entityBottomWorldY + entity.speedVert)/gp.tileSize); // - entity.curUpSpeed is because it will be negative - not positive like other variables.
-            System.out.println("leftCol - rightCol: " + entityLeftCol + " " + entityRightCol);
+//            System.out.println("leftCol - rightCol: " + entityLeftCol + " " + entityRightCol);
             for(int i = entityLeftCol; i <= entityRightCol; i++){
                 tileNum1 = gp.tileM.mapTileNum[entityBottomRow][i];
                 if(gp.tileM.tile[tileNum1].collision) {
