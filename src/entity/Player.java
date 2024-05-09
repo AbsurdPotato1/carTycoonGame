@@ -21,7 +21,7 @@ public class Player extends Entity{
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
-        solidArea = new Rectangle(0, 0, gp.tileSize, gp.tileSize); //436 /4
+        solidArea = new Rectangle(8, 8 , gp.tileSize - 16, gp.tileSize - 8); //436 /4
 
         setDefaultValues();
         getPlayerImage();
@@ -150,7 +150,7 @@ public class Player extends Entity{
         // IF COLLISION IS FALSE, PLAYER CAN MOVE
 
 
-//        System.out.println("X: " + worldX + ", Y: " + worldY);
+        System.out.println("X: " + worldX + ", Y: " + worldY);
 //        System.out.print("UP: " + upCollisionOn);
 //        System.out.print(", RIGHT: " + rightCollisionOn);
 //        System.out.print(", DOWN: " + downCollisionOn);
