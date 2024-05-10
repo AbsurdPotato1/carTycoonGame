@@ -14,7 +14,7 @@ public class Player extends Entity{
 
     public final int screenX, screenY;
     int numCopper = 0; // change to inventory in future
-
+    long lastPickUpTime = System.nanoTime();
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
         this.keyH = keyH;
@@ -123,6 +123,28 @@ public class Player extends Entity{
             }
         }
     }
+    public void pickUpObject(int i){
+        long currentTime;
+        currentTime = System.nanoTime();
+        long pickUpInterval = 5;
+        if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // last pickup >= 5 frames ago? -- TODO: seems to be going 6 frames (10 items / sec)
+            lastPickUpTime = currentTime;
+            if(i != 999){
+
+                String objectName = gp.obj[i].name;
+
+                if(objectName.equals("copperOre")){
+                    numCopper++;
+                    gp.obj[i] = null;
+                    System.out.println(numCopper);
+                }
+                else if(objectName.equals("chest")){
+                    if(numCopper > 0)numCopper--;
+                }
+
+            }
+        }
+    }
     public void update(){
         if(keyH.jumpPressed){
             direction[0] = true;
@@ -156,7 +178,7 @@ public class Player extends Entity{
         int objIndex = gp.cChecker.checkObject(this, true);
         pickUpObject(objIndex);
 
-
+//        System.out.println(numCopper);
 //        System.out.println("X: " + worldX + ", Y: " + worldY);
 //        System.out.print("UP: " + upCollisionOn);
 //        System.out.print(", RIGHT: " + rightCollisionOn);
@@ -187,23 +209,7 @@ public class Player extends Entity{
         snapPlayerLoc();
     }
 
-    public void pickUpObject(int i){
-        if(i != 999){
 
-            String objectName = gp.obj[i].name;
-
-            if(objectName.equals("copperOre")){
-                numCopper++;
-                gp.obj[i] = null;
-                System.out.println(numCopper);
-            }
-            else if(objectName.equals("chest")){
-                if(numCopper > 0)numCopper--;
-//                System.out.println("bonk");
-            }
-
-        }
-    }
 
     public void draw(Graphics2D g2){
 

@@ -82,51 +82,57 @@ public class CollisionChecker {
                 gp.obj[i].solidArea.x = gp.obj[i].worldX + gp.obj[i].solidArea.x; // move obj solidArea temporarily
                 gp.obj[i].solidArea.y = gp.obj[i].worldY + gp.obj[i].solidArea.y; // move obj solidArea temporarily
 
-                if(entity.direction[0]){ // up
+                if(entity.direction[0]) { // up
                     entity.solidArea.y -= entity.speedVert; // move solidArea to next frame position temporarily
-                    if(entity.solidArea.intersects(gp.obj[i].solidArea)){ // if touching
-                        if(gp.obj[i].collision) { // if object is collide-able
-                            entity.upCollisionOn = true;
-                        }
-                        if(player){
-                            index = i; // return index of object that is collided with
-                        }
+                }
+                if(entity.solidArea.intersects(gp.obj[i].solidArea)){ // if touching
+                    if(gp.obj[i].collision) { // if object is collide-able
+                        entity.upCollisionOn = true;
                     }
+                    if(player){
+                        index = i; // return index of object that is collided with
+                    }
+                }
+                if(entity.direction[0]) {
                     entity.solidArea.y += entity.speedVert; // reverting changes -- only works if speed DOES NOT change
                 }
-                if(entity.direction[1]){ // right
+                if(entity.direction[1]) { // right
                     entity.solidArea.x += entity.speedHor;
-                    if(entity.solidArea.intersects(gp.obj[i].solidArea)){
-                        if(gp.obj[i].collision) {
-                            entity.rightCollisionOn = true;
-                        }
-                        if(player){
-                            index = i;
-                        }
+                }
+                if(entity.solidArea.intersects(gp.obj[i].solidArea)){
+                    if(gp.obj[i].collision) {
+                        entity.rightCollisionOn = true;
                     }
+                    if(player){
+                        index = i;
+                    }
+                }
+                if(entity.direction[0]) {
                     entity.solidArea.x -= entity.speedHor;
                 }
-                if(entity.direction[2]){ // down
+                if(entity.direction[2]) { // down
                     entity.solidArea.y += entity.speedVert;
-                    if(entity.solidArea.intersects(gp.obj[i].solidArea)){
-                        if(gp.obj[i].collision) {
-                            entity.downCollisionOn = true;
-                        }
-                        if(player){
-                            index = i;
-                        }
+                }
+                if(entity.solidArea.intersects(gp.obj[i].solidArea)){
+                    if(gp.obj[i].collision) {
+                        entity.downCollisionOn = true;
                     }
+                    if(player){
+                        index = i;
+                    }
+                }
+                if(entity.direction[2]) {
                     entity.solidArea.y -= entity.speedVert;
                 }
-                if(entity.direction[3]){ // left
+                if(entity.direction[3]) { // left
                     entity.solidArea.x -= entity.speedHor;
-                    if(entity.solidArea.intersects(gp.obj[i].solidArea)){
-                        if(gp.obj[i].collision) {
-                            entity.leftCollisionOn = true;
-                        }
-                        if(player){
-                            index = i;
-                        }
+                }
+                if(entity.solidArea.intersects(gp.obj[i].solidArea)){
+                    if(gp.obj[i].collision) {
+                        entity.leftCollisionOn = true;
+                    }
+                    if(player){
+                        index = i;
                     }
                 }
                 entity.solidArea.x = entity.solidAreaDefaultX;
