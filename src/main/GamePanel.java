@@ -38,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     public Player player = new Player(this, keyH);
+    public UI ui = new UI(this);
     public SuperObject[] obj = new SuperObject[100]; // display up to 10 objects at the same time
 
 //    int player1X = 1024;
@@ -114,6 +115,8 @@ public class GamePanel extends JPanel implements Runnable {
         }
         // Player
         player.draw(g2);
+
+        ui.draw(g2);
 
         g2.dispose(); // saves memory (optimization)
     }

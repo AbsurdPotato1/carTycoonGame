@@ -13,7 +13,7 @@ public class Player extends Entity{
     KeyHandler keyH;
 
     public final int screenX, screenY;
-    int numCopper = 0; // change to inventory in future
+    public int numCopper = 0; // change to inventory in future
     long lastPickUpTime = System.nanoTime();
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
@@ -22,8 +22,8 @@ public class Player extends Entity{
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
-//        solidArea = new Rectangle(8, 8 , gp.tileSize - 16, gp.tileSize - 8); // sets hitbox - 8 pixels from left, right, and top of sprite, i.e. hitbox is 32x40
-        solidArea = new Rectangle(0, 0, gp.tileSize, gp.tileSize); // use for testing
+        solidArea = new Rectangle(8, 8 , gp.tileSize - 16, gp.tileSize - 8); // sets hitbox - 8 pixels from left, right, and top of sprite, i.e. hitbox is 32x40
+//        solidArea = new Rectangle(0, 0, gp.tileSize, gp.tileSize); // use for testing
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         setDefaultValues();
