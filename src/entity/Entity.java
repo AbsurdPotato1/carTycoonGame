@@ -15,7 +15,8 @@ public class Entity {
     public BufferedImage car1;
     public int spriteCounter = 0;
     public int spriteNum = 1;
-    public Rectangle solidArea;
+    public Rectangle solidArea; // solidArea.x and solidArea.y may be modified TEMPORARILY in CollisionChecker -- thus solidAreaDefaultX and Y exist
+    public int solidAreaDefaultX, solidAreaDefaultY; // the normal positions of solidArea
     public boolean upCollisionOn = false;
     public boolean rightCollisionOn = false;
     public boolean downCollisionOn = false;

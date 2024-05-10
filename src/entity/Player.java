@@ -13,6 +13,7 @@ public class Player extends Entity{
     KeyHandler keyH;
 
     public final int screenX, screenY;
+    int numCopper = 0; // change to inventory in future
 
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
@@ -21,8 +22,10 @@ public class Player extends Entity{
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
-        solidArea = new Rectangle(8, 8 , gp.tileSize - 16, gp.tileSize - 8); //436 /4
-
+//        solidArea = new Rectangle(8, 8 , gp.tileSize - 16, gp.tileSize - 8); // sets hitbox - 8 pixels from left, right, and top of sprite, i.e. hitbox is 32x40
+        solidArea = new Rectangle(0, 0, gp.tileSize, gp.tileSize); // use for testing
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
         setDefaultValues();
         getPlayerImage();
     }
@@ -149,12 +152,16 @@ public class Player extends Entity{
         gp.cChecker.checkTile(this);
         // IF COLLISION IS FALSE, PLAYER CAN MOVE
 
+        gp.cChecker.checkTile(this);
+        int objIndex = gp.cChecker.checkObject(this, true);
+        pickUpObject(objIndex);
+
 
         System.out.println("X: " + worldX + ", Y: " + worldY);
-//        System.out.print("UP: " + upCollisionOn);
-//        System.out.print(", RIGHT: " + rightCollisionOn);
-//        System.out.print(", DOWN: " + downCollisionOn);
-//        System.out.println(", LEFT: " + leftCollisionOn);
+        System.out.print("UP: " + upCollisionOn);
+        System.out.print(", RIGHT: " + rightCollisionOn);
+        System.out.print(", DOWN: " + downCollisionOn);
+        System.out.println(", LEFT: " + leftCollisionOn);
         if(!upCollisionOn) {
             if (keyH.jumpPressed) {
                 worldY -= speedVert;
@@ -178,6 +185,24 @@ public class Player extends Entity{
         }
         gp.cChecker.checkTile(this);
         snapPlayerLoc();
+    }
+
+    public void pickUpObject(int i){
+        if(i != 999){
+
+            String objectName = gp.obj[i].name;
+
+            if(objectName.equals("copperOre")){
+                numCopper++;
+                gp.obj[i] = null;
+                System.out.println(numCopper);
+            }
+            else if(objectName.equals("chest")){
+                if(numCopper > 0)numCopper--;
+//                System.out.println("bonk");
+            }
+
+        }
     }
 
     public void draw(Graphics2D g2){

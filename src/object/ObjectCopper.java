@@ -11,5 +11,8 @@ public class ObjectCopper extends SuperObject {
         } catch(IOException e){
             e.printStackTrace();
         }
+
+
+//        solidAreaDefaultY = 0;
     }
 }
