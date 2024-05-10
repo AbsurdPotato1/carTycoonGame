@@ -157,11 +157,11 @@ public class Player extends Entity{
         pickUpObject(objIndex);
 
 
-        System.out.println("X: " + worldX + ", Y: " + worldY);
-        System.out.print("UP: " + upCollisionOn);
-        System.out.print(", RIGHT: " + rightCollisionOn);
-        System.out.print(", DOWN: " + downCollisionOn);
-        System.out.println(", LEFT: " + leftCollisionOn);
+//        System.out.println("X: " + worldX + ", Y: " + worldY);
+//        System.out.print("UP: " + upCollisionOn);
+//        System.out.print(", RIGHT: " + rightCollisionOn);
+//        System.out.print(", DOWN: " + downCollisionOn);
+//        System.out.println(", LEFT: " + leftCollisionOn);
         if(!upCollisionOn) {
             if (keyH.jumpPressed) {
                 worldY -= speedVert;
