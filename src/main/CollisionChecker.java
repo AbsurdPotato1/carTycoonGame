@@ -73,7 +73,7 @@ public class CollisionChecker {
         entityBottomRow = (entityBottomWorldY-1)/gp.tileSize;
     }
     public int checkObject(Entity entity, boolean player){ // args: entity - entity to check collision with; player - true if entity is player, false if other (NPC, etc.)
-        int index = 999;
+        int index = 99999;
         for(int i = 0; i < gp.obj.length; i++){ // using for loop is technically inefficient - maybe do search pruning (only nearby objects) if performance is impacted
             if(gp.obj[i] != null){
                 entity.solidArea.x = entity.worldX + entity.solidArea.x; // move entity solidArea temporarily
@@ -94,7 +94,7 @@ public class CollisionChecker {
                     }
                 }
                 if(entity.direction[0]) {
-                    entity.solidArea.y += entity.speedVert; // reverting changes -- only works if speed DOES NOT change
+                    entity.solidArea.y += entity.speedVert; // reverting changes - works since speed DOES NOT change
                 }
                 if(entity.direction[1]) { // right
                     entity.solidArea.x += entity.speedHor;
@@ -107,7 +107,7 @@ public class CollisionChecker {
                         index = i;
                     }
                 }
-                if(entity.direction[0]) {
+                if(entity.direction[1]) {
                     entity.solidArea.x -= entity.speedHor;
                 }
                 if(entity.direction[2]) { // down

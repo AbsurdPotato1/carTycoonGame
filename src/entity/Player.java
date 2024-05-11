@@ -129,18 +129,19 @@ public class Player extends Entity{
         long pickUpInterval = 5;
         if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // last pickup >= 5 frames ago? -- TODO: seems to be going 6 frames (10 items / sec)
             lastPickUpTime = currentTime;
-            if(i != 999){
+            if(i != 99999){
 
                 String objectName = gp.obj[i].name;
 
                 if(objectName.equals("copperOre")){
+                    gp.playSE(1); // sound effect
                     numCopper++;
                     gp.obj[i] = null;
                     System.out.println(numCopper);
                 }
-                else if(objectName.equals("chest")){
-                    if(numCopper > 0)numCopper--;
-                }
+//                else if(objectName.equals("chest")){
+//                    if(numCopper > 0)numCopper--;
+//                }
 
             }
         }
