@@ -3,8 +3,9 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 
+import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -133,15 +134,18 @@ public class Player extends Entity{
 
                 String objectName = gp.obj[i].name;
 
-                if(objectName.equals("copperOre")){
-                    gp.playSE(1); // sound effect
-                    numCopper++;
-                    gp.obj[i] = null;
-                    System.out.println(numCopper);
-                }
-//                else if(objectName.equals("chest")){
-//                    if(numCopper > 0)numCopper--;
-//                }
+                switch(objectName){
+                    case "copperOre":
+                        gp.playSE(1); // sound effect
+                        numCopper++;
+                        gp.obj[i] = null;
+                        gp.ui.showMessage("You got a copper ore!");
+                        break;
+                    case "chest":
+                        gp.ui.showMessage("L bozo chests don't work yet");
+                        break;
+
+                    }
 
             }
         }

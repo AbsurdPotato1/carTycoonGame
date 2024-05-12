@@ -3,8 +3,13 @@ import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 // this class will display the window
 public class GamePanel extends JPanel implements Runnable {
