@@ -144,4 +144,108 @@ public class CollisionChecker {
 
         return index;
     }
+    // NPC or Monsters
+    public int checkEntity(Entity entity, Entity[] target){
+        int index = 99999;
+        for(int i = 0; i < target.length; i++){ // using for loop is technically inefficient - maybe do search pruning (only nearby objects) if performance is impacted
+            if(target[i] != null){
+                entity.solidArea.x = (int)entity.worldX + entity.solidArea.x; // move entity solidArea temporarily
+                entity.solidArea.y = (int)entity.worldY + entity.solidArea.y; // move entity solidArea temporarily
+
+                target[i].solidArea.x = target[i].worldX + target[i].solidArea.x; // move obj solidArea temporarily
+                target[i].solidArea.y = target[i].worldY + target[i].solidArea.y; // move obj solidArea temporarily
+
+                if(entity.direction[0]) { // up
+                    entity.solidArea.y -= entity.speedVert; // move solidArea to next frame position temporarily
+                }
+                if(entity.solidArea.intersects(target[i].solidArea)){ // if touching
+                    entity.upCollisionOn = true;
+                    index = i;
+                }
+                if(entity.direction[0]) {
+                    entity.solidArea.y += entity.speedVert; // reverting changes - works since speed DOES NOT change
+                }
+                if(entity.direction[1]) { // right
+                    entity.solidArea.x += entity.speedHor;
+                }
+                if(entity.solidArea.intersects(target[i].solidArea)){
+                    entity.rightCollisionOn = true;
+                    index = i;
+                }
+                if(entity.direction[1]) {
+                    entity.solidArea.x -= entity.speedHor;
+                }
+                if(entity.direction[2]) { // down
+                    entity.solidArea.y += entity.speedVert;
+                }
+                if(entity.solidArea.intersects(target[i].solidArea)){
+                    entity.downCollisionOn = true;
+                    index = i;
+                }
+                if(entity.direction[2]) {
+                    entity.solidArea.y -= entity.speedVert;
+                }
+                if(entity.direction[3]) { // left
+                    entity.solidArea.x -= entity.speedHor;
+                }
+                if(entity.solidArea.intersects(target[i].solidArea)){
+                    entity.leftCollisionOn = true;
+                    index = i;
+                }
+                entity.solidArea.x = entity.solidAreaDefaultX;
+                entity.solidArea.y = entity.solidAreaDefaultY;
+                target[i].solidArea.x = target[i].solidAreaDefaultX;
+                target[i].solidArea.y = target[i].solidAreaDefaultY;
+            }
+        }
+
+        return index;
+    }
+    public void checkPlayer(Entity entity){
+        if(gp.player != null){
+            entity.solidArea.x = (int)entity.worldX + entity.solidArea.x; // move entity solidArea temporarily
+            entity.solidArea.y = (int)entity.worldY + entity.solidArea.y; // move entity solidArea temporarily
+
+            gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x; // move obj solidArea temporarily
+            gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y; // move obj solidArea temporarily
+
+            if(entity.direction[0]) { // up
+                entity.solidArea.y -= entity.speedVert; // move solidArea to next frame position temporarily
+            }
+            if(entity.solidArea.intersects(gp.player.solidArea)){ // if touching
+                entity.upCollisionOn = true;
+            }
+            if(entity.direction[0]) {
+                entity.solidArea.y += entity.speedVert; // reverting changes - works since speed DOES NOT change
+            }
+            if(entity.direction[1]) { // right
+                entity.solidArea.x += entity.speedHor;
+            }
+            if(entity.solidArea.intersects(gp.player.solidArea)){
+                entity.rightCollisionOn = true;
+            }
+            if(entity.direction[1]) {
+                entity.solidArea.x -= entity.speedHor;
+            }
+            if(entity.direction[2]) { // down
+                entity.solidArea.y += entity.speedVert;
+            }
+            if(entity.solidArea.intersects(gp.player.solidArea)){
+                entity.downCollisionOn = true;
+            }
+            if(entity.direction[2]) {
+                entity.solidArea.y -= entity.speedVert;
+            }
+            if(entity.direction[3]) { // left
+                entity.solidArea.x -= entity.speedHor;
+            }
+            if(entity.solidArea.intersects(gp.player.solidArea)){
+                entity.leftCollisionOn = true;
+            }
+            entity.solidArea.x = entity.solidAreaDefaultX;
+            entity.solidArea.y = entity.solidAreaDefaultY;
+            gp.player.solidArea.x = gp.player.solidAreaDefaultX;
+            gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package main;
 
+import entity.NPC_MiningMan;
 import object.ObjectChest;
 import object.ObjectCopperOre;
 
@@ -37,4 +38,10 @@ public class AssetSetter {
         gp.obj[4].worldY = 9 * gp.tileSize;
 
     }
+    public void setNPC(){
+        gp.npc[0] = new NPC_MiningMan(gp);
+        gp.npc[0].worldX = gp.tileSize * 21;
+        gp.npc[0].worldY = gp.tileSize * 11;
+    }
+
 }

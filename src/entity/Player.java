@@ -10,14 +10,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity{
-    GamePanel gp;
     KeyHandler keyH;
 
     public final int screenX, screenY;
     public int numCopper = 0; // change to inventory in future
     long lastPickUpTime = System.nanoTime();
     public Player(GamePanel gp, KeyHandler keyH){
-        this.gp = gp;
+        super(gp);
         this.keyH = keyH;
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
@@ -38,11 +37,7 @@ public class Player extends Entity{
     }
 
     public void getPlayerImage(){
-        try {
-            car1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("player/boy_down_1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image1 = getImage("player/boy_down_1.png");
     }
     public void snapPlayerLoc() {
         if (downCollisionOn) {
@@ -150,6 +145,11 @@ public class Player extends Entity{
             }
         }
     }
+    public void interactNPC(int i){
+        if(i != 99999){
+            System.out.println("you bonk");
+        }
+    }
     public void update(){
         if(keyH.jumpPressed){
             direction[0] = true;
@@ -183,7 +183,10 @@ public class Player extends Entity{
         int objIndex = gp.cChecker.checkObject(this, true);
         pickUpObject(objIndex);
 
-//        System.out.println(numCopper);
+        // Check NPC Collision
+        int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+        interactNPC(npcIndex);
+
 //        System.out.println("X: " + worldX + ", Y: " + worldY);
 //        System.out.print("UP: " + upCollisionOn);
 //        System.out.print(", RIGHT: " + rightCollisionOn);
@@ -220,7 +223,7 @@ public class Player extends Entity{
 
         BufferedImage image = null;
 
-        image = car1;
+        image = image1;
         g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
 
 

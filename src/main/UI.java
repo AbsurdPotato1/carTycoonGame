@@ -85,14 +85,13 @@ public class UI {
 
         final int slotXstart = frameX + (80 - gp.tileSize) / 2;
         final int slotYstart = frameY + (80 - gp.tileSize) / 2;
-        int slotX = slotXstart;
-        int slotY = slotYstart;
+//        int slotX = slotXstart;
+//        int slotY = slotYstart;
 
         int cursorX = slotXstart + (gp.tileSize * slotCol);
         int cursorY = slotYstart + (gp.tileSize * slotRow);
         int cursorWidth = gp.tileSize;
         int cursorHeight = gp.tileSize;
-        System.out.println(slotCol);
 
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(3));
