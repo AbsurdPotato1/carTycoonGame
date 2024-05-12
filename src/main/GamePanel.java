@@ -3,11 +3,10 @@ import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import javax.swing.*;
+
 // this class will display the window
 public class GamePanel extends JPanel implements Runnable {
 
@@ -20,20 +19,26 @@ public class GamePanel extends JPanel implements Runnable {
 
     public final int tileSize = originalTileSize * scale; // 96 x 96;
     public final int maxScreenCol = 32;
-    public final int maxScreenRow = 24;
-    public final int screenWidth = tileSize * maxScreenCol; // 2048px
-    public final int screenHeight = tileSize * maxScreenRow; // 1536px
+    public final int maxScreenRow = 18;
+    public final int screenWidth = tileSize * maxScreenCol; // 1536px
+    public final int screenHeight = tileSize * maxScreenRow; // 864
 
     // world settings
     public final int maxWorldCol = 64;
     public final int maxWorldRow = 48;
+
+    int screenWidth2 = screenWidth;
+    int screenHeight2 = screenHeight;
+    BufferedImage tempScreen;
+    Graphics2D g2;
 
     public int FPS = 60;
 
     // SYSTEM
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
-    Sound sound = new Sound();
+    Sound music = new Sound();
+    Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     Thread gameThread; // This will run the code continuously (i.e. won't stop)
@@ -58,10 +63,34 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
     }
 
-    public void setupGame(){
+    public void setUpGame(){
         aSetter.setObject();
         playMusic(0);
+//
+//        tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+//        g2 = (Graphics2D)tempScreen.getGraphics();
+//
+//        setFullScreen();
     }
+
+//    public void setFullScreen(){
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        double width = screenSize.getWidth();
+//        double height = screenSize.getHeight();
+//        Main.window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//        screenWidth2 = (int) width;
+//        screenHeight2 = (int) height;
+        //offset factor to be used by mouse listener or mouse motion listener if you are using cursor in your game. Multiply your e.getX()e.getY() by this.
+//        float fullScreenOffsetFactor = (float) screenWidth / (float) screenWidth2;
+//        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//        GraphicsDevice gd = ge.getDefaultScreenDevice();
+//        gd.setFullScreenWindow(Main.window);
+//
+//        // GET FULL SCREEN WIDTH AND HEIGHT
+//        screenWidth2 = Main.window.getWidth();
+//        screenHeight2 = Main.window.getHeight();
+
+//    }
 
     public void startGameThread(){
         gameThread = new Thread(this);
@@ -90,7 +119,10 @@ public class GamePanel extends JPanel implements Runnable {
             if(delta >= 1){
                 update();
                 repaint(); // calls paintcomponent
+//                drawToTempScreen(); // draw to bufferedimage - done instead of straight on the JPanel to allow resizing
+//                drawToScreen(); // draws bufferedimage to screen
                 delta--;
+
                 drawCount++;
             }
             if(timer >= 1000000000){
@@ -104,6 +136,25 @@ public class GamePanel extends JPanel implements Runnable {
     public void update(){
         player.update();
     }
+
+//    public void drawToTempScreen(){
+//        // Tiles -- Keep in mind drawing order does matter.
+//        tileM.draw(g2);
+//
+//        // Objects
+//        for(int i = 0; i < obj.length; i++){
+//            if(obj[i] != null){
+//                obj[i].draw(g2, this);
+//            }
+//        }
+//        // Player
+//        player.draw(g2);
+//
+//        ui.draw(g2);
+
+//        g2.dispose();
+//    }
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
@@ -126,16 +177,23 @@ public class GamePanel extends JPanel implements Runnable {
         g2.dispose(); // saves memory (optimization)
     }
 
+//    public void drawToScreen(){
+//        Graphics g = getGraphics();
+//        g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
+//        g.dispose();
+////        g2.dispose();
+//    }
+
     public void playMusic(int i){
-        sound.setFile(i);
-        sound.play();
-        sound.loop(); // repeat music
+        music.setFile(i);
+        music.play();
+        music.loop(); // repeat music
     }
     public void stopMusic(){
-        sound.stop(); // stop music
+        music.stop(); // stop music
     }
     public void playSE(int i){
-        sound.setFile(i);
-        sound.play(); // sound effects are short, only call once typically.
+        se.setFile(i);
+        se.play(); // sound effects are short, only call once typically.
     }
 }
