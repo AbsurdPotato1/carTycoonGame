@@ -20,8 +20,8 @@ public class SuperObject {
     public int objectYOffset = 0; // vertical offset into the tile for an object
 
     public void draw(Graphics2D g2, GamePanel gp){
-        int screenX = worldX - gp.player.worldX + gp.player.screenX;
-        int screenY = worldY - gp.player.worldY + gp.player.screenY;
+        int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
+        int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
 
         if(worldX > gp.player.worldX - gp.player.screenX - gp.tileSize &&
            worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&

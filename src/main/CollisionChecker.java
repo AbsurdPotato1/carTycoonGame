@@ -12,10 +12,10 @@ public class CollisionChecker {
     }
 
     public void checkTile(Entity entity){
-        int entityLeftWorldX = entity.worldX + entity.solidArea.x;
-        int entityRightWorldX = entity.worldX + entity.solidArea.x + entity.solidArea.width;
-        int entityTopWorldY = entity.worldY + entity.solidArea.y;
-        int entityBottomWorldY = entity.worldY + entity.solidArea.y + entity.solidArea.height;
+        int entityLeftWorldX = (int)entity.worldX + entity.solidArea.x;
+        int entityRightWorldX = (int)entity.worldX + entity.solidArea.x + entity.solidArea.width;
+        int entityTopWorldY = (int)entity.worldY + entity.solidArea.y;
+        int entityBottomWorldY = (int)entity.worldY + entity.solidArea.y + entity.solidArea.height;
         int entityLeftCol = (entityLeftWorldX)/gp.tileSize;
         int entityRightCol = (entityRightWorldX-1)/gp.tileSize;
         int entityTopRow = (entityTopWorldY)/gp.tileSize;
@@ -76,8 +76,8 @@ public class CollisionChecker {
         int index = 99999;
         for(int i = 0; i < gp.obj.length; i++){ // using for loop is technically inefficient - maybe do search pruning (only nearby objects) if performance is impacted
             if(gp.obj[i] != null){
-                entity.solidArea.x = entity.worldX + entity.solidArea.x; // move entity solidArea temporarily
-                entity.solidArea.y = entity.worldY + entity.solidArea.y; // move entity solidArea temporarily
+                entity.solidArea.x = (int)entity.worldX + entity.solidArea.x; // move entity solidArea temporarily
+                entity.solidArea.y = (int)entity.worldY + entity.solidArea.y; // move entity solidArea temporarily
 
                 gp.obj[i].solidArea.x = gp.obj[i].worldX + gp.obj[i].solidArea.x + gp.obj[i].objectXOffset; // move obj solidArea temporarily
                 gp.obj[i].solidArea.y = gp.obj[i].worldY + gp.obj[i].solidArea.y + gp.obj[i].objectYOffset; // move obj solidArea temporarily

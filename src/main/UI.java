@@ -15,9 +15,11 @@ public class UI {
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
-
     double playTime;
     File fontFile;
+    public int slotCol = 0;
+    public int slotRow = 0;
+
     public UI(GamePanel gp){
         this.gp = gp;
         arial_40 = new Font("Arial", Font.PLAIN, 40);
@@ -52,6 +54,7 @@ public class UI {
         messageOn = true;
     }
     public void draw(Graphics2D g2){
+        drawHotbar(g2);
         int playTimeTextLength;
         g2.setFont(montserrat);
         g2.setFont(g2.getFont().deriveFont(30f));
@@ -73,8 +76,39 @@ public class UI {
         }
 
     }
+    public void drawHotbar(Graphics2D g2){
+        int frameWidth = 992;
+        int frameHeight = 80;
+        int frameX = gp.screenWidth / 2 - frameWidth / 2;
+        int frameY = gp.screenHeight - frameHeight;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2);
 
-//    public void drawSubWindow(int x, int y, int width, int height){
-//        g2.setColor(Color.black);
-//    }
+        final int slotXstart = frameX + (80 - gp.tileSize) / 2;
+        final int slotYstart = frameY + (80 - gp.tileSize) / 2;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        int cursorX = slotXstart + (gp.tileSize * slotCol);
+        int cursorY = slotYstart + (gp.tileSize * slotRow);
+        int cursorWidth = gp.tileSize;
+        int cursorHeight = gp.tileSize;
+        System.out.println(slotCol);
+
+        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+
+
+    }
+
+    public void drawSubWindow(int x, int y, int width, int height, Graphics2D g2){
+        Color c = new Color(216, 178, 129, 127); // black
+        g2.setColor(c);
+        g2.fillRoundRect(x, y, width, height, 35, 35);
+
+        c = new Color(255, 255, 255);
+        g2.setColor(c);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x + 7, y + 7, width - 14, height - 14, 25, 25);
+    }
 }

@@ -47,15 +47,15 @@ public class Player extends Entity{
     public void snapPlayerLoc() {
         if (downCollisionOn) {
             // Snap player to the nearest tile below
-            int playerBottomY = worldY + solidArea.y + solidArea.height; // Calculate the bottom Y-coordinate of the player
+            int playerBottomY = (int)worldY + solidArea.y + solidArea.height; // Calculate the bottom Y-coordinate of the player
             int nearestTileBelowY = ((playerBottomY + gp.tileSize - 1) / gp.tileSize) * gp.tileSize; // Calculate nearest tile below
 
             // Calculate the distance to the nearest tile above
             int nearestTileAboveY = nearestTileBelowY - gp.tileSize;
-            int distToTileAbove = worldY + solidArea.y + solidArea.height - nearestTileAboveY; // should always be positive
+            int distToTileAbove = (int)worldY + solidArea.y + solidArea.height - nearestTileAboveY; // should always be positive
 
             // Calculate the distance to the nearest tile below
-            int distToTileBelow = nearestTileBelowY - (worldY + solidArea.height);
+            int distToTileBelow = nearestTileBelowY - ((int)worldY + solidArea.height);
 
             // Snap to the nearest tile (above or below)
             if(distToTileAbove < 6){
@@ -66,15 +66,15 @@ public class Player extends Entity{
         }
         if (upCollisionOn) {
             // Snap player to the nearest tile below
-            int playerTopY = worldY; // Calculate the bottom Y-coordinate of the player
+            int playerTopY = (int)worldY; // Calculate the bottom Y-coordinate of the player
             int nearestTileAboveY = ((playerTopY) / gp.tileSize) * gp.tileSize; // Calculate nearest tile above
 
             // Calculate the distance to the nearest tile above
             int nearestTileBelowY = nearestTileAboveY + gp.tileSize;
-            int distToTileAbove = worldY - nearestTileAboveY; // should always be positive
+            int distToTileAbove = (int)worldY - nearestTileAboveY; // should always be positive
 
             // Calculate the distance to the nearest tile below
-            int distToTileBelow = nearestTileBelowY - worldY;
+            int distToTileBelow = nearestTileBelowY - (int)worldY;
 
             // Snap to the nearest tile (above or below)
             if(distToTileAbove < 6){
@@ -86,15 +86,15 @@ public class Player extends Entity{
 
         if (rightCollisionOn) {
             // Snap player to the nearest tile below
-            int playerRightX = worldX + solidArea.x + solidArea.width; // Calculate the right X-coordinate of the player
+            int playerRightX = (int)worldX + solidArea.x + solidArea.width; // Calculate the right X-coordinate of the player
             int nearestTileRightX = ((playerRightX + gp.tileSize - 1) / gp.tileSize) * gp.tileSize; // Calculate nearest tile right
 
             // Calculate the distance to the nearest tile above
             int nearestTileLeftX = nearestTileRightX - gp.tileSize;
-            int distToTileLeft = worldX + solidArea.x + solidArea.width - nearestTileLeftX; // should always be positive
+            int distToTileLeft = (int)worldX + solidArea.x + solidArea.width - nearestTileLeftX; // should always be positive
 
             // Calculate the distance to the nearest tile below
-            int distToTileRight = nearestTileRightX - (worldX + solidArea.width);
+            int distToTileRight = nearestTileRightX - ((int)worldX + solidArea.width);
 
             // Snap to the nearest tile (above or below)
             if(distToTileLeft < 6){
@@ -106,15 +106,15 @@ public class Player extends Entity{
 
         if (leftCollisionOn) {
             // Snap player to the nearest tile below
-            int playerLeftX = worldX; // Calculate the left X-coordinate of the player
+            int playerLeftX = (int)worldX; // Calculate the left X-coordinate of the player
             int nearestTileLeftX = ((playerLeftX) / gp.tileSize) * gp.tileSize; // Calculate nearest tile above
 
             // Calculate the distance to the nearest tile above
             int nearestTileRightX = nearestTileLeftX + gp.tileSize;
-            int distToTileLeft = worldX - nearestTileLeftX; // should always be positive
+            int distToTileLeft = (int)worldX - nearestTileLeftX; // should always be positive
 
             // Calculate the distance to the nearest tile below
-            int distToTileRight = nearestTileRightX - worldX;
+            int distToTileRight = nearestTileRightX - (int)worldX;
 
             // Snap to the nearest tile (above or below)
             if(distToTileLeft < 6){
