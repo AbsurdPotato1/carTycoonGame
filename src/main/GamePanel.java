@@ -3,11 +3,9 @@ import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import javax.swing.JPanel;
+import java.awt.*;
+import javax.swing.*;
+
 // this class will display the window
 public class GamePanel extends JPanel implements Runnable {
 
@@ -20,9 +18,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public final int tileSize = originalTileSize * scale; // 96 x 96;
     public final int maxScreenCol = 32;
-    public final int maxScreenRow = 24;
-    public final int screenWidth = tileSize * maxScreenCol; // 2048px
-    public final int screenHeight = tileSize * maxScreenRow; // 1536px
+    public final int maxScreenRow = 18;
+    public int screenWidth = tileSize * maxScreenCol; // 1536px
+    public int screenHeight = tileSize * maxScreenRow; // 864
 
     // world settings
     public final int maxWorldCol = 64;
@@ -33,7 +31,8 @@ public class GamePanel extends JPanel implements Runnable {
     // SYSTEM
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
-    Sound sound = new Sound();
+    Sound music = new Sound();
+    Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     Thread gameThread; // This will run the code continuously (i.e. won't stop)
@@ -45,10 +44,6 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyH);
     public SuperObject[] obj = new SuperObject[100]; // display up to 10 objects at the same time
 
-//    int player1X = 1024;
-//    int player1Y = 768;
-//    int player1SpeedVert = 4;
-//    int player1SpeedHor = 4;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -58,9 +53,21 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
     }
 
-    public void setupGame(){
+    public void setUpGame(){
         aSetter.setObject();
         playMusic(0);
+        setFullScreen();
+    }
+
+    public void setFullScreen(){
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = screenSize.getWidth();
+        double height = screenSize.getHeight();
+        Main.window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        screenWidth = (int) width;
+        screenHeight = (int) height;
+    //offset factor to be used by mouse listener or mouse motion listener if you are using cursor in your game. Multiply your e.getX()e.getY() by this.
+//        float fullScreenOffsetFactor = (float) screenWidth / (float) screenWidth2;
     }
 
     public void startGameThread(){
@@ -90,7 +97,10 @@ public class GamePanel extends JPanel implements Runnable {
             if(delta >= 1){
                 update();
                 repaint(); // calls paintcomponent
+//                drawToTempScreen(); // draw to bufferedimage - done instead of straight on the JPanel to allow resizing
+//                drawToScreen(); // draws bufferedimage to screen
                 delta--;
+
                 drawCount++;
             }
             if(timer >= 1000000000){
@@ -104,6 +114,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void update(){
         player.update();
     }
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
@@ -127,15 +138,15 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void playMusic(int i){
-        sound.setFile(i);
-        sound.play();
-        sound.loop(); // repeat music
+        music.setFile(i);
+        music.play();
+        music.loop(); // repeat music
     }
     public void stopMusic(){
-        sound.stop(); // stop music
+        music.stop(); // stop music
     }
     public void playSE(int i){
-        sound.setFile(i);
-        sound.play(); // sound effects are short, only call once typically.
+        se.setFile(i);
+        se.play(); // sound effects are short, only call once typically.
     }
 }
