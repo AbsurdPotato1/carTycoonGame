@@ -11,17 +11,20 @@ public class ObjectCopperOre extends SuperObject {
     public ObjectCopperOre(){
         collisionWidth = 22;
         collisionHeight = 19;
-        objectWidth = 22;
-        objectHeight = 19;
-        objectXOffset = 13;
-        objectYOffset = 14;
+        objectWidth = 48;
+        objectHeight = 48;
+        objectXOffset = 0;
+        objectYOffset = 0;
+        objectId = 0;
         solidArea = new Rectangle(objectXOffset, objectYOffset, collisionWidth, collisionHeight);
         name = "copperOre";
         try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre22x19.png"));
+            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre.png"));
+            inventoryImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre22x19.png"));
         } catch(IOException e){
             e.printStackTrace();
         }
+        description = "Copper Ore\nUsed to make things.";
 
 
 //        solidAreaDefaultY = 0;

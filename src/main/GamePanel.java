@@ -65,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setNPC();
 //        playMusic(0);
         setFullScreen();
+
     }
 
     public void setFullScreen(){

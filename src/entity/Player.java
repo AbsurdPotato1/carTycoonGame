@@ -2,12 +2,15 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import object.ObjectCopperOre;
+import object.SuperObject;
 
 import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Player extends Entity{
     KeyHandler keyH;
@@ -15,6 +18,8 @@ public class Player extends Entity{
     public final int screenX, screenY;
     public int numCopper = 0; // change to inventory in future
     long lastPickUpTime = System.nanoTime();
+    public int[] inventory = new int[255]; // size is number of objects.
+//    public ArrayList<SuperObject> inventory = new ArrayList<>();
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
         this.keyH = keyH;
@@ -28,12 +33,19 @@ public class Player extends Entity{
         solidAreaDefaultY = solidArea.y;
         setDefaultValues();
         getPlayerImage();
+        setItems();
     }
     public void setDefaultValues(){
         worldX = 50;
         worldY = 500;
         speedHor = 2 * 60.0 / gp.FPS;
         speedVert = 2 * 60.0 / gp.FPS;
+    }
+    public void setItems(){
+        inventory[new ObjectCopperOre().objectId]++;
+        inventory[new ObjectCopperOre().objectId]++;
+        inventory[new ObjectCopperOre().objectId]++;
+
     }
 
     public void getPlayerImage(){
