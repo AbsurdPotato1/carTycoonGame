@@ -10,22 +10,18 @@ import java.io.InputStream;
 
 public class UI {
     GamePanel gp;
-    Font arial_40, montserrat;
     BufferedImage copperOreImage;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
     double playTime;
-    File fontFile;
     public int slotCol = 0;
     public int slotRow = 0;
 
     public UI(GamePanel gp){
         this.gp = gp;
-        arial_40 = new Font("Arial", Font.PLAIN, 40);
         ObjectCopperOre copperOre = new ObjectCopperOre();
         copperOreImage = copperOre.image;
-        montserrat = loadFont("fonts/Montserrat-VariableFont_wght.ttf");
 //        try {
 //            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("fonts/Montserrat-VariableFont_wght.ttf");
 //            fontFile = new File("fonts/Montserrat-VariableFont_wght.ttf");
@@ -36,18 +32,6 @@ public class UI {
 //            throw new RuntimeException(e);
 //        }
     }
-    public Font loadFont(String path){
-        try {
-            InputStream fontStream = getClass().getClassLoader().getResourceAsStream(path);
-            fontFile = new File(path);
-            Font temp = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(14f);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(temp);
-            return temp;
-        } catch (IOException | FontFormatException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void showMessage(String text){
         message = text;
@@ -56,7 +40,7 @@ public class UI {
     public void draw(Graphics2D g2){
         drawHotbar(g2);
         int playTimeTextLength;
-        g2.setFont(montserrat);
+        g2.setFont(Fonts.montserrat);
         g2.setFont(g2.getFont().deriveFont(30f));
         g2.setColor(Color.white);
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time
