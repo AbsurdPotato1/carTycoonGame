@@ -55,6 +55,12 @@ public class GamePanel extends JPanel implements Runnable {
     public SuperObject[] obj = new SuperObject[100]; // display up to 100 objects at the same time
     public Entity npc[] = new Entity[100];
 
+    //states
+    public int gameState;
+    public final int titleState = 0;
+    public final int playerState =1;
+    public final int pauseState = 2;
+    public final int dialogueState = 3;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -69,6 +75,9 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setNPC();
 //        playMusic(0);
         setFullScreen();
+
+        //game state
+        gameState = titleState;
     }
 
     public void setFullScreen(){
@@ -137,29 +146,38 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D)g; // just adds some useful functions
 
-        // Tiles -- Keep in mind drawing order does matter.
-        tileM.draw(g2);
-
-        // Objects
-        for(int i = 0; i < obj.length; i++){
-            if(obj[i] != null){
-                obj[i].draw(g2, this);
-            }
+        //Title screen
+        if(gameState == titleState){
+            ui.draw(g2);
         }
+        else{
+            tileM.draw(g2);
 
-        //NPCs
-        for(int i = 0; i < npc.length; i++){
-            if(npc[i] != null){
-                npc[i].draw(g2);
+            // Objects
+            for(int i = 0; i < obj.length; i++){
+                if(obj[i] != null){
+                    obj[i].draw(g2, this);
+                }
             }
+
+            //NPCs
+            for(int i = 0; i < npc.length; i++){
+                if(npc[i] != null){
+                    npc[i].draw(g2);
+                }
+            }
+
+            // Player
+            player.draw(g2);
+
+            ui.draw(g2);
+
         }
-
-        // Player
-        player.draw(g2);
-
-        ui.draw(g2);
 
         g2.dispose(); // saves memory (optimization)
+
+        // Tiles -- Keep in mind drawing order does matter.
+
     }
 
     public void playMusic(int i){
