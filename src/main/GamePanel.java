@@ -1,4 +1,5 @@
 package main;//package main.Main;
+import data.SaveLoad;
 import entity.Entity;
 import entity.Player;
 import object.SuperObject;
@@ -45,6 +46,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     // GRAPHICS
     public UI ui = new UI(this);
+
+    //Save and Load
+    SaveLoad saveLoad = new SaveLoad(this);
 
     // ENTITIES
     public Player player = new Player(this, keyH);
