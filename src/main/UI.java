@@ -18,7 +18,6 @@ public class UI {
     public String message = "";
     int messageCounter = 0;
     double playTime;
-    File fontFile;
     public int slotCol = 0;
     public int slotRow = 0;
 
@@ -41,7 +40,6 @@ public class UI {
     public Font loadFont(String path){
         try {
             InputStream fontStream = getClass().getClassLoader().getResourceAsStream(path);
-            fontFile = new File(path);
             Font temp = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(14f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(temp);
@@ -90,9 +88,8 @@ public class UI {
         int slotX = slotXstart;
         int slotY = slotYstart;
 
-        for(int i = 0; i < gp.player.inventory.length; i++){
-            g2.drawImage(gp.player.inventory[i].inventoryImage, slotX, slotY, 48, 48, null);
-
+        for(SuperObject obj : gp.player.inventory.keySet()){
+            g2.drawImage(obj.inventoryImage, slotX, slotY, 48, 48, null);
             slotX += gp.tileSize;
         }
 
@@ -119,12 +116,15 @@ public class UI {
         final int slotYstart = frameY + (80 - gp.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
-
-        for(int i = 0; i < gp.player.inventory.size(); i++){
-            g2.drawImage(gp.player.inventory.get(i).inventoryImage, slotX, slotY, 48, 48, null);
-
+        for(SuperObject obj : gp.player.inventory.keySet()){
+            g2.drawImage(obj.inventoryImage, slotX, slotY, 48, 48, null);
             slotX += gp.tileSize;
         }
+//        for(int i = 0; i < gp.player.inventory.size(); i++){
+//            g2.drawImage(gp.player.inventory.get(i).inventoryImage, slotX, slotY, 48, 48, null);
+//
+//            slotX += gp.tileSize;
+//        }
 
         int cursorX = slotXstart + (gp.tileSize * slotCol);
         int cursorY = slotYstart + (gp.tileSize * slotRow);

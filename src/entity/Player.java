@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player extends Entity{
     KeyHandler keyH;
@@ -18,7 +19,8 @@ public class Player extends Entity{
     public final int screenX, screenY;
     public int numCopper = 0; // change to inventory in future
     long lastPickUpTime = System.nanoTime();
-    public int[] inventory = new int[255]; // size is number of objects.
+    public HashMap<SuperObject, Integer> inventory = new HashMap<>();
+//    public int[] inventory = new int[255]; // size is number of objects.
 //    public ArrayList<SuperObject> inventory = new ArrayList<>();
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
@@ -42,9 +44,9 @@ public class Player extends Entity{
         speedVert = 2 * 60.0 / gp.FPS;
     }
     public void setItems(){
-        inventory[new ObjectCopperOre().objectId]++;
-        inventory[new ObjectCopperOre().objectId]++;
-        inventory[new ObjectCopperOre().objectId]++;
+        inventory.merge(new ObjectCopperOre(), 1, Integer::sum); // increments key (count) of value (SuperObject)
+        inventory.merge(new ObjectCopperOre(), 1, Integer::sum); // increments key (count) of value (SuperObject)
+        inventory.merge(new ObjectCopperOre(), 1, Integer::sum); // increments key (count) of value (SuperObject)
 
     }
 
