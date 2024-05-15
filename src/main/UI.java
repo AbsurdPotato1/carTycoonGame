@@ -1,12 +1,15 @@
 package main;
 
+import object.IdToObject;
 import object.ObjectCopperOre;
+import object.SuperObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class UI {
     GamePanel gp;
@@ -16,7 +19,6 @@ public class UI {
     public String message = "";
     int messageCounter = 0;
     double playTime;
-    File fontFile;
     public int slotCol = 0;
     public int slotRow = 0;
 
@@ -39,7 +41,6 @@ public class UI {
     public Font loadFont(String path){
         try {
             InputStream fontStream = getClass().getClassLoader().getResourceAsStream(path);
-            fontFile = new File(path);
             Font temp = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(14f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(temp);
@@ -123,8 +124,30 @@ public class UI {
 
         final int slotXstart = frameX + (80 - gp.tileSize) / 2;
         final int slotYstart = frameY + (80 - gp.tileSize) / 2;
-//        int slotX = slotXstart;
-//        int slotY = slotYstart;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+//        for (Integer objId : gp.player.inventory.keySet()) {
+//            Class<? extends SuperObject> objClass = IdToObject.getObjectFromId(objId);
+//
+//            try {
+//                // Access the static 'inventoryImage' field from the class
+//                BufferedImage inventoryImage = (BufferedImage) objClass.getField("inventoryImage").get(null);
+//
+//                // Draw the image if it exists
+//                if (inventoryImage != null) {
+//                    g2.drawImage(inventoryImage, slotX, slotY, 48, 48, null);
+//                }
+//            } catch (NoSuchFieldException | IllegalAccessException e) {
+//                e.printStackTrace(); // Handle exceptions appropriately
+//            }
+//
+//            slotX += gp.tileSize;
+//        }
+        for(Integer objId : gp.player.inventory.keySet()){
+            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
+            slotX += gp.tileSize;
+        }
 
         int cursorX = slotXstart + (gp.tileSize * slotCol);
         int cursorY = slotYstart + (gp.tileSize * slotRow);
@@ -136,6 +159,38 @@ public class UI {
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
 
 
+    }
+
+    public void drawInventory(Graphics2D g2){
+        int frameWidth = 992;
+        int frameHeight = 80;
+        int frameX = gp.screenWidth / 2 - frameWidth / 2;
+        int frameY = gp.screenHeight - frameHeight;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2);
+
+        final int slotXstart = frameX + (80 - gp.tileSize) / 2;
+        final int slotYstart = frameY + (80 - gp.tileSize) / 2;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        for(Integer objId : gp.player.inventory.keySet()){
+            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
+            slotX += gp.tileSize;
+        }
+//        for(int i = 0; i < gp.player.inventory.size(); i++){
+//            g2.drawImage(gp.player.inventory.get(i).inventoryImage, slotX, slotY, 48, 48, null);
+//
+//            slotX += gp.tileSize;
+//        }
+
+        int cursorX = slotXstart + (gp.tileSize * slotCol);
+        int cursorY = slotYstart + (gp.tileSize * slotRow);
+        int cursorWidth = gp.tileSize;
+        int cursorHeight = gp.tileSize;
+
+        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
     }
 
     public void drawSubWindow(int x, int y, int width, int height, Graphics2D g2){

@@ -5,23 +5,30 @@ import main.GamePanel;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class ObjectCopperOre extends SuperObject {
+//    public static final String name = "copperOre";
+    public static final int objectId = 0;
+    public static BufferedImage inventoryImage;
     public ObjectCopperOre(){
         collisionWidth = 22;
         collisionHeight = 19;
-        objectWidth = 22;
-        objectHeight = 19;
-        objectXOffset = 13;
-        objectYOffset = 14;
-        solidArea = new Rectangle(objectXOffset, objectYOffset, collisionWidth, collisionHeight);
+        objectWidth = 48;
+        objectHeight = 48;
+        collisionXOffset = 14;
+        collisionYOffset = 17;
+//        objectId = 0;
+        solidArea = new Rectangle(collisionXOffset, collisionYOffset, collisionWidth, collisionHeight);
         name = "copperOre";
         try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre22x19.png"));
+            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre.png")); // image provides the location where the object is drawn.
+            inventoryImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre22x19.png"));
         } catch(IOException e){
             e.printStackTrace();
         }
+        description = "Copper Ore\nUsed to make things.";
 
 
 //        solidAreaDefaultY = 0;
@@ -34,7 +41,7 @@ public class ObjectCopperOre extends SuperObject {
                 worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
                 worldY > gp.player.worldY - gp.player.screenY - gp.tileSize &&
                 worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
-            g2.drawImage(image, screenX + objectXOffset, screenY + objectYOffset, objectWidth, objectHeight, null);
+            g2.drawImage(image, screenX, screenY, objectWidth, objectHeight, null);
         }
     }
 }

@@ -2,6 +2,7 @@ package main;//package main.Main;
 import data.SaveLoad;
 import entity.Entity;
 import entity.Player;
+import object.IdToObject;
 import object.SuperObject;
 import tile.TileManager;
 
@@ -52,7 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITIES
     public Player player = new Player(this, keyH);
-    public SuperObject[] obj = new SuperObject[100]; // display up to 100 objects at the same time
+    public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
     public Entity npc[] = new Entity[100];
 
     //states
@@ -71,9 +72,10 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setUpGame(){
+        IdToObject.setIdObject();
         aSetter.setObject();
         aSetter.setNPC();
-//        playMusic(0);
+        playMusic(0);
         setFullScreen();
 
         //game state
