@@ -50,14 +50,22 @@ public class KeyHandler implements KeyListener {
         else if(code == KeyEvent.VK_S){
             downPressed = true;
         }
+        if(code == KeyEvent.VK_E){
+            inventoryPressed = true;
+        }
         window.addMouseWheelListener(scroll -> {
             currentTime = System.nanoTime();
             if(currentTime - lastTime >= frameInterval){
                 int notches = scroll.getWheelRotation();
                 if (notches < 0) {
                     // Scroll up
-                    if(gp.ui.slotCol == 0){
-                        gp.ui.slotCol = 19;
+                    if(gp.ui.slotRow == 0 && gp.ui.slotCol == 0){
+                        gp.ui.slotRow = 2;
+                        gp.ui.slotCol = 8;
+                    }
+                    else if(gp.ui.slotCol == 0){
+                        gp.ui.slotRow--;
+                        gp.ui.slotCol = 8;
                     }
                     else {
                         gp.ui.slotCol--;
@@ -65,7 +73,12 @@ public class KeyHandler implements KeyListener {
                         lastTime = System.nanoTime();
                 } else {
                     // Scroll down
-                    if(gp.ui.slotCol == 19){
+                    if(gp.ui.slotRow == 2 && gp.ui.slotCol == 8){
+                        gp.ui.slotRow = 0;
+                        gp.ui.slotCol = 0;
+                    }
+                    else if(gp.ui.slotCol == 8){
+                        gp.ui.slotRow++;
                         gp.ui.slotCol = 0;
                     }
                     else { // (UI.drawHotbar.frameWidth - 32) / 48 - 1
@@ -76,9 +89,7 @@ public class KeyHandler implements KeyListener {
             }
 
         });
-        if(code == KeyEvent.VK_E){
-            inventoryPressed = true;
-        }
+
     }
 
     @Override
