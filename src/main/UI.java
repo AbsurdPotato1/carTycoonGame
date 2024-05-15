@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class UI {
     GamePanel gp;
+    Font arial_40, montserrat;
     BufferedImage copperOreImage;
     public boolean messageOn = false;
     public String message = "";
@@ -23,8 +24,10 @@ public class UI {
 
     public UI(GamePanel gp){
         this.gp = gp;
+        arial_40 = new Font("Arial", Font.PLAIN, 40);
         ObjectCopperOre copperOre = new ObjectCopperOre();
         copperOreImage = copperOre.image;
+        montserrat = loadFont("fonts/Montserrat-VariableFont_wght.ttf");
 //        try {
 //            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("fonts/Montserrat-VariableFont_wght.ttf");
 //            fontFile = new File("fonts/Montserrat-VariableFont_wght.ttf");
@@ -36,6 +39,7 @@ public class UI {
 //        }
     }
 
+
     public void showMessage(String text){
         message = text;
         messageOn = true;
@@ -43,9 +47,40 @@ public class UI {
     public void draw(Graphics2D g2){
         drawHotbar(g2);
         int playTimeTextLength;
-        g2.setFont(Fonts.montserrat);
+        g2.setFont(montserrat);
         g2.setFont(g2.getFont().deriveFont(30f));
         g2.setColor(Color.white);
+
+        //drawing the title state
+//        if(gp.gameState == gp.titleState){
+//            //drawTitleScreen();
+//            g2.setColor(new Color(60,70,90));
+//
+//            String text = "CarSimulator";
+//            int x = gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
+//            int y = gp.tileSize*3;
+//            g2.drawString(text, x, y);
+//            //menu
+//            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+//
+//            text = "NEW START";
+//            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
+//            y += gp.tileSize*4;
+//            g2.drawString(text, x, y);
+//
+//            text = "Load GAME";
+//            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
+//            y += gp.tileSize;
+//            g2.drawString(text, x, y);
+//
+//            text = "QUIT";
+//            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
+//            y += gp.tileSize;
+//            g2.drawString(text, x, y);
+//
+//        }
+
+
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time
         playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
 
@@ -63,6 +98,13 @@ public class UI {
         }
 
     }
+//    public void drawTitleScreen(){
+//
+//        //Title name
+//        //changing the font  g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+//        String text = "CarSimulator";
+//        int x = gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
+//    }
     public void drawHotbar(Graphics2D g2){
         int frameWidth = 992;
         int frameHeight = 80;

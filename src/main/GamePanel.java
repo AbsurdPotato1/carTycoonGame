@@ -1,4 +1,5 @@
 package main;//package main.Main;
+import data.SaveLoad;
 import entity.Entity;
 import entity.Player;
 import object.IdToObject;
@@ -36,7 +37,6 @@ public class GamePanel extends JPanel implements Runnable {
     public int FPS = 60;
 
     // SYSTEM
-    public boolean gameStarted = false;
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler(this);
     MouseHandler mouseH = new MouseHandler(this);
@@ -45,15 +45,28 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     Thread gameThread; // This will run the code continuously (i.e. won't stop)
+<<<<<<< HEAD
     public Homescreen hs = new Homescreen(this);
+=======
+
+>>>>>>> jonathan
     // GRAPHICS
     public UI ui = new UI(this);
+
+    //Save and Load
+    SaveLoad saveLoad = new SaveLoad(this);
 
     // ENTITIES
     public Player player = new Player(this, keyH);
     public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
     public Entity npc[] = new Entity[100];
 
+    //states
+    public int gameState;
+    public final int titleState = 0;
+    public final int playerState =1;
+    public final int pauseState = 2;
+    public final int dialogueState = 3;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -68,8 +81,15 @@ public class GamePanel extends JPanel implements Runnable {
         IdToObject.setIdObject();
         aSetter.setObject();
         aSetter.setNPC();
+<<<<<<< HEAD
         //playMusic(0);
+=======
+        playMusic(0);
+>>>>>>> jonathan
         setFullScreen();
+
+        //game state
+        gameState = titleState;
     }
 
     public void setFullScreen(){
@@ -138,8 +158,11 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D)g; // just adds some useful functions
 
-        if (gameStarted) {
-            // Tiles -- Keep in mind drawing order does matter.
+        //Title screen
+//        if(gameState == titleState){
+//            ui.draw(g2);
+//        }
+//        else{
             tileM.draw(g2);
 
             // Objects
@@ -161,10 +184,12 @@ public class GamePanel extends JPanel implements Runnable {
 
             ui.draw(g2);
 
-            g2.dispose(); // saves memory (optimization)
-        } else {
-            hs.draw(g2);
-        }
+//        }
+
+        g2.dispose(); // saves memory (optimization)
+
+        // Tiles -- Keep in mind drawing order does matter.
+
     }
 
     public void playMusic(int i){
