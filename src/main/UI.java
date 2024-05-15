@@ -27,7 +27,7 @@ public class UI {
         arial_40 = new Font("Arial", Font.PLAIN, 40);
         ObjectCopperOre copperOre = new ObjectCopperOre();
         copperOreImage = copperOre.image;
-        montserrat = loadFont("fonts/Montserrat-VariableFont_wght.ttf");
+        montserrat = Fonts.loadFont("fonts/Montserrat-VariableFont_wght.ttf");
 //        try {
 //            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("fonts/Montserrat-VariableFont_wght.ttf");
 //            fontFile = new File("fonts/Montserrat-VariableFont_wght.ttf");

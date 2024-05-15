@@ -35,7 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxWorldRow = 48;
 
     public int FPS = 60;
-
+    public boolean gameStarted = false;
     // SYSTEM
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler(this);
@@ -44,12 +44,9 @@ public class GamePanel extends JPanel implements Runnable {
     Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
-    Thread gameThread; // This will run the code continuously (i.e. won't stop)
-<<<<<<< HEAD
+    Thread gameThread; // This will run the code continuously (i.e. won't stop)en hs = new Homescreen(this);
     public Homescreen hs = new Homescreen(this);
-=======
 
->>>>>>> jonathan
     // GRAPHICS
     public UI ui = new UI(this);
 
@@ -81,11 +78,7 @@ public class GamePanel extends JPanel implements Runnable {
         IdToObject.setIdObject();
         aSetter.setObject();
         aSetter.setNPC();
-<<<<<<< HEAD
         //playMusic(0);
-=======
-        playMusic(0);
->>>>>>> jonathan
         setFullScreen();
 
         //game state
@@ -158,11 +151,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D)g; // just adds some useful functions
 
-        //Title screen
-//        if(gameState == titleState){
-//            ui.draw(g2);
-//        }
-//        else{
+        if (gameStarted) {
+            // Tiles -- Keep in mind drawing order does matter.
             tileM.draw(g2);
 
             // Objects
@@ -184,13 +174,12 @@ public class GamePanel extends JPanel implements Runnable {
 
             ui.draw(g2);
 
-//        }
-
-        g2.dispose(); // saves memory (optimization)
-
-        // Tiles -- Keep in mind drawing order does matter.
-
+            g2.dispose(); // saves memory (optimization)
+        } else {
+            hs.draw(g2);
+        }
     }
+
 
     public void playMusic(int i){
         music.setFile(i);
