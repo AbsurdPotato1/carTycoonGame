@@ -12,7 +12,7 @@ public class KeyHandler implements KeyListener {
      *  https://stackoverflow.com/questions/22741215/how-to-use-key-bindings-instead-of-key-listeners
      * *///
 
-    public boolean leftPressed, rightPressed, jumpPressed, downPressed;
+    public boolean leftPressed, rightPressed, jumpPressed, downPressed, inventoryPressed;
     public GamePanel gp;
     double frameInterval;
     double delta = 0;
@@ -56,20 +56,29 @@ public class KeyHandler implements KeyListener {
                 int notches = scroll.getWheelRotation();
                 if (notches < 0) {
                     // Scroll up
-                    if(gp.ui.slotCol != 0) {
-                        gp.ui.slotCol--;
-                        lastTime = System.nanoTime();
+                    if(gp.ui.slotCol == 0){
+                        gp.ui.slotCol = 19;
                     }
+                    else {
+                        gp.ui.slotCol--;
+                    }
+                        lastTime = System.nanoTime();
                 } else {
                     // Scroll down
-                    if(gp.ui.slotCol != 19) { // (UI.drawHotbar.frameWidth - 32) / 48 - 1
-                        gp.ui.slotCol++;
-                        lastTime = System.nanoTime();
+                    if(gp.ui.slotCol == 19){
+                        gp.ui.slotCol = 0;
                     }
+                    else { // (UI.drawHotbar.frameWidth - 32) / 48 - 1
+                        gp.ui.slotCol++;
+                    }
+                        lastTime = System.nanoTime();
                 }
             }
 
         });
+        if(code == KeyEvent.VK_E){
+            inventoryPressed = true;
+        }
     }
 
     @Override
@@ -86,6 +95,9 @@ public class KeyHandler implements KeyListener {
         }
         else if(code == KeyEvent.VK_S){
             downPressed = false;
+        }
+        if(code == KeyEvent.VK_E){
+            inventoryPressed = false;
         }
     }
 }

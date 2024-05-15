@@ -22,7 +22,7 @@ public class Homescreen {
             e.printStackTrace();
         }
         g2.setFont(Fonts.pressStart_2P.deriveFont(30f));
-        int bheight = gp.screenHeight;
+        int bheight = gp.screenHeight; // button height and width very chonky
         int bwidth = bheight;
 
         float opacity = 0.5f;
@@ -53,7 +53,12 @@ public class Homescreen {
         int loadingScreenTextLength = (int)g2.getFontMetrics().getStringBounds(toDisplay, g2).getWidth();
         int loadingScreenTextHeight = (int)g2.getFontMetrics().getStringBounds(toDisplay, g2).getHeight();
         g2.drawString(toDisplay, (gp.screenWidth - loadingScreenTextLength) / 2, (gp.screenHeight - loadingScreenTextHeight - 170) / 2);
-
+        if(gp.mouseH.mouseClicked){
+            if(gp.mouseH.mouseX >= (gp.screenWidth - bwidth) / 2 && gp.mouseH.mouseX <= (gp.screenWidth + bwidth) / 2 &&
+                gp.mouseH.mouseY >= (gp.screenHeight - bheight) /2 && gp.mouseH.mouseY <= (gp.screenHeight + bheight) / 2){
+                    gp.gameStarted = true;
+            }
+        }
         g2.dispose();
     }
 

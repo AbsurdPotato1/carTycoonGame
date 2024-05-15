@@ -2,12 +2,16 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import object.ObjectCopperOre;
+import object.SuperObject;
 
 import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player extends Entity{
     KeyHandler keyH;
@@ -15,6 +19,9 @@ public class Player extends Entity{
     public final int screenX, screenY;
     public int numCopper = 0; // change to inventory in future
     long lastPickUpTime = System.nanoTime();
+    public HashMap<Integer, Integer> inventory = new HashMap<>();
+//    public int[] inventory = new int[255]; // size is number of objects.
+//    public ArrayList<SuperObject> inventory = new ArrayList<>();
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
         this.keyH = keyH;
@@ -28,12 +35,25 @@ public class Player extends Entity{
         solidAreaDefaultY = solidArea.y;
         setDefaultValues();
         getPlayerImage();
+        setPlayerStartingItems();
     }
     public void setDefaultValues(){
         worldX = 50;
         worldY = 500;
         speedHor = 2 * 60.0 / gp.FPS;
         speedVert = 2 * 60.0 / gp.FPS;
+    }
+    public void addOneToInventory(Class c){
+        try {
+            inventory.merge((Integer)c.getField("objectId").get(null), 1, Integer::sum); // increments key (count) of value (SuperObject)
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void setPlayerStartingItems(){
+//        addOneToInventory(ObjectCopperOre.class);
+//        addOneToInventory(ObjectCopperOre.class);
+//        addOneToInventory(ObjectCopperOre.class);
     }
 
     public void getPlayerImage(){
@@ -132,7 +152,7 @@ public class Player extends Entity{
                 switch(objectName){
                     case "copperOre":
                         gp.playSE(1); // sound effect
-                        numCopper++;
+                        addOneToInventory(ObjectCopperOre.class);
                         gp.obj[i] = null;
                         gp.ui.showMessage("You got a copper ore!");
                         break;
