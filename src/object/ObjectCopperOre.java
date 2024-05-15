@@ -13,13 +13,13 @@ public class ObjectCopperOre extends SuperObject {
         collisionHeight = 19;
         objectWidth = 48;
         objectHeight = 48;
-        objectXOffset = 0;
-        objectYOffset = 0;
+        collisionXOffset = 14;
+        collisionYOffset = 17;
         objectId = 0;
-        solidArea = new Rectangle(objectXOffset, objectYOffset, collisionWidth, collisionHeight);
+        solidArea = new Rectangle(collisionXOffset, collisionYOffset, collisionWidth, collisionHeight);
         name = "copperOre";
         try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre.png"));
+            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre.png")); // image provides the location where the object is drawn.
             inventoryImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre22x19.png"));
         } catch(IOException e){
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class ObjectCopperOre extends SuperObject {
                 worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
                 worldY > gp.player.worldY - gp.player.screenY - gp.tileSize &&
                 worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
-            g2.drawImage(image, screenX + objectXOffset, screenY + objectYOffset, objectWidth, objectHeight, null);
+            g2.drawImage(image, screenX, screenY, objectWidth, objectHeight, null);
         }
     }
 }
