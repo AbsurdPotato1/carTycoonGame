@@ -10,8 +10,9 @@ public class Sound {
     URL[] soundURL = new URL[30]; // stores filepath of .wav file
 
     public Sound(){
-        soundURL[0] = getClass().getClassLoader().getResource("sound/backgroundMusic.wav");
-        soundURL[1] = getClass().getClassLoader().getResource("sound/copperPickUp.wav");
+        soundURL[0] = getClass().getClassLoader().getResource("sound/titlescreen-overdrive-matrika.wav"); // Absolute banger of background music
+        soundURL[1] = getClass().getClassLoader().getResource("sound/copperPickUp.wav"); // copper pickup sound effect
+        soundURL[2] = getClass().getClassLoader().getResource("sound/backgroundMusic.wav"); // Ethan's bng music
     }
 
     public void setFile(int i){

@@ -24,10 +24,8 @@ public class UI {
 
     public UI(GamePanel gp){
         this.gp = gp;
-        arial_40 = new Font("Arial", Font.PLAIN, 40);
         ObjectCopperOre copperOre = new ObjectCopperOre();
         copperOreImage = copperOre.image;
-        montserrat = Fonts.loadFont("fonts/Montserrat-VariableFont_wght.ttf");
 //        try {
 //            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("fonts/Montserrat-VariableFont_wght.ttf");
 //            fontFile = new File("fonts/Montserrat-VariableFont_wght.ttf");
@@ -47,7 +45,7 @@ public class UI {
     public void draw(Graphics2D g2){
         drawHotbar(g2);
         int playTimeTextLength;
-        g2.setFont(montserrat);
+        g2.setFont(Fonts.montserrat);
         g2.setFont(g2.getFont().deriveFont(30f));
         g2.setColor(Color.white);
 
