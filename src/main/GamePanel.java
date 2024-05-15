@@ -1,6 +1,7 @@
 package main;//package main.Main;
 import entity.Entity;
 import entity.Player;
+import object.IdToObject;
 import object.SuperObject;
 import tile.TileManager;
 
@@ -35,20 +36,22 @@ public class GamePanel extends JPanel implements Runnable {
     public int FPS = 60;
 
     // SYSTEM
+    public boolean gameStarted = false;
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler(this);
+    MouseHandler mouseH = new MouseHandler(this);
     Sound music = new Sound();
     Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     Thread gameThread; // This will run the code continuously (i.e. won't stop)
-
+    public Homescreen hs = new Homescreen(this);
     // GRAPHICS
     public UI ui = new UI(this);
 
     // ENTITIES
     public Player player = new Player(this, keyH);
-    public SuperObject[] obj = new SuperObject[100]; // display up to 100 objects at the same time
+    public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
     public Entity npc[] = new Entity[100];
 
 
@@ -57,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
+        this.addMouseListener(mouseH);
         this.setFocusable(true);
     }
 
@@ -72,6 +76,7 @@ public class GamePanel extends JPanel implements Runnable {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
+
         Main.window.setExtendedState(JFrame.MAXIMIZED_BOTH);
         screenWidth = (int) width;
         screenHeight = (int) height;
@@ -86,7 +91,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-
         double drawInterval = 1000000000/FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
