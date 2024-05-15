@@ -62,33 +62,33 @@ public class UI {
         g2.setColor(Color.white);
 
         //drawing the title state
-        if(gp.gameState == gp.titleState){
-            //drawTitleScreen();
-            g2.setColor(new Color(60,70,90));
-
-            String text = "CarSimulator";
-            int x = gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
-            int y = gp.tileSize*3;
-            g2.drawString(text, x, y);
-            //menu
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-
-            text = "NEW START";
-            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
-            y += gp.tileSize*4;
-            g2.drawString(text, x, y);
-
-            text = "Load GAME";
-            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
-            y += gp.tileSize;
-            g2.drawString(text, x, y);
-
-            text = "QUIT";
-            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
-            y += gp.tileSize;
-            g2.drawString(text, x, y);
-
-        }
+//        if(gp.gameState == gp.titleState){
+//            //drawTitleScreen();
+//            g2.setColor(new Color(60,70,90));
+//
+//            String text = "CarSimulator";
+//            int x = gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
+//            int y = gp.tileSize*3;
+//            g2.drawString(text, x, y);
+//            //menu
+//            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+//
+//            text = "NEW START";
+//            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
+//            y += gp.tileSize*4;
+//            g2.drawString(text, x, y);
+//
+//            text = "Load GAME";
+//            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
+//            y += gp.tileSize;
+//            g2.drawString(text, x, y);
+//
+//            text = "QUIT";
+//            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
+//            y += gp.tileSize;
+//            g2.drawString(text, x, y);
+//
+//        }
 
 
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time

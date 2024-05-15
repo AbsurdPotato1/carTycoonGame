@@ -149,10 +149,10 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D)g; // just adds some useful functions
 
         //Title screen
-        if(gameState == titleState){
-            ui.draw(g2);
-        }
-        else{
+//        if(gameState == titleState){
+//            ui.draw(g2);
+//        }
+//        else{
             tileM.draw(g2);
 
             // Objects
@@ -174,7 +174,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             ui.draw(g2);
 
-        }
+//        }
 
         g2.dispose(); // saves memory (optimization)
 
