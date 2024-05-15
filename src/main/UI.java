@@ -1,5 +1,6 @@
 package main;
 
+import object.IdToObject;
 import object.ObjectCopperOre;
 import object.SuperObject;
 
@@ -88,8 +89,25 @@ public class UI {
         int slotX = slotXstart;
         int slotY = slotYstart;
 
-        for(SuperObject obj : gp.player.inventory.keySet()){
-            g2.drawImage(obj.inventoryImage, slotX, slotY, 48, 48, null);
+//        for (Integer objId : gp.player.inventory.keySet()) {
+//            Class<? extends SuperObject> objClass = IdToObject.getObjectFromId(objId);
+//
+//            try {
+//                // Access the static 'inventoryImage' field from the class
+//                BufferedImage inventoryImage = (BufferedImage) objClass.getField("inventoryImage").get(null);
+//
+//                // Draw the image if it exists
+//                if (inventoryImage != null) {
+//                    g2.drawImage(inventoryImage, slotX, slotY, 48, 48, null);
+//                }
+//            } catch (NoSuchFieldException | IllegalAccessException e) {
+//                e.printStackTrace(); // Handle exceptions appropriately
+//            }
+//
+//            slotX += gp.tileSize;
+//        }
+        for(Integer objId : gp.player.inventory.keySet()){
+            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
             slotX += gp.tileSize;
         }
 
@@ -116,8 +134,9 @@ public class UI {
         final int slotYstart = frameY + (80 - gp.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
-        for(SuperObject obj : gp.player.inventory.keySet()){
-            g2.drawImage(obj.inventoryImage, slotX, slotY, 48, 48, null);
+
+        for(Integer objId : gp.player.inventory.keySet()){
+            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
             slotX += gp.tileSize;
         }
 //        for(int i = 0; i < gp.player.inventory.size(); i++){

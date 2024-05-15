@@ -5,9 +5,13 @@ import main.GamePanel;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class ObjectCopperOre extends SuperObject {
+//    public static final String name = "copperOre";
+    public static final int objectId = 0;
+    public static BufferedImage inventoryImage;
     public ObjectCopperOre(){
         collisionWidth = 22;
         collisionHeight = 19;
@@ -15,7 +19,7 @@ public class ObjectCopperOre extends SuperObject {
         objectHeight = 48;
         collisionXOffset = 14;
         collisionYOffset = 17;
-        objectId = 0;
+//        objectId = 0;
         solidArea = new Rectangle(collisionXOffset, collisionYOffset, collisionWidth, collisionHeight);
         name = "copperOre";
         try {

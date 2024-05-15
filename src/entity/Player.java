@@ -19,7 +19,7 @@ public class Player extends Entity{
     public final int screenX, screenY;
     public int numCopper = 0; // change to inventory in future
     long lastPickUpTime = System.nanoTime();
-    public HashMap<SuperObject, Integer> inventory = new HashMap<>();
+    public HashMap<Integer, Integer> inventory = new HashMap<>();
 //    public int[] inventory = new int[255]; // size is number of objects.
 //    public ArrayList<SuperObject> inventory = new ArrayList<>();
     public Player(GamePanel gp, KeyHandler keyH){
@@ -35,7 +35,7 @@ public class Player extends Entity{
         solidAreaDefaultY = solidArea.y;
         setDefaultValues();
         getPlayerImage();
-        setItems();
+        setPlayerStartingItems();
     }
     public void setDefaultValues(){
         worldX = 50;
@@ -43,11 +43,17 @@ public class Player extends Entity{
         speedHor = 2 * 60.0 / gp.FPS;
         speedVert = 2 * 60.0 / gp.FPS;
     }
-    public void setItems(){
-        inventory.merge(new ObjectCopperOre(), 1, Integer::sum); // increments key (count) of value (SuperObject)
-        inventory.merge(new ObjectCopperOre(), 1, Integer::sum); // increments key (count) of value (SuperObject)
-        inventory.merge(new ObjectCopperOre(), 1, Integer::sum); // increments key (count) of value (SuperObject)
-
+    public void addOneToInventory(Class c){
+        try {
+            inventory.merge((Integer)c.getField("objectId").get(null), 1, Integer::sum); // increments key (count) of value (SuperObject)
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void setPlayerStartingItems(){
+//        addOneToInventory(ObjectCopperOre.class);
+//        addOneToInventory(ObjectCopperOre.class);
+//        addOneToInventory(ObjectCopperOre.class);
     }
 
     public void getPlayerImage(){
@@ -146,7 +152,7 @@ public class Player extends Entity{
                 switch(objectName){
                     case "copperOre":
                         gp.playSE(1); // sound effect
-                        numCopper++;
+                        addOneToInventory(ObjectCopperOre.class);
                         gp.obj[i] = null;
                         gp.ui.showMessage("You got a copper ore!");
                         break;
