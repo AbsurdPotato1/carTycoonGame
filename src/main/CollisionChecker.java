@@ -79,8 +79,8 @@ public class CollisionChecker {
                 entity.solidArea.x = (int)entity.worldX + entity.solidArea.x; // move entity solidArea temporarily
                 entity.solidArea.y = (int)entity.worldY + entity.solidArea.y; // move entity solidArea temporarily
 
-                gp.obj[i].solidArea.x = gp.obj[i].worldX + gp.obj[i].solidArea.x + gp.obj[i].objectXOffset; // move obj solidArea temporarily
-                gp.obj[i].solidArea.y = gp.obj[i].worldY + gp.obj[i].solidArea.y + gp.obj[i].objectYOffset; // move obj solidArea temporarily
+                gp.obj[i].solidArea.x = gp.obj[i].worldX + gp.obj[i].solidArea.x + gp.obj[i].collisionXOffset; // move obj solidArea temporarily
+                gp.obj[i].solidArea.y = gp.obj[i].worldY + gp.obj[i].solidArea.y + gp.obj[i].collisionYOffset; // move obj solidArea temporarily
 
                 if(entity.direction[0]) { // up
                     entity.solidArea.y -= entity.speedVert; // move solidArea to next frame position temporarily

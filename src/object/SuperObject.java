@@ -17,8 +17,8 @@ public class SuperObject {
     public int solidAreaDefaultY = 0;
     public int collisionWidth, collisionHeight; // width and height of collision hitbox
     public int objectWidth, objectHeight; // width and height of object image (often same as collisionWidth and collisionHeight)
-    public int objectXOffset = 0; // horizontal offset into the tile for an object - usually 0
-    public int objectYOffset = 0; // vertical offset into the tile for an object
+    public int collisionXOffset = 0; // horizontal offset into the tile for an object - usually 0
+    public int collisionYOffset = 0; // vertical offset into the tile for an object
     public String description = "";
     public int objectId;
 

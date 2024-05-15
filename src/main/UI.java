@@ -1,5 +1,6 @@
 package main;
 
+import object.IdToObject;
 import object.ObjectCopperOre;
 import object.SuperObject;
 
@@ -12,22 +13,18 @@ import java.util.ArrayList;
 
 public class UI {
     GamePanel gp;
-    Font arial_40, montserrat;
     BufferedImage copperOreImage;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
     double playTime;
-    File fontFile;
     public int slotCol = 0;
     public int slotRow = 0;
 
     public UI(GamePanel gp){
         this.gp = gp;
-        arial_40 = new Font("Arial", Font.PLAIN, 40);
         ObjectCopperOre copperOre = new ObjectCopperOre();
         copperOreImage = copperOre.image;
-        montserrat = loadFont("fonts/Montserrat-VariableFont_wght.ttf");
 //        try {
 //            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("fonts/Montserrat-VariableFont_wght.ttf");
 //            fontFile = new File("fonts/Montserrat-VariableFont_wght.ttf");
@@ -38,18 +35,6 @@ public class UI {
 //            throw new RuntimeException(e);
 //        }
     }
-    public Font loadFont(String path){
-        try {
-            InputStream fontStream = getClass().getClassLoader().getResourceAsStream(path);
-            fontFile = new File(path);
-            Font temp = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(14f);
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(temp);
-            return temp;
-        } catch (IOException | FontFormatException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void showMessage(String text){
         message = text;
@@ -58,7 +43,7 @@ public class UI {
     public void draw(Graphics2D g2){
         drawHotbar(g2);
         int playTimeTextLength;
-        g2.setFont(montserrat);
+        g2.setFont(Fonts.montserrat);
         g2.setFont(g2.getFont().deriveFont(30f));
         g2.setColor(Color.white);
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time
@@ -90,9 +75,25 @@ public class UI {
         int slotX = slotXstart;
         int slotY = slotYstart;
 
-        for(int i = 0; i < gp.player.inventory.length; i++){
-            g2.drawImage(gp.player.inventory[i].inventoryImage, slotX, slotY, 48, 48, null);
-
+//        for (Integer objId : gp.player.inventory.keySet()) {
+//            Class<? extends SuperObject> objClass = IdToObject.getObjectFromId(objId);
+//
+//            try {
+//                // Access the static 'inventoryImage' field from the class
+//                BufferedImage inventoryImage = (BufferedImage) objClass.getField("inventoryImage").get(null);
+//
+//                // Draw the image if it exists
+//                if (inventoryImage != null) {
+//                    g2.drawImage(inventoryImage, slotX, slotY, 48, 48, null);
+//                }
+//            } catch (NoSuchFieldException | IllegalAccessException e) {
+//                e.printStackTrace(); // Handle exceptions appropriately
+//            }
+//
+//            slotX += gp.tileSize;
+//        }
+        for(Integer objId : gp.player.inventory.keySet()){
+            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
             slotX += gp.tileSize;
         }
 
@@ -120,11 +121,15 @@ public class UI {
         int slotX = slotXstart;
         int slotY = slotYstart;
 
-        for(int i = 0; i < gp.player.inventory.size(); i++){
-            g2.drawImage(gp.player.inventory.get(i).inventoryImage, slotX, slotY, 48, 48, null);
-
+        for(Integer objId : gp.player.inventory.keySet()){
+            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
             slotX += gp.tileSize;
         }
+//        for(int i = 0; i < gp.player.inventory.size(); i++){
+//            g2.drawImage(gp.player.inventory.get(i).inventoryImage, slotX, slotY, 48, 48, null);
+//
+//            slotX += gp.tileSize;
+//        }
 
         int cursorX = slotXstart + (gp.tileSize * slotCol);
         int cursorY = slotYstart + (gp.tileSize * slotRow);
@@ -134,6 +139,8 @@ public class UI {
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+
+
     }
 
     public void drawSubWindow(int x, int y, int width, int height, Graphics2D g2){

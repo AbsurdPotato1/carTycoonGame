@@ -1,6 +1,7 @@
 package main;//package main.Main;
 import entity.Entity;
 import entity.Player;
+import object.IdToObject;
 import object.SuperObject;
 import tile.TileManager;
 
@@ -35,20 +36,22 @@ public class GamePanel extends JPanel implements Runnable {
     public int FPS = 60;
 
     // SYSTEM
+    public boolean gameStarted = false;
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler(this);
+    MouseHandler mouseH = new MouseHandler(this);
     Sound music = new Sound();
     Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     Thread gameThread; // This will run the code continuously (i.e. won't stop)
-
+    public Homescreen hs = new Homescreen(this);
     // GRAPHICS
     public UI ui = new UI(this);
 
     // ENTITIES
     public Player player = new Player(this, keyH);
-    public SuperObject[] obj = new SuperObject[100]; // display up to 100 objects at the same time
+    public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
     public Entity npc[] = new Entity[100];
 
 
@@ -57,21 +60,23 @@ public class GamePanel extends JPanel implements Runnable {
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
+        this.addMouseListener(mouseH);
         this.setFocusable(true);
     }
 
     public void setUpGame(){
+        IdToObject.setIdObject();
         aSetter.setObject();
         aSetter.setNPC();
-//        playMusic(0);
+        //playMusic(0);
         setFullScreen();
-
     }
 
     public void setFullScreen(){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
+
         Main.window.setExtendedState(JFrame.MAXIMIZED_BOTH);
         screenWidth = (int) width;
         screenHeight = (int) height;
@@ -86,7 +91,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-
         double drawInterval = 1000000000/FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
@@ -134,29 +138,33 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D)g; // just adds some useful functions
 
-        // Tiles -- Keep in mind drawing order does matter.
-        tileM.draw(g2);
+        if (gameStarted) {
+            // Tiles -- Keep in mind drawing order does matter.
+            tileM.draw(g2);
 
-        // Objects
-        for(int i = 0; i < obj.length; i++){
-            if(obj[i] != null){
-                obj[i].draw(g2, this);
+            // Objects
+            for(int i = 0; i < obj.length; i++){
+                if(obj[i] != null){
+                    obj[i].draw(g2, this);
+                }
             }
-        }
 
-        //NPCs
-        for(int i = 0; i < npc.length; i++){
-            if(npc[i] != null){
-                npc[i].draw(g2);
+            //NPCs
+            for(int i = 0; i < npc.length; i++){
+                if(npc[i] != null){
+                    npc[i].draw(g2);
+                }
             }
+
+            // Player
+            player.draw(g2);
+
+            ui.draw(g2);
+
+            g2.dispose(); // saves memory (optimization)
+        } else {
+            hs.draw(g2);
         }
-
-        // Player
-        player.draw(g2);
-
-        ui.draw(g2);
-
-        g2.dispose(); // saves memory (optimization)
     }
 
     public void playMusic(int i){
