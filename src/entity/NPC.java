@@ -74,4 +74,14 @@ public class NPC extends Entity { //Just a collection of NPC-wide methods
     public void triggerDialogue(int dialogue_stage, Graphics2D g2) {
         dialogues[dialogue_stage].runDialogue(g2);
     }
+
+    public boolean isClicked() {
+        if(gp.mouseH.mouseClicked){
+            if(gp.mouseH.mouseX >= (this.worldX + solidArea.x) && gp.mouseH.mouseX <= (this.worldX + solidArea.x + solidArea.width) &&
+            gp.mouseH.mouseY >= (this.worldY + solidArea.y) && gp.mouseH.mouseY <= (this.worldX + solidArea.x + solidArea.width )) { // Checks that mouseclick is inside
+                return true;
+            }
+        }
+        return false;
+    }
 }

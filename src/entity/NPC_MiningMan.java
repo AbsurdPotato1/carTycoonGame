@@ -27,7 +27,7 @@ public class NPC_MiningMan extends NPC {
 
     public void draw(Graphics2D g2 ) {
         super.draw(g2);
-        if(gp.mouseH.mouseClicked) {
+        if(isClicked()) {
             triggerDialogue(0, g2);
 
         }
