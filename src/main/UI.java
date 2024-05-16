@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class UI {
     GamePanel gp;
-    Font arial_40, montserrat;
     BufferedImage copperOreImage;
     public boolean messageOn = false;
     public String message = "";
