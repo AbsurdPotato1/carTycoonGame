@@ -59,8 +59,8 @@ public class UI {
         playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
 
         g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
-        g2.drawImage(copperOreImage, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
-        g2.drawString("x " + gp.player.numCopper, 75, 50);
+//        g2.drawImage(copperOreImage, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
+//        g2.drawString("x " + gp.player.inventory.get(0), 75, 50);
         if(messageOn){
             g2.drawString(message, gp.tileSize / 2, gp.tileSize * 5);
 
@@ -84,10 +84,17 @@ public class UI {
         final int slotYstart = frameY + (80 - gp.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
-
+        int maxObject = 5;
         for(Integer objId : gp.player.inventory.keySet()){
-            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
-            slotX += gp.tileSize;
+            Integer numObject = gp.player.inventory.get(objId);
+            for(int i = 0; i < numObject / maxObject + 1; i++){
+                g2.setFont(Fonts.pressStart_2P);
+                g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
+                int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(Math.min(maxObject, numObject)), g2).getWidth();
+                g2.drawString(String.valueOf(Math.min(maxObject, numObject)), slotX+44 - numLength, slotY+45);
+                slotX += gp.tileSize;
+                numObject -= maxObject;
+            }
         }
 
         int cursorX = slotXstart + (gp.tileSize * slotCol);
@@ -114,15 +121,16 @@ public class UI {
         int slotX = slotXstart;
         int slotY = slotYstart;
 
+        int numDraw = 0;
         for(Integer objId : gp.player.inventory.keySet()){
-            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY + slotRow * 16, 48, 48, null);
+            g2.setFont(Fonts.pressStart_2P);
+            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY + (numDraw / 9) * 16, 48, 48, null);
+            String numObject = String.valueOf(gp.player.inventory.get(objId));
+            int numLength = (int)g2.getFontMetrics().getStringBounds(numObject, g2).getWidth();
+            g2.drawString(numObject, slotX+44 - numLength, slotY+45);
             slotX += gp.tileSize;
+            numDraw++;
         }
-//        for(int i = 0; i < gp.player.inventory.size(); i++){
-//            g2.drawImage(gp.player.inventory.get(i).inventoryImage, slotX, slotY, 48, 48, null);
-//
-//            slotX += gp.tileSize;
-//        }
 
         int cursorX = slotXstart + (gp.tileSize * slotCol);
         int cursorY = slotYstart + (gp.tileSize * slotRow) + slotRow * 16;
