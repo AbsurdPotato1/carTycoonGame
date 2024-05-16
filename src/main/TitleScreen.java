@@ -5,11 +5,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Homescreen {
+public class TitleScreen {
     GamePanel gp;
     boolean playClicked;
 
-    public Homescreen(GamePanel gp) {
+    public TitleScreen(GamePanel gp) {
         this.gp = gp;
         playClicked = false;
     }
@@ -58,12 +58,17 @@ public class Homescreen {
         if(gp.mouseH.mouseClicked){
             if(gp.mouseH.mouseX >= (gp.screenWidth - startw) / 2 && gp.mouseH.mouseX <= (gp.screenWidth + startw) / 2 &&
                 gp.mouseH.mouseY >= (gp.screenHeight - starth) /2 && gp.mouseH.mouseY <= (gp.screenHeight + starth) / 2){
+                try {
+                    Animations.fadeOut(g2);
                     gp.gameState = GamePanel.playerState;
-                    //gp.stopMusic();
+                    Animations.fadeIn(g2);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                //gp.stopMusic();
                     //gp.playMusic(2);
             }
         }
-        g2.dispose();
     }
 
 
