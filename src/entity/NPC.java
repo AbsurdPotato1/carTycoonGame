@@ -2,10 +2,12 @@ package entity;
 
 import main.GamePanel;
 
+import java.awt.Graphics2D;
 import java.util.Random;
 
 
 public class NPC extends Entity { //Just a collection of NPC-wide methods
+    public Dialogue[] dialogues = new Dialogue[10]; // Max 10 dialogs
 
     public NPC(GamePanel gp) {
         super(gp);
@@ -64,5 +66,12 @@ public class NPC extends Entity { //Just a collection of NPC-wide methods
             }
             actionLockCounter = 0;
         }
+    }
+
+    //dialogue_stage has not yet been implemented but is intended to access an array for the corresponding dialogue that the NPC should say
+    //ds is 0 through 9
+
+    public void triggerDialogue(int dialogue_stage, Graphics2D g2) {
+        dialogues[dialogue_stage].runDialogue(g2);
     }
 }

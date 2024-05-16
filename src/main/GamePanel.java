@@ -36,14 +36,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     public int FPS = 30;
     // SYSTEM
-    TileManager tileM = new TileManager(this);
-    KeyHandler keyH = new KeyHandler(this);
-    MouseHandler mouseH = new MouseHandler(this);
-    Sound music = new Sound();
-    Sound se = new Sound();
+    public TileManager tileM = new TileManager(this);
+    public KeyHandler keyH = new KeyHandler(this);
+    public MouseHandler mouseH = new MouseHandler(this);
+    public Sound music = new Sound();
+    public Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
-    Thread gameThread; // This will run the code continuously (i.e. won't stop)en hs = new TitleScreen(this);
+    public Thread gameThread; // This will run the code continuously (i.e. won't stop)en hs = new TitleScreen(this);
     public TitleScreen ts = new TitleScreen(this);
 
     // GRAPHICS
