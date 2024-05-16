@@ -34,8 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxWorldCol = 64;
     public final int maxWorldRow = 48;
 
-    public int FPS = 60;
-    public boolean gameStarted = false;
+    public int FPS = 30;
     // SYSTEM
     TileManager tileM = new TileManager(this);
     KeyHandler keyH = new KeyHandler(this);
@@ -60,10 +59,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     //states
     public int gameState;
-    public final int titleState = 0;
-    public final int playerState =1;
-    public final int pauseState = 2;
-    public final int dialogueState = 3;
+    public static final int titleState = 0;
+    public static final int playerState =1;
+    public static final int pauseState = 2;
+    public static final int dialogueState = 3;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -82,7 +81,7 @@ public class GamePanel extends JPanel implements Runnable {
         setFullScreen();
 
         //game state
-        gameState = titleState;
+        gameState = GamePanel.titleState;
     }
 
     public void setFullScreen(){
@@ -151,7 +150,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D)g; // just adds some useful functions
 
-        if (gameStarted) {
+        if (gameState != 0) {
             // Tiles -- Keep in mind drawing order does matter.
             tileM.draw(g2);
 

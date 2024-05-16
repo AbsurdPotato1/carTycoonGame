@@ -1,6 +1,6 @@
 TODO:
 -
-- Title screen
+- Title screen (ethan needs to get a bng)
 - Draw full inventory on keyboard click
 - NPC interaction
 - Mining

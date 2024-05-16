@@ -17,13 +17,14 @@ public class Homescreen {
     public void draw(Graphics2D g2)  {
         BufferedImage image = null;
         try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/earth.png"));
+            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("loading_screen/city-bng1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         g2.setFont(Fonts.pressStart_2P.deriveFont(30f));
-        int bheight = gp.screenHeight; // button height and width very chonky
-        int bwidth = bheight;
+        // b stands for BACKGROUND!!
+        int bheight = gp.screenHeight; // Full screen height
+        int bwidth = bheight * 16 / 9; // Approx 16:9 (due to int division)
 
         float opacity = 0.5f;
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
@@ -41,6 +42,7 @@ public class Homescreen {
             e.printStackTrace();
         }
 
+        // `start` stands for the START BUTTON.
         int starth = start1.getHeight() * 10; // start1 dimensions == start2 dims
         int startw = start1.getWidth() * 10; // Expand by 10
         long time = System.nanoTime();
@@ -54,12 +56,16 @@ public class Homescreen {
         int loadingScreenTextHeight = (int)g2.getFontMetrics().getStringBounds(toDisplay, g2).getHeight();
         g2.drawString(toDisplay, (gp.screenWidth - loadingScreenTextLength) / 2, (gp.screenHeight - loadingScreenTextHeight - 170) / 2);
         if(gp.mouseH.mouseClicked){
-            if(gp.mouseH.mouseX >= (gp.screenWidth - bwidth) / 2 && gp.mouseH.mouseX <= (gp.screenWidth + bwidth) / 2 &&
-                gp.mouseH.mouseY >= (gp.screenHeight - bheight) /2 && gp.mouseH.mouseY <= (gp.screenHeight + bheight) / 2){
-                    gp.gameStarted = true;
+            if(gp.mouseH.mouseX >= (gp.screenWidth - startw) / 2 && gp.mouseH.mouseX <= (gp.screenWidth + startw) / 2 &&
+                gp.mouseH.mouseY >= (gp.screenHeight - starth) /2 && gp.mouseH.mouseY <= (gp.screenHeight + starth) / 2){
+                    gp.gameState = GamePanel.playerState;
+                    //gp.stopMusic();
+                    //gp.playMusic(2);
             }
         }
         g2.dispose();
     }
+
+
 
 }
