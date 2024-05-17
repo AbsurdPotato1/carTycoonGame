@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import object.IdToObject;
 import object.ObjectCopperOre;
 import object.SuperObject;
 
@@ -20,6 +21,7 @@ public class Player extends Entity{
     public int numCopper = 0; // change to inventory in future
     long lastPickUpTime = System.nanoTime();
     public HashMap<Integer, Integer> inventory = new HashMap<>();
+    public int maxObjectPerSlot = 99;
 //    public int[] inventory = new int[255]; // size is number of objects.
 //    public ArrayList<SuperObject> inventory = new ArrayList<>();
     public Player(GamePanel gp, KeyHandler keyH){
@@ -139,11 +141,14 @@ public class Player extends Entity{
             }
         }
     }
+    public boolean spaceInInventory(int objectId){
+        return gp.ui.inventorySize < 27 || (gp.ui.inventorySize == 27 && inventory.get(objectId) % maxObjectPerSlot > 0);
+    }
     public void pickUpObject(int i){
         long currentTime;
         currentTime = System.nanoTime();
         long pickUpInterval = 5;
-        if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // last pickup >= 5 frames ago? -- TODO: seems to be going 6 frames (10 items / sec)
+        if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // checks if last pickup >= 5 frames ago -- TODO: seems to be going 6 frames (10 items / sec) - due to slight inaccuracy in timing
             lastPickUpTime = currentTime;
             if(i != 99999){
 
@@ -151,10 +156,12 @@ public class Player extends Entity{
 
                 switch(objectName){
                     case "copperOre":
-                        gp.playSE(1); // sound effect
-                        addOneToInventory(ObjectCopperOre.class);
-                        gp.obj[i] = null;
-                        gp.ui.showMessage("You got a copper ore!");
+                        if(spaceInInventory(ObjectCopperOre.objectId)) {
+                            gp.playSE(1); // sound effect
+                            addOneToInventory(ObjectCopperOre.class);
+                            gp.obj[i] = null;
+                            gp.ui.showMessage("You got a copper ore!");
+                        }
                         break;
                     case "chest":
                         gp.ui.showMessage("L bozo chests don't work yet");

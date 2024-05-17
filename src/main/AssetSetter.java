@@ -14,8 +14,8 @@ public class AssetSetter {
     public void setObject(){
         for(int i = 0; i < 255; i++){
             gp.obj[i] = new ObjectCopperOre();
-            gp.obj[i].worldX = 9 * gp.tileSize;
-            gp.obj[i].worldY = 9 * gp.tileSize;
+            gp.obj[i].worldX = 3 * gp.tileSize;
+            gp.obj[i].worldY = 3 * gp.tileSize;
         }
         gp.obj[0] = new ObjectCopperOre();
         gp.obj[0].worldX = 9 * gp.tileSize;

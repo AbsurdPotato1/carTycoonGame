@@ -34,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxWorldCol = 64;
     public final int maxWorldRow = 48;
 
-    public int FPS = 30;
+    public int FPS = 60;
     public boolean gameStarted = false;
     // SYSTEM
     TileManager tileM = new TileManager(this);
@@ -61,7 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
     //states
     public int gameState;
     public final int titleState = 0;
-    public final int playerState =1;
+    public final int playerState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
 
