@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class UI {
     GamePanel gp;
-    BufferedImage copperOreImage;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
@@ -24,17 +23,6 @@ public class UI {
 
     public UI(GamePanel gp){
         this.gp = gp;
-        ObjectCopperOre copperOre = new ObjectCopperOre();
-        copperOreImage = copperOre.image;
-//        try {
-//            InputStream fontStream = getClass().getClassLoader().getResourceAsStream("fonts/Montserrat-VariableFont_wght.ttf");
-//            fontFile = new File("fonts/Montserrat-VariableFont_wght.ttf");
-//            montserrat = Font.createFont(Font.TRUETYPE_FONT, fontStream).deriveFont(14f);
-//            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//            ge.registerFont(montserrat);
-//        } catch (IOException | FontFormatException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
 
@@ -57,10 +45,8 @@ public class UI {
         playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
 
         g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
-//        g2.drawImage(copperOreImage, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
-//        g2.drawString("x " + gp.player.inventory.get(0), 75, 50);
         if(messageOn){
-            g2.drawString(message, gp.tileSize / 2, gp.tileSize * 5);
+            g2.drawString(message, GamePanel.tileSize / 2, GamePanel.tileSize * 5);
 
             messageCounter++;
             if(messageCounter > 120){
@@ -78,8 +64,8 @@ public class UI {
         int frameY = gp.screenHeight - frameHeight;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2);
 
-        final int slotXstart = frameX + (80 - gp.tileSize) / 2;
-        final int slotYstart = frameY + (80 - gp.tileSize) / 2;
+        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
+        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
         int hotbarSlot = 0;
@@ -98,16 +84,16 @@ public class UI {
                 int curNumObj = Math.min(gp.player.maxObjectPerSlot, numObject - numDrawn); // number to draw
                 int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(curNumObj), g2).getWidth(); // length of number string to draw
                 g2.drawString(String.valueOf(curNumObj), slotX+44 - numLength, slotY+44); // draw number of objects
-                slotX += gp.tileSize;
+                slotX += GamePanel.tileSize;
                 numDrawn += gp.player.maxObjectPerSlot;
                 hotbarSlot++;
             }
         }
 
-        int cursorX = slotXstart + (gp.tileSize * slotCol);
+        int cursorX = slotXstart + (GamePanel.tileSize * slotCol);
         int cursorY = slotYstart;
-        int cursorWidth = gp.tileSize;
-        int cursorHeight = gp.tileSize;
+        int cursorWidth = GamePanel.tileSize;
+        int cursorHeight = GamePanel.tileSize;
 
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(3));
@@ -123,8 +109,8 @@ public class UI {
         int frameY = 20;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2);
 
-        final int slotXstart = frameX + (80 - gp.tileSize) / 2;
-        final int slotYstart = frameY + (80 - gp.tileSize) / 2;
+        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
+        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
 
@@ -135,20 +121,20 @@ public class UI {
 //            String numObject = String.valueOf(gp.player.inventory.get(objId));
 //            int numLength = (int)g2.getFontMetrics().getStringBounds(numObject, g2).getWidth();
 //            g2.drawString(numObject, slotX+44 - numLength, slotY+45);
-//            slotX += gp.tileSize;
+//            slotX += GamePanel.tileSize;
 //            numDraw++;
 //        }
         int inventorySlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
             if(inventorySlot == 9 || inventorySlot == 18){
-                slotY += gp.tileSize + 16;
+                slotY += GamePanel.tileSize + 16;
                 slotX = slotXstart;
             }
             int numObject = gp.player.inventory.get(objId); // number of objects
             int numDrawn = 0; // number of objects of current object that have been drawn
             for(int i = 0; i < (numObject-1) / gp.player.maxObjectPerSlot + 1; i++){
                 if(inventorySlot == 9 || inventorySlot == 18){
-                    slotY += gp.tileSize + 16;
+                    slotY += GamePanel.tileSize + 16;
                     slotX = slotXstart;
                 }
                 g2.setFont(Fonts.pressStart_2P);
@@ -156,17 +142,17 @@ public class UI {
                 int curNumObj = Math.min(gp.player.maxObjectPerSlot, numObject - numDrawn); // number to draw
                 int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(curNumObj), g2).getWidth(); // length of number string to draw
                 g2.drawString(String.valueOf(curNumObj), slotX+44 - numLength, slotY+44); // draw number of objects
-                slotX += gp.tileSize;
+                slotX += GamePanel.tileSize;
                 numDrawn += gp.player.maxObjectPerSlot;
                 inventorySlot++;
             }
         }
         inventorySize = Math.max(inventorySize, inventorySlot);
 
-        int cursorX = slotXstart + (gp.tileSize * slotCol);
-        int cursorY = slotYstart + (gp.tileSize * slotRow) + slotRow * 16;
-        int cursorWidth = gp.tileSize;
-        int cursorHeight = gp.tileSize;
+        int cursorX = slotXstart + (GamePanel.tileSize * slotCol);
+        int cursorY = slotYstart + (GamePanel.tileSize * slotRow) + slotRow * 16;
+        int cursorWidth = GamePanel.tileSize;
+        int cursorHeight = GamePanel.tileSize;
 
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(3));

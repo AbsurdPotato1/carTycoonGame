@@ -12,7 +12,8 @@ public class ObjectCopperOre extends SuperObject {
 //    public static final String name = "copperOre";
     public static final int objectId = 0;
     public static BufferedImage inventoryImage;
-    public ObjectCopperOre(){
+    public ObjectCopperOre(GamePanel gp, int row, int col){
+        super(gp, row, col);
         collisionWidth = 22;
         collisionHeight = 19;
         objectWidth = 48;
@@ -37,9 +38,9 @@ public class ObjectCopperOre extends SuperObject {
         int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
         int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
 
-        if(worldX > gp.player.worldX - gp.player.screenX - gp.tileSize &&
+        if(worldX > gp.player.worldX - gp.player.screenX - GamePanel.tileSize &&
                 worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
-                worldY > gp.player.worldY - gp.player.screenY - gp.tileSize &&
+                worldY > gp.player.worldY - gp.player.screenY - GamePanel.tileSize &&
                 worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
             g2.drawImage(image, screenX, screenY, objectWidth, objectHeight, null);
         }

@@ -80,11 +80,11 @@ public class Entity {
         int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
         int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
 
-        if(worldX > gp.player.worldX - gp.player.screenX - gp.tileSize &&
+        if(worldX > gp.player.worldX - gp.player.screenX - GamePanel.tileSize &&
                 worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
-                worldY > gp.player.worldY - gp.player.screenY - gp.tileSize &&
+                worldY > gp.player.worldY - gp.player.screenY - GamePanel.tileSize &&
                 worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
-            g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
         }
     }
 }

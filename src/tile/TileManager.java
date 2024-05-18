@@ -98,16 +98,16 @@ public class TileManager {
 
             int tileNum = mapTileNum[worldRow][worldCol];
 
-            int worldX = worldCol * gp.tileSize;
-            int worldY = worldRow * gp.tileSize;
+            int worldX = worldCol * GamePanel.tileSize;
+            int worldY = worldRow * GamePanel.tileSize;
             int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
             int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
 
-            if(worldX > gp.player.worldX - gp.player.screenX - gp.tileSize &&
+            if(worldX > gp.player.worldX - gp.player.screenX - GamePanel.tileSize &&
                worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
-               worldY > gp.player.worldY - gp.player.screenY - gp.tileSize &&
+               worldY > gp.player.worldY - gp.player.screenY - GamePanel.tileSize &&
                worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
-                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+                g2.drawImage(tile[tileNum].image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
             }
 
             worldCol++;
@@ -204,15 +204,15 @@ public class TileManager {
 //        while(col < gp.maxScreenCol && row < gp.maxScreenRow){
 //
 //            int tileNum = mapTileNum[row][col];
-//            g2.drawImage(tile[tileNum].image, x, y, gp.tileSize, gp.tileSize, null);
+//            g2.drawImage(tile[tileNum].image, x, y, GamePanel.tileSize, GamePanel.tileSize, null);
 //            col++;
-//            x += gp.tileSize;
+//            x += GamePanel.tileSize;
 //
 //            if(col == gp.maxScreenCol){
 //                col = 0;
 //                x = 0;
 //                row++;
-//                y += gp.tileSize;
+//                y += GamePanel.tileSize;
 //            }
 //
 //        }
