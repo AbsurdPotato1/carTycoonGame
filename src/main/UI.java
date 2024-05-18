@@ -20,6 +20,7 @@ public class UI {
     double playTime;
     public int slotCol = 0;
     public int slotRow = 0;
+    public int inventorySize;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -42,48 +43,22 @@ public class UI {
         messageOn = true;
     }
     public void draw(Graphics2D g2){
-        drawHotbar(g2);
+        if(gp.keyH.inventoryPressed){
+            drawInventory(g2);
+        }else {
+            drawHotbar(g2);
+        }
         int playTimeTextLength;
         g2.setFont(Fonts.montserrat);
         g2.setFont(g2.getFont().deriveFont(30f));
         g2.setColor(Color.white);
 
-        //drawing the title state
-//        if(gp.gameState == gp.titleState){
-//            //drawTitleScreen();
-//            g2.setColor(new Color(60,70,90));
-//
-//            String text = "CarSimulator";
-//            int x = gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
-//            int y = gp.tileSize*3;
-//            g2.drawString(text, x, y);
-//            //menu
-//            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-//
-//            text = "NEW START";
-//            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
-//            y += gp.tileSize*4;
-//            g2.drawString(text, x, y);
-//
-//            text = "Load GAME";
-//            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
-//            y += gp.tileSize;
-//            g2.drawString(text, x, y);
-//
-//            text = "QUIT";
-//            x =gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
-//            y += gp.tileSize;
-//            g2.drawString(text, x, y);
-//
-//        }
-
-
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time
         playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
 
         g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
-        g2.drawImage(copperOreImage, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
-        g2.drawString("x " + gp.player.numCopper, 75, 50);
+//        g2.drawImage(copperOreImage, gp.tileSize / 2, gp.tileSize / 2, gp.tileSize, gp.tileSize, null);
+//        g2.drawString("x " + gp.player.inventory.get(0), 75, 50);
         if(messageOn){
             g2.drawString(message, gp.tileSize / 2, gp.tileSize * 5);
 
@@ -95,15 +70,9 @@ public class UI {
         }
 
     }
-//    public void drawTitleScreen(){
-//
-//        //Title name
-//        //changing the font  g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
-//        String text = "CarSimulator";
-//        int x = gp.screenWidth/2 -  (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth()/2;
-//    }
+
     public void drawHotbar(Graphics2D g2){
-        int frameWidth = 992;
+        int frameWidth = 464;
         int frameHeight = 80;
         int frameX = gp.screenWidth / 2 - frameWidth / 2;
         int frameY = gp.screenHeight - frameHeight;
@@ -113,31 +82,30 @@ public class UI {
         final int slotYstart = frameY + (80 - gp.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
-
-//        for (Integer objId : gp.player.inventory.keySet()) {
-//            Class<? extends SuperObject> objClass = IdToObject.getObjectFromId(objId);
-//
-//            try {
-//                // Access the static 'inventoryImage' field from the class
-//                BufferedImage inventoryImage = (BufferedImage) objClass.getField("inventoryImage").get(null);
-//
-//                // Draw the image if it exists
-//                if (inventoryImage != null) {
-//                    g2.drawImage(inventoryImage, slotX, slotY, 48, 48, null);
-//                }
-//            } catch (NoSuchFieldException | IllegalAccessException e) {
-//                e.printStackTrace(); // Handle exceptions appropriately
-//            }
-//
-//            slotX += gp.tileSize;
-//        }
+        int hotbarSlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
-            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
-            slotX += gp.tileSize;
+            if(hotbarSlot == 9){
+                break;
+            }
+            int numObject = gp.player.inventory.get(objId);
+            int numDrawn = 0; // number of objects of current object that have been drawn
+            for(int i = 0; i < (numObject-1) / gp.player.maxObjectPerSlot + 1; i++){
+                if(hotbarSlot == 9){
+                    break;
+                }
+                g2.setFont(Fonts.pressStart_2P);
+                g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
+                int curNumObj = Math.min(gp.player.maxObjectPerSlot, numObject - numDrawn); // number to draw
+                int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(curNumObj), g2).getWidth(); // length of number string to draw
+                g2.drawString(String.valueOf(curNumObj), slotX+44 - numLength, slotY+44); // draw number of objects
+                slotX += gp.tileSize;
+                numDrawn += gp.player.maxObjectPerSlot;
+                hotbarSlot++;
+            }
         }
 
         int cursorX = slotXstart + (gp.tileSize * slotCol);
-        int cursorY = slotYstart + (gp.tileSize * slotRow);
+        int cursorY = slotYstart;
         int cursorWidth = gp.tileSize;
         int cursorHeight = gp.tileSize;
 
@@ -149,10 +117,10 @@ public class UI {
     }
 
     public void drawInventory(Graphics2D g2){
-        int frameWidth = 992;
-        int frameHeight = 80;
-        int frameX = gp.screenWidth / 2 - frameWidth / 2;
-        int frameY = gp.screenHeight - frameHeight;
+        int frameWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        int frameHeight = 208; // 4 * 16 + 48 * 3
+        int frameX = 20;
+        int frameY = 20;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2);
 
         final int slotXstart = frameX + (80 - gp.tileSize) / 2;
@@ -160,18 +128,43 @@ public class UI {
         int slotX = slotXstart;
         int slotY = slotYstart;
 
-        for(Integer objId : gp.player.inventory.keySet()){
-            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
-            slotX += gp.tileSize;
-        }
-//        for(int i = 0; i < gp.player.inventory.size(); i++){
-//            g2.drawImage(gp.player.inventory.get(i).inventoryImage, slotX, slotY, 48, 48, null);
-//
+        int numDraw = 0;
+//        for(Integer objId : gp.player.inventory.keySet()){
+//            g2.setFont(Fonts.pressStart_2P);
+//            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY + (numDraw / 9) * 16, 48, 48, null);
+//            String numObject = String.valueOf(gp.player.inventory.get(objId));
+//            int numLength = (int)g2.getFontMetrics().getStringBounds(numObject, g2).getWidth();
+//            g2.drawString(numObject, slotX+44 - numLength, slotY+45);
 //            slotX += gp.tileSize;
+//            numDraw++;
 //        }
+        int inventorySlot = 0;
+        for(Integer objId : gp.player.inventory.keySet()){
+            if(inventorySlot == 9 || inventorySlot == 18){
+                slotY += gp.tileSize + 16;
+                slotX = slotXstart;
+            }
+            int numObject = gp.player.inventory.get(objId); // number of objects
+            int numDrawn = 0; // number of objects of current object that have been drawn
+            for(int i = 0; i < (numObject-1) / gp.player.maxObjectPerSlot + 1; i++){
+                if(inventorySlot == 9 || inventorySlot == 18){
+                    slotY += gp.tileSize + 16;
+                    slotX = slotXstart;
+                }
+                g2.setFont(Fonts.pressStart_2P);
+                g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
+                int curNumObj = Math.min(gp.player.maxObjectPerSlot, numObject - numDrawn); // number to draw
+                int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(curNumObj), g2).getWidth(); // length of number string to draw
+                g2.drawString(String.valueOf(curNumObj), slotX+44 - numLength, slotY+44); // draw number of objects
+                slotX += gp.tileSize;
+                numDrawn += gp.player.maxObjectPerSlot;
+                inventorySlot++;
+            }
+        }
+        inventorySize = Math.max(inventorySize, inventorySlot);
 
         int cursorX = slotXstart + (gp.tileSize * slotCol);
-        int cursorY = slotYstart + (gp.tileSize * slotRow);
+        int cursorY = slotYstart + (gp.tileSize * slotRow) + slotRow * 16;
         int cursorWidth = gp.tileSize;
         int cursorHeight = gp.tileSize;
 
