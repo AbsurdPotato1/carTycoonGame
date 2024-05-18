@@ -37,15 +37,15 @@ public class GamePanel extends JPanel implements Runnable {
     public int FPS = 60;
     public boolean gameStarted = false;
     // SYSTEM
-    TileManager tileM = new TileManager(this);
-    KeyHandler keyH = new KeyHandler(this);
-    MouseHandler mouseH = new MouseHandler(this);
-    Sound music = new Sound();
-    Sound se = new Sound();
+    public TileManager tileM = new TileManager(this);
+    public KeyHandler keyH = new KeyHandler(this);
+    public MouseHandler mouseH = new MouseHandler(this);
+    public Sound music = new Sound();
+    public Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
-    Thread gameThread; // This will run the code continuously (i.e. won't stop)en hs = new Homescreen(this);
-    public Homescreen hs = new Homescreen(this);
+    public Thread gameThread; // This will run the code continuously (i.e. won't stop)en hs = new TitleScreen(this);
+    public TitleScreen ts = new TitleScreen(this);
 
     // GRAPHICS
     public UI ui = new UI(this);
@@ -60,10 +60,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     //states
     public int gameState;
-    public final int titleState = 0;
-    public final int playerState = 1;
-    public final int pauseState = 2;
-    public final int dialogueState = 3;
+    public static final int titleState = 0;
+    public static final int playerState =1;
+    public static final int pauseState = 2;
+    public static final int dialogueState = 3;
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -82,7 +82,7 @@ public class GamePanel extends JPanel implements Runnable {
         setFullScreen();
 
         //game state
-        gameState = titleState;
+        gameState = GamePanel.titleState;
     }
 
     public void setFullScreen(){
@@ -146,25 +146,29 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        Graphics2D g2 = (Graphics2D)g; // just adds some useful functions
+        Graphics2D g2 = (Graphics2D) g; // just adds some useful functions
 
-        if (gameStarted) {
+        if (gameState == GamePanel.titleState) {
+            ts.draw(g2);
+            g2.dispose();
+
+        } else if (gameState == GamePanel.playerState) {
             // Tiles -- Keep in mind drawing order does matter.
             tileM.draw(g2);
 
             // Objects
-            for(int i = 0; i < obj.length; i++){
-                if(obj[i] != null){
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
                     obj[i].draw(g2, this);
                 }
             }
 
             //NPCs
-            for(int i = 0; i < npc.length; i++){
-                if(npc[i] != null){
+            for (int i = 0; i < npc.length; i++) {
+                if (npc[i] != null) {
                     npc[i].draw(g2);
                 }
             }
@@ -176,7 +180,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             g2.dispose(); // saves memory (optimization)
         } else {
-            hs.draw(g2);
+            System.out.println("UNSUPPORTED COMPONENT. gameState wrong!");
         }
     }
 
