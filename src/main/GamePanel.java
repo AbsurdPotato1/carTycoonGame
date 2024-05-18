@@ -5,6 +5,7 @@ import entity.Player;
 import object.IdToObject;
 import object.SuperObject;
 import tile.TileManager;
+import tile_interactive.InteractiveTile;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,12 +20,12 @@ public class GamePanel extends JPanel implements Runnable {
 
     // screen settings
 
-    final int originalTileSize = 16; // 16 x 16
-    final int scale = 3; // may not use this stuff since not retro -- pixels; instead use sprites in future
+    final static int originalTileSize = 16; // 16 x 16
+    final static int scale = 3; // may not use this stuff since not retro -- pixels; instead use sprites in future
     // Hopefully sprite classes work
     //https://www.reddit.com/r/gamedev/comments/mct51g/how_to_make_sprite_sheets_in_java/
 
-    public final int tileSize = originalTileSize * scale; // 96 x 96;
+    public static final int tileSize = originalTileSize * scale; // 96 x 96;
     public final int maxScreenCol = 32;
     public final int maxScreenRow = 18;
     public int screenWidth = tileSize * maxScreenCol; // 1536px
@@ -57,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyH);
     public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
     public Entity npc[] = new Entity[100];
+    public InteractiveTile[] iTile = new InteractiveTile[50];
 
     //states
     public int gameState;
@@ -78,6 +80,7 @@ public class GamePanel extends JPanel implements Runnable {
         IdToObject.setIdObject();
         aSetter.setObject();
         aSetter.setNPC();
+        aSetter.setInteractiveTile();
         //playMusic(0);
         setFullScreen();
 
@@ -144,6 +147,11 @@ public class GamePanel extends JPanel implements Runnable {
                 npc[i].update();
             }
         }
+        for(int i = 0; i < iTile.length; i++){
+            if(iTile[i] != null){
+                iTile[i].update();
+            }
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -158,6 +166,12 @@ public class GamePanel extends JPanel implements Runnable {
         } else if (gameState == GamePanel.playerState) {
             // Tiles -- Keep in mind drawing order does matter.
             tileM.draw(g2);
+
+            for(int i = 0; i < iTile.length; i++){
+                if(iTile[i] != null){
+                    iTile[i].draw(g2, this);
+                }
+            }
 
             // Objects
             for (int i = 0; i < obj.length; i++) {

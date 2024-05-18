@@ -28,11 +28,11 @@ public class Player extends Entity{
         super(gp);
         this.keyH = keyH;
 
-        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
-        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
+        screenX = gp.screenWidth / 2 - (GamePanel.tileSize / 2);
+        screenY = gp.screenHeight / 2 - (GamePanel.tileSize / 2);
 
-        solidArea = new Rectangle(8, 8 , gp.tileSize - 16, gp.tileSize - 8); // sets hitbox - 8 pixels from left, right, and top of sprite, i.e. hitbox is 32x40
-//        solidArea = new Rectangle(0, 0, gp.tileSize, gp.tileSize); // use for testing
+        solidArea = new Rectangle(8, 8 , GamePanel.tileSize - 16, GamePanel.tileSize - 8); // sets hitbox - 8 pixels from left, right, and top of sprite, i.e. hitbox is 32x40
+//        solidArea = new Rectangle(0, 0, GamePanel.tileSize, GamePanel.tileSize); // use for testing
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         setDefaultValues();
@@ -65,10 +65,10 @@ public class Player extends Entity{
         if (downCollisionOn) {
             // Snap player to the nearest tile below
             int playerBottomY = (int)worldY + solidArea.y + solidArea.height; // Calculate the bottom Y-coordinate of the player
-            int nearestTileBelowY = ((playerBottomY + gp.tileSize - 1) / gp.tileSize) * gp.tileSize; // Calculate nearest tile below
+            int nearestTileBelowY = ((playerBottomY + GamePanel.tileSize - 1) / GamePanel.tileSize) * GamePanel.tileSize; // Calculate nearest tile below
 
             // Calculate the distance to the nearest tile above
-            int nearestTileAboveY = nearestTileBelowY - gp.tileSize;
+            int nearestTileAboveY = nearestTileBelowY - GamePanel.tileSize;
             int distToTileAbove = (int)worldY + solidArea.y + solidArea.height - nearestTileAboveY; // should always be positive
 
             // Calculate the distance to the nearest tile below
@@ -76,18 +76,18 @@ public class Player extends Entity{
 
             // Snap to the nearest tile (above or below)
             if(distToTileAbove < 6){
-                worldY = (nearestTileAboveY + 6) / gp.tileSize * gp.tileSize - solidArea.height;
+                worldY = (nearestTileAboveY + 6) / GamePanel.tileSize * GamePanel.tileSize - solidArea.height;
             }else if(distToTileBelow < 6){
-                worldY = (nearestTileBelowY + 6) / gp.tileSize * gp.tileSize - solidArea.height;;
+                worldY = (nearestTileBelowY + 6) / GamePanel.tileSize * GamePanel.tileSize - solidArea.height;;
             }
         }
         if (upCollisionOn) {
             // Snap player to the nearest tile below
             int playerTopY = (int)worldY; // Calculate the bottom Y-coordinate of the player
-            int nearestTileAboveY = ((playerTopY) / gp.tileSize) * gp.tileSize; // Calculate nearest tile above
+            int nearestTileAboveY = ((playerTopY) / GamePanel.tileSize) * GamePanel.tileSize; // Calculate nearest tile above
 
             // Calculate the distance to the nearest tile above
-            int nearestTileBelowY = nearestTileAboveY + gp.tileSize;
+            int nearestTileBelowY = nearestTileAboveY + GamePanel.tileSize;
             int distToTileAbove = (int)worldY - nearestTileAboveY; // should always be positive
 
             // Calculate the distance to the nearest tile below
@@ -95,19 +95,19 @@ public class Player extends Entity{
 
             // Snap to the nearest tile (above or below)
             if(distToTileAbove < 6){
-                worldY = (nearestTileAboveY + 6) / gp.tileSize * gp.tileSize;
+                worldY = (nearestTileAboveY + 6) / GamePanel.tileSize * GamePanel.tileSize;
             }else if(distToTileBelow < 6){
-                worldY = (nearestTileBelowY + 6) / gp.tileSize * gp.tileSize;
+                worldY = (nearestTileBelowY + 6) / GamePanel.tileSize * GamePanel.tileSize;
             }
         }
 
         if (rightCollisionOn) {
             // Snap player to the nearest tile below
             int playerRightX = (int)worldX + solidArea.x + solidArea.width; // Calculate the right X-coordinate of the player
-            int nearestTileRightX = ((playerRightX + gp.tileSize - 1) / gp.tileSize) * gp.tileSize; // Calculate nearest tile right
+            int nearestTileRightX = ((playerRightX + GamePanel.tileSize - 1) / GamePanel.tileSize) * GamePanel.tileSize; // Calculate nearest tile right
 
             // Calculate the distance to the nearest tile above
-            int nearestTileLeftX = nearestTileRightX - gp.tileSize;
+            int nearestTileLeftX = nearestTileRightX - GamePanel.tileSize;
             int distToTileLeft = (int)worldX + solidArea.x + solidArea.width - nearestTileLeftX; // should always be positive
 
             // Calculate the distance to the nearest tile below
@@ -115,19 +115,19 @@ public class Player extends Entity{
 
             // Snap to the nearest tile (above or below)
             if(distToTileLeft < 6){
-                worldX = (nearestTileLeftX + 6) / gp.tileSize * gp.tileSize - solidArea.width;
+                worldX = (nearestTileLeftX + 6) / GamePanel.tileSize * GamePanel.tileSize - solidArea.width;
             }else if(distToTileRight < 6){
-                worldX = (nearestTileRightX + 6) / gp.tileSize * gp.tileSize - solidArea.width;
+                worldX = (nearestTileRightX + 6) / GamePanel.tileSize * GamePanel.tileSize - solidArea.width;
             }
         }
 
         if (leftCollisionOn) {
             // Snap player to the nearest tile below
             int playerLeftX = (int)worldX; // Calculate the left X-coordinate of the player
-            int nearestTileLeftX = ((playerLeftX) / gp.tileSize) * gp.tileSize; // Calculate nearest tile above
+            int nearestTileLeftX = ((playerLeftX) / GamePanel.tileSize) * GamePanel.tileSize; // Calculate nearest tile above
 
             // Calculate the distance to the nearest tile above
-            int nearestTileRightX = nearestTileLeftX + gp.tileSize;
+            int nearestTileRightX = nearestTileLeftX + GamePanel.tileSize;
             int distToTileLeft = (int)worldX - nearestTileLeftX; // should always be positive
 
             // Calculate the distance to the nearest tile below
@@ -135,9 +135,9 @@ public class Player extends Entity{
 
             // Snap to the nearest tile (above or below)
             if(distToTileLeft < 6){
-                worldX = (nearestTileLeftX + 6) / gp.tileSize * gp.tileSize;
+                worldX = (nearestTileLeftX + 6) / GamePanel.tileSize * GamePanel.tileSize;
             }else if(distToTileRight < 6){
-                worldX = (nearestTileRightX + 6) / gp.tileSize * gp.tileSize;
+                worldX = (nearestTileRightX + 6) / GamePanel.tileSize * GamePanel.tileSize;
             }
         }
     }
@@ -203,7 +203,12 @@ public class Player extends Entity{
         rightCollisionOn = false;
         downCollisionOn = false;
         leftCollisionOn = false;
+        // Check tile collision
         gp.cChecker.checkTile(this);
+        // Check interaction tile collision
+        gp.cChecker.checkEntity(this, gp.iTile);
+
+
         // IF COLLISION IS FALSE, PLAYER CAN MOVE
 
         gp.cChecker.checkTile(this);
@@ -251,7 +256,7 @@ public class Player extends Entity{
         BufferedImage image = null;
 
         image = image1;
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
 
 
     }

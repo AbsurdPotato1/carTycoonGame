@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class SuperObject {
+    GamePanel gp;
     public BufferedImage image;
     public BufferedImage inventoryImage;
     public String name;
@@ -22,15 +23,21 @@ public class SuperObject {
     public String description = "";
     public int objectId;
 
+    public SuperObject(GamePanel gp, int row, int col){
+        this.gp = gp;
+        worldX = row * GamePanel.tileSize;
+        worldY = col * GamePanel.tileSize;
+    }
+
     public void draw(Graphics2D g2, GamePanel gp){
         int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
         int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
 
-        if(worldX > gp.player.worldX - gp.player.screenX - gp.tileSize &&
+        if(worldX > gp.player.worldX - gp.player.screenX - GamePanel.tileSize &&
            worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
-           worldY > gp.player.worldY - gp.player.screenY - gp.tileSize &&
+           worldY > gp.player.worldY - gp.player.screenY - GamePanel.tileSize &&
            worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
-           g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+           g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
         }
     }
 
