@@ -60,7 +60,7 @@ public class TitleScreen {
                 gp.gameState = GamePanel.playerState;
                 gp.stopMusic();
                 gp.playSE(3);
-                gp.playMusic(4);
+                gp.playMusic(5);
             }
         }
     }
