@@ -182,7 +182,7 @@ public class Player extends Entity{
     }
     public void interactNPC(int i){
         if(i != 99999){
-            System.out.println("you bonk");
+//            System.out.println("you bonk");
         }
     }
     public void update(){

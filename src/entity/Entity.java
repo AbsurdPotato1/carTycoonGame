@@ -30,6 +30,7 @@ public class Entity {
     public boolean leftCollisionOn = false;
     public int actionLockCounter = 0;
 
+
     public Entity(GamePanel gp){
         this.gp = gp;
     }
@@ -43,6 +44,7 @@ public class Entity {
     }
 
     public void setAction(){}
+
     public void update(){
         setAction();
         upCollisionOn = false;
@@ -74,6 +76,10 @@ public class Entity {
         }
     }
 
+    public boolean isCloseTo(Entity entity){
+        return Math.abs(entity.worldX - worldX) <= 96 &&
+                Math.abs(entity.worldY - worldY) <= 96;
+    }
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         if(direction[1])image = right1;
@@ -92,4 +98,5 @@ public class Entity {
             g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
         }
     }
+
 }

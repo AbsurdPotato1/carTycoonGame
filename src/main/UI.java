@@ -21,6 +21,7 @@ public class UI {
     public int inventoryRow = 0;
     public int inventoryCol = 0;
     public int inventorySize;
+    public String currentDialogue = "";
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -45,7 +46,7 @@ public class UI {
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time
         playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
 
-        g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
+//        g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
         if(messageOn){
             g2.drawString(message, GamePanel.tileSize / 2, GamePanel.tileSize * 5);
 
@@ -63,7 +64,9 @@ public class UI {
         int frameHeight = 80;
         int frameX = gp.screenWidth / 2 - frameWidth / 2;
         int frameY = gp.screenHeight - frameHeight;
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2);
+        Color outerColor = new Color(216, 178, 129, 127);
+        Color innerColor = new Color(255, 255, 255);
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2, outerColor, innerColor);
 
         final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
         final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
@@ -108,7 +111,9 @@ public class UI {
         int frameHeight = 208; // 4 * 16 + 48 * 3
         int frameX = 20;
         int frameY = 20;
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2);
+        Color outerColor = new Color(216, 178, 129, 127);
+        Color innerColor = new Color(255, 255, 255);
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2, outerColor, innerColor);
 
         final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
         final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
@@ -152,14 +157,30 @@ public class UI {
 
     }
 
-    public void drawSubWindow(int x, int y, int width, int height, Graphics2D g2){
-        Color c = new Color(216, 178, 129, 127); // black
-        g2.setColor(c);
+    public void drawSubWindow(int x, int y, int width, int height, Graphics2D g2, Color outer, Color inner){
+        g2.setColor(outer);
         g2.fillRoundRect(x, y, width, height, 35, 35);
 
-        c = new Color(255, 255, 255);
-        g2.setColor(c);
+        g2.setColor(inner);
         g2.setStroke(new BasicStroke(5));
         g2.drawRoundRect(x + 7, y + 7, width - 14, height - 14, 25, 25);
+    }
+
+    public void drawDialogueScreen(Graphics2D g2) {
+        int x = 96;
+        int y = 24;
+        int width = gp.screenWidth - (GamePanel.tileSize * 4);
+        int height = GamePanel.tileSize * 5;
+        Color outerColor = new Color(0, 0, 0, 200);
+        Color innerColor = new Color(255, 255, 255);
+        drawSubWindow(x, y, width, height, g2, outerColor, innerColor);
+        g2.setFont(g2.getFont().deriveFont(32F));
+        x += GamePanel.tileSize / 2;
+        y += 55;
+
+        for(String line : currentDialogue.split("\n")) { // im not gonna split the text with string length lmao id rather die
+            g2.drawString(line, x, y);
+            y += 40;
+        }
     }
 }

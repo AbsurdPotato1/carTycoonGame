@@ -1,6 +1,7 @@
 package main;//package main.Main;
 import data.SaveLoad;
 import entity.Entity;
+import entity.NPC;
 import entity.Player;
 import object.IdToObject;
 import object.SuperObject;
@@ -57,7 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     // ENTITIES
     public Player player = new Player(this, keyH);
     public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
-    public Entity npc[] = new Entity[100];
+    public NPC npc[] = new NPC[100];
     public InteractiveTile[] iTile = new InteractiveTile[50];
 
     //states
@@ -161,10 +162,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         if (gameState == GamePanel.titleState) {
             ts.draw(g2);
-            g2.dispose();
 
         }
-        if (gameState == GamePanel.playerState) {
+        if(gameState != GamePanel.titleState){
             // Tiles -- Keep in mind drawing order does matter.
             tileM.draw(g2);
 
@@ -192,14 +192,11 @@ public class GamePanel extends JPanel implements Runnable {
             player.draw(g2);
 
             ui.draw(g2);
-
-            g2.dispose(); // saves memory (optimization)
-        } else {
-            System.out.println("UNSUPPORTED COMPONENT. gameState wrong!");
         }
-//        if(gameState == GamePanel.dialogueState){
-//            drawDialogueScreen();
-//        }
+        if(gameState == GamePanel.dialogueState){
+
+        }
+        g2.dispose();
     }
 
     public void playMusic(int i){
