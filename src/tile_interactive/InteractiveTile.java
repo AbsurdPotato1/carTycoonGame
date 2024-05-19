@@ -14,4 +14,13 @@ public class InteractiveTile extends SuperObject {
     public void update(){
 
     }
+    public boolean isClicked() {
+        if(gp.mouseH.mouseClicked){
+            if(gp.mouseH.mouseX >= (this.worldX + solidArea.x) && gp.mouseH.mouseX <= (this.worldX + solidArea.x + solidArea.width) &&
+                gp.mouseH.mouseY >= (this.worldY + solidArea.y) && gp.mouseH.mouseY <= (this.worldY + solidArea.y + solidArea.height )) { // Checks that mouseclick is inside
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -177,7 +177,7 @@ public class Player extends Entity{
     }
     public void interactWithTile(int i){
         if(i != 99999 && gp.iTile[i].destructible){
-            gp.iTile[i] = null;
+//            gp.iTile[i] = null;
         }
     }
     public void interactNPC(int i){

@@ -32,7 +32,6 @@ public class NPC_MiningMan extends NPC {
         super.draw(g2);
         if(isClicked()) {
             triggerDialogue(0, g2);
-
         }
     }
 }

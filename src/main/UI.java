@@ -38,7 +38,7 @@ public class UI {
             drawHotbar(g2);
         }
         int playTimeTextLength;
-        g2.setFont(Fonts.montserrat);
+        g2.setFont(Fonts.pressStart_2P);
         g2.setFont(g2.getFont().deriveFont(30f));
         g2.setColor(Color.white);
 
