@@ -18,8 +18,8 @@ public class Entity {
 //    public boolean jumping = false;
     public boolean[] direction = new boolean[4]; // goes clockwise from the top: 0 - up, 1 - right, 2 - down, 3 - left
     public int accel;
-//    public final double gravity = 0.25 * 60 / 60;
-    public BufferedImage image1;
+    public BufferedImage up1, right1, down1, left1;
+    //    public final double gravity = 0.25 * 60 / 60;
     public int spriteCounter = 0;
     public int spriteNum = 1;
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48); // solidArea.x and solidArea.y may be modified TEMPORARILY in CollisionChecker -- thus solidAreaDefaultX and Y exist
@@ -76,7 +76,12 @@ public class Entity {
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        image = image1;
+        if(direction[1])image = right1;
+        else if(direction[3])image = left1;
+        else if(direction[0])image = up1;
+        else if(direction[2])image = down1;
+        else image = down1;
+//        image = down1;
         int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
         int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
 

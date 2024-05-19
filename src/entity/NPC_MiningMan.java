@@ -18,7 +18,10 @@ public class NPC_MiningMan extends NPC {
         dialogues[0] = new Dialogue(new String[]{"Hello!", "How are you?"});
     }
     public void getMiningManImage(){
-        image1 = getImage("npc/oldman_down_1.png");
+        up1 = getImage("npc/oldman_up_1.png");
+        right1 = getImage("npc/oldman_right_1.png");
+        down1 = getImage("npc/oldman_down_1.png");
+        left1 = getImage("npc/oldman_left_1.png");
     }
     public void setAction(){ // possible bug: sometimes gets stuck on tile corners
         // bug: player and entity can clip into each other if travelling into each other sometimes

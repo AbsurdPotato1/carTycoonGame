@@ -202,7 +202,7 @@ public class CollisionChecker {
 
         return index;
     }
-    public int checkEntity(Entity entity, InteractiveTile[] target){
+    public int checkTile(Entity entity, InteractiveTile[] target){
         int index = 99999;
         for(int i = 0; i < target.length; i++){ // using for loop is technically inefficient - maybe do search pruning (only nearby objects) if performance is impacted
             if(target[i] != null){

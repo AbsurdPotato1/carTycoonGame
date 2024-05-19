@@ -59,7 +59,10 @@ public class Player extends Entity{
     }
 
     public void getPlayerImage(){
-        image1 = getImage("player/boy_down_1.png");
+        up1 = getImage("player/boy_up_1.png");
+        right1 = getImage("player/boy_right_1.png");
+        down1 = getImage("player/boy_down_1.png");
+        left1 = getImage("player/boy_left_1.png");
     }
     public void snapPlayerLoc() {
         if (downCollisionOn) {
@@ -172,6 +175,11 @@ public class Player extends Entity{
             }
         }
     }
+    public void interactWithTile(int i){
+        if(i != 99999 && gp.iTile[i].destructible){
+            gp.iTile[i] = null;
+        }
+    }
     public void interactNPC(int i){
         if(i != 99999){
             System.out.println("you bonk");
@@ -206,7 +214,8 @@ public class Player extends Entity{
         // Check tile collision
         gp.cChecker.checkTile(this);
         // Check interaction tile collision
-        gp.cChecker.checkEntity(this, gp.iTile);
+        int iTileIndex = gp.cChecker.checkTile(this, gp.iTile);
+        interactWithTile(iTileIndex);
 
 
         // IF COLLISION IS FALSE, PLAYER CAN MOVE
@@ -255,7 +264,11 @@ public class Player extends Entity{
 
         BufferedImage image = null;
 
-        image = image1;
+        if(direction[1])image = right1;
+        else if(direction[3])image = left1;
+        else if(direction[0])image = up1;
+        else if(direction[2])image = down1;
+        else image = down1;
         g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
 
 
