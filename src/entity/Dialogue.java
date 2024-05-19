@@ -9,12 +9,10 @@ public class Dialogue {
     }
 
     public void runDialogue(Graphics2D g2)  {
-        for(int i = 0 ; i < dialogue_seq.length && dialogue_seq[i] != null; i++) {
-            g2.drawString(dialogue_seq[i], 500, 500);
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        for(int i = 0 ; i < dialogue_seq.length; i++) {
+            if(dialogue_seq[i] != null) {
+                g2.drawString(dialogue_seq[i], 500, 500);
+                System.out.println("bob");
             }
         }
     }

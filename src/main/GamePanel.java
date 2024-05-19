@@ -63,7 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
     //states
     public int gameState;
     public static final int titleState = 0;
-    public static final int playerState =1;
+    public static final int playerState = 1;
     public static final int pauseState = 2;
     public static final int dialogueState = 3;
 
@@ -163,7 +163,8 @@ public class GamePanel extends JPanel implements Runnable {
             ts.draw(g2);
             g2.dispose();
 
-        } else if (gameState == GamePanel.playerState) {
+        }
+        if (gameState == GamePanel.playerState) {
             // Tiles -- Keep in mind drawing order does matter.
             tileM.draw(g2);
 
@@ -196,8 +197,10 @@ public class GamePanel extends JPanel implements Runnable {
         } else {
             System.out.println("UNSUPPORTED COMPONENT. gameState wrong!");
         }
+//        if(gameState == GamePanel.dialogueState){
+//            drawDialogueScreen();
+//        }
     }
-
 
     public void playMusic(int i){
 //        music.setFile(i);

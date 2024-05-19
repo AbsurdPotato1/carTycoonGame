@@ -25,12 +25,17 @@ public class NPC_MiningMan extends NPC {
     }
     public void setAction(){ // possible bug: sometimes gets stuck on tile corners
         // bug: player and entity can clip into each other if travelling into each other sometimes
-        moveRandomly();
+//        moveRandomly();
     }
+    @Override
+    public void update(){
+        super.update(); // check collisions
 
-    public void draw(Graphics2D g2 ) {
+    }
+    public void draw(Graphics2D g2) {
         super.draw(g2);
         if(isClicked()) {
+            System.out.println("clicked");
             triggerDialogue(0, g2);
         }
     }
