@@ -59,7 +59,8 @@ public class TitleScreen {
 //                gp.a.fadeOut(g2);
                 gp.gameState = GamePanel.playerState;
                 gp.stopMusic();
-                gp.playMusic(2);
+                gp.playSE(3);
+                gp.playMusic(4);
             }
         }
     }
