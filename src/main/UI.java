@@ -17,8 +17,9 @@ public class UI {
     public String message = "";
     int messageCounter = 0;
     double playTime;
-    public int slotCol = 0;
-    public int slotRow = 0;
+    public int hotbarCol = 0;
+    public int inventoryRow = 0;
+    public int inventoryCol = 0;
     public int inventorySize;
 
     public UI(GamePanel gp){
@@ -90,7 +91,7 @@ public class UI {
             }
         }
 
-        int cursorX = slotXstart + (GamePanel.tileSize * slotCol);
+        int cursorX = slotXstart + (GamePanel.tileSize * hotbarCol);
         int cursorY = slotYstart;
         int cursorWidth = GamePanel.tileSize;
         int cursorHeight = GamePanel.tileSize;
@@ -114,16 +115,6 @@ public class UI {
         int slotX = slotXstart;
         int slotY = slotYstart;
 
-        int numDraw = 0;
-//        for(Integer objId : gp.player.inventory.keySet()){
-//            g2.setFont(Fonts.pressStart_2P);
-//            g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY + (numDraw / 9) * 16, 48, 48, null);
-//            String numObject = String.valueOf(gp.player.inventory.get(objId));
-//            int numLength = (int)g2.getFontMetrics().getStringBounds(numObject, g2).getWidth();
-//            g2.drawString(numObject, slotX+44 - numLength, slotY+45);
-//            slotX += GamePanel.tileSize;
-//            numDraw++;
-//        }
         int inventorySlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
             if(inventorySlot == 9 || inventorySlot == 18){
@@ -149,8 +140,8 @@ public class UI {
         }
         inventorySize = Math.max(inventorySize, inventorySlot);
 
-        int cursorX = slotXstart + (GamePanel.tileSize * slotCol);
-        int cursorY = slotYstart + (GamePanel.tileSize * slotRow) + slotRow * 16;
+        int cursorX = slotXstart + (GamePanel.tileSize * inventoryCol);
+        int cursorY = slotYstart + (GamePanel.tileSize * inventoryRow) + inventoryRow * 16;
         int cursorWidth = GamePanel.tileSize;
         int cursorHeight = GamePanel.tileSize;
 
