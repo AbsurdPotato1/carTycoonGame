@@ -2,14 +2,14 @@ package object;
 
 import main.GamePanel;
 
-import java.awt.Rectangle;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-public class SuperObject {
+public class SuperTool {
     GamePanel gp;
-    public BufferedImage inventoryImage; // only exists for readibility (every subclass has a public static BufferedImage inventoryImage)
     public BufferedImage image;
+    public BufferedImage inventoryImage; // only exists for readibility (every subclass has a public static BufferedImage inventoryImage)
     public String name;
     public boolean collision = false;
     public int worldX, worldY;
@@ -23,22 +23,21 @@ public class SuperObject {
     public String description = "";
     public int objectId;
 
-    public SuperObject(GamePanel gp, int row, int col){
+    public SuperTool(GamePanel gp, int row, int col){
         this.gp = gp;
         worldX = row * GamePanel.tileSize;
         worldY = col * GamePanel.tileSize;
     }
 
-    public void draw(Graphics2D g2, GamePanel gp){
-        int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
-        int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
+    public void draw(Graphics2D g2, GamePanel gp) {
+        int screenX = worldX - (int) gp.player.worldX + gp.player.screenX;
+        int screenY = worldY - (int) gp.player.worldY + gp.player.screenY;
 
-        if(worldX > gp.player.worldX - gp.player.screenX - GamePanel.tileSize &&
-           worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
-           worldY > gp.player.worldY - gp.player.screenY - GamePanel.tileSize &&
-           worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
-           g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
+        if (worldX > gp.player.worldX - gp.player.screenX - GamePanel.tileSize &&
+                worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
+                worldY > gp.player.worldY - gp.player.screenY - GamePanel.tileSize &&
+                worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY) {
+            g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
         }
     }
-
 }

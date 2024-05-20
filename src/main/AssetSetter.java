@@ -3,6 +3,7 @@ package main;
 import entity.NPC_MiningMan;
 import object.ObjectChest;
 import object.ObjectCopperOre;
+import object.ToolPickaxe;
 import tile_interactive.copperOreNode;
 
 public class AssetSetter {
@@ -26,6 +27,10 @@ public class AssetSetter {
 
         gp.obj[4] = new ObjectCopperOre(gp,  4, 9); // Objects are layer-able - be careful
 
+    }
+
+    public void setTool(){
+        gp.tools[0] = new ToolPickaxe(gp, 4, 5);
     }
 
     public void setInteractiveTile(){

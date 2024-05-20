@@ -5,6 +5,7 @@ import entity.NPC;
 import entity.Player;
 import object.IdToObject;
 import object.SuperObject;
+import object.SuperTool;
 import tile.TileManager;
 import tile_interactive.InteractiveTile;
 
@@ -58,6 +59,7 @@ public class GamePanel extends JPanel implements Runnable {
     // ENTITIES
     public Player player = new Player(this, keyH);
     public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
+    public SuperTool[] tools = new SuperTool[100];
     public NPC npc[] = new NPC[100];
     public InteractiveTile[] iTile = new InteractiveTile[50];
 
@@ -80,6 +82,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void setUpGame(){
         IdToObject.setIdObject();
         aSetter.setObject();
+        aSetter.setTool();
         aSetter.setNPC();
         aSetter.setInteractiveTile();
         playMusic(0);
@@ -180,6 +183,11 @@ public class GamePanel extends JPanel implements Runnable {
                     obj[i].draw(g2, this);
                 }
             }
+            for(int i = 0; i < tools.length; i++){
+                if(tools[i] != null){
+                    tools[i].draw(g2, this);
+                }
+            }
 
             //NPCs
             for (int i = 0; i < npc.length; i++) {
@@ -200,15 +208,15 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void playMusic(int i){
-        music.setFile(i);
-        music.play();
-        music.loop(); // repeat music
+//        music.setFile(i);
+//        music.play();
+//        music.loop(); // repeat music
     }
     public void stopMusic(){
-        music.stop(); // stop music
+//        music.stop(); // stop music
     }
     public void playSE(int i){
-        se.setFile(i);
-        se.play(); // sound effects are short, only call once typically.
+//        se.setFile(i);
+//        se.play(); // sound effects are short, only call once typically.
     }
 }

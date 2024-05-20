@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class ObjectCopperOre extends SuperObject {
 //    public static final String name = "copperOre";
-    public static final int objectId = 0;
+    public static final int objectId = 2;
     public static BufferedImage inventoryImage;
     public ObjectCopperOre(GamePanel gp, int row, int col){
         super(gp, row, col);
@@ -24,8 +24,8 @@ public class ObjectCopperOre extends SuperObject {
         solidArea = new Rectangle(collisionXOffset, collisionYOffset, collisionWidth, collisionHeight);
         name = "copperOre";
         try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre.png")); // image provides the location where the object is drawn.
-            inventoryImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre22x19.png"));
+            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOreNew.png")); // image provides the location where the object is drawn.
+            inventoryImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOreNew.png"));
         } catch(IOException e){
             e.printStackTrace();
         }

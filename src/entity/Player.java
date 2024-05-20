@@ -5,6 +5,7 @@ import main.KeyHandler;
 import object.IdToObject;
 import object.ObjectCopperOre;
 import object.SuperObject;
+import object.ToolPickaxe;
 
 import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
@@ -175,6 +176,31 @@ public class Player extends Entity{
             }
         }
     }
+    public void pickUpTool(int i) {
+        long currentTime;
+        currentTime = System.nanoTime();
+        long pickUpInterval = 5;
+        if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // checks if last pickup >= 5 frames ago -- TODO: seems to be going 6 frames (10 items / sec) - due to slight inaccuracy in timing
+            lastPickUpTime = currentTime;
+            if(i != 99999){
+
+                String objectName = gp.tools[i].name;
+
+//                System.out.println("tool test");
+                switch(objectName){
+                    case "pickaxe":
+                        if(spaceInInventory(ToolPickaxe.objectId)) {
+                            gp.playSE(1); // sound effect
+                            addOneToInventory(ToolPickaxe.class);
+                            gp.tools[i] = null;
+                            System.out.println("pickaxe");
+                            gp.ui.showMessage("You got a pickaxe");
+                        }
+                        break;
+                }
+            }
+        }
+    }
     public void interactWithTile(int i){
         if(i != 99999 && gp.iTile[i].destructible){
 //            gp.iTile[i] = null;
@@ -227,6 +253,9 @@ public class Player extends Entity{
         // Check NPC Collision
         int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
         interactNPC(npcIndex);
+
+        int toolIndex = gp.cChecker.checkTool(this, true);
+        pickUpTool(toolIndex);
 
 //        System.out.println("X: " + worldX + ", Y: " + worldY);
 //        System.out.print("UP: " + upCollisionOn);
