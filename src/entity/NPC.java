@@ -9,8 +9,8 @@ import java.util.Random;
 public class NPC extends Entity { //Just a collection of NPC-wide methods
     public String[] dialogues = new String[30]; // Max 30 dialogs
     long lastTalkTime;
-    boolean talkingTo = true;
-    int dialogueNum = -1;
+    boolean beganTalking = false;
+    int dialogueNum = 0;
 
     public NPC(GamePanel gp) {
         super(gp);
@@ -75,49 +75,42 @@ public class NPC extends Entity { //Just a collection of NPC-wide methods
     //ds is 0 through 9
 
     public void speak(){
-        if(dialogueNum != -1 && dialogues[dialogueNum] != null) {
+        if(dialogues[dialogueNum] != null) {
             gp.ui.currentDialogue = dialogues[dialogueNum];
         }
     }
 
     public void doDialogue(Graphics2D g2){
+        long talkInterval = 30; // Minimum time between dialogue transition
         if(isCloseTo(gp.player)) {
-            if (isClicked()) {
+            if ((System.nanoTime() - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval && !beganTalking && isClicked() && System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) {
                 gp.gameState = GamePanel.dialogueState;
-                talkingTo = true;
+                beganTalking = true;
+                lastTalkTime = System.nanoTime();
             }
-        }
-        else{
-            gp.gameState = GamePanel.playerState;
-            dialogueNum = -1;
-            lastTalkTime = 0;
-            talkingTo = false;
-            gp.ui.currentDialogue = "";
-        }
-        if(talkingTo) {
-            speak();
-            gp.ui.drawDialogueScreen(g2);
-            if(gp.mouseH.mouseClicked){
-                long currentTime;
-                currentTime = System.nanoTime();
-                long talkInterval = 30;
-                if(dialogueNum == -1){
-                    lastTalkTime = currentTime;
-                    dialogueNum++;
-                }
-                else if((currentTime - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval) {
-                    lastTalkTime = currentTime;
-                    if(dialogueNum != dialogues.length - 1) {
+            if (beganTalking) {
+                speak();
+                gp.ui.drawDialogueScreen(g2);
+                if (gp.mouseH.mouseClicked &&  System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) {
+                    long currentTime;
+                    currentTime = System.nanoTime();
+                    if ((currentTime - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval) {
+                        lastTalkTime = currentTime;
                         dialogueNum++;
                     }
                 }
             }
         }
+        else {
+            dialogueNum = 0;
+            beganTalking = false;
+        }
+        if(dialogues[dialogueNum] == null){
+            beganTalking = false;
+            dialogueNum = 0;
+            lastTalkTime = System.nanoTime();
+        }
     }
-
-//    public void triggerDialogue(int dialogue_stage, Graphics2D g2) {
-//        dialogues[dialogue_stage].runDialogue(g2);
-//    }
 
     public boolean isClicked() {
         int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
