@@ -5,6 +5,7 @@ import object.ObjectChest;
 import object.ObjectCopperOre;
 import object.ToolPickaxe;
 import tile_interactive.copperOreNode;
+import tile_interactive.craftingBench;
 
 public class AssetSetter {
     GamePanel gp;
@@ -37,6 +38,7 @@ public class AssetSetter {
         for(int i = 0; i < 10; i++){
             gp.iTile[i] = new copperOreNode(gp, i+10, 4);
         }
+        gp.iTile[11] = new craftingBench(gp, 5, 5); // arbitrary cords
     }
 
     public void setNPC(){

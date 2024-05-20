@@ -4,7 +4,8 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 public class IdToObject {
-    public static final Class[] idObject = new Class[255];
+    public static int numObjs = 3; // REMEMBER TO CHANGE THIS VALUE WHEN ADDING NEW OBJECTS!!!!
+    public static final Class[] idObject = new Class[numObjs];
     public static void setIdObject(){
         idObject[0] = ToolPickaxe.class;
         idObject[1] = ObjectChest.class;

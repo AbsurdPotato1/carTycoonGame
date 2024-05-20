@@ -1,6 +1,7 @@
 package entity;
 
 import main.GamePanel;
+import tile_interactive.InteractiveTile;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -80,6 +81,11 @@ public class Entity {
         return Math.abs(entity.worldX - worldX) <= 96 &&
                 Math.abs(entity.worldY - worldY) <= 96;
     }
+    public boolean isCloseTo(InteractiveTile it){
+        return Math.abs(it.worldX - worldX) <= 96 &&
+                Math.abs(it.worldY - worldY) <= 96;
+    }
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         if(direction[1])image = right1;

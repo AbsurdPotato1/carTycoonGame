@@ -27,5 +27,6 @@ public class ToolPickaxe extends SuperTool {
             e.printStackTrace();
         }
         name = "pickaxe";
+        craftable = true;
     }
 }

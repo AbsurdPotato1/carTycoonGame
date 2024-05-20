@@ -22,6 +22,7 @@ public class UI {
     public int inventoryCol = 0;
     public int inventorySize;
     public String currentDialogue = "";
+    public ArrayList<Integer> craftables = new ArrayList<Integer>();
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -35,6 +36,9 @@ public class UI {
     public void draw(Graphics2D g2){
         if(gp.keyH.inventoryPressed){
             drawInventory(g2);
+            if(gp.player.isCloseTo(gp.iTile[11])) {
+                drawCraftingUI(g2);
+            }
         }else {
             drawHotbar(g2);
         }
@@ -106,6 +110,33 @@ public class UI {
 
     }
 
+    public void drawSubWindow(int x, int y, int width, int height, Graphics2D g2, Color outer, Color inner){
+        g2.setColor(outer);
+        g2.fillRoundRect(x, y, width, height, 35, 35);
+
+        g2.setColor(inner);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x + 7, y + 7, width - 14, height - 14, 25, 25);
+    }
+
+    public void drawDialogueScreen(Graphics2D g2) {
+        int x = 96;
+        int y = 24;
+        int width = gp.screenWidth - (GamePanel.tileSize * 4);
+        int height = GamePanel.tileSize * 5;
+        Color outerColor = new Color(0, 0, 0, 200);
+        Color innerColor = new Color(255, 255, 255);
+        drawSubWindow(x, y, width, height, g2, outerColor, innerColor);
+        g2.setFont(g2.getFont().deriveFont(32F));
+        x += GamePanel.tileSize / 2;
+        y += 55;
+
+        for(String line : currentDialogue.split("\n")) { // im not gonna split the text with string length lmao id rather die
+            g2.drawString(line, x, y);
+            y += 40;
+        }
+    }
+
     public void drawInventory(Graphics2D g2){
         int frameWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
         int frameHeight = 208; // 4 * 16 + 48 * 3
@@ -153,34 +184,48 @@ public class UI {
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
-
-
     }
+    public void drawCraftingUI(Graphics2D g2) {
 
-    public void drawSubWindow(int x, int y, int width, int height, Graphics2D g2, Color outer, Color inner){
-        g2.setColor(outer);
-        g2.fillRoundRect(x, y, width, height, 35, 35);
-
-        g2.setColor(inner);
-        g2.setStroke(new BasicStroke(5));
-        g2.drawRoundRect(x + 7, y + 7, width - 14, height - 14, 25, 25);
-    }
-
-    public void drawDialogueScreen(Graphics2D g2) {
-        int x = 96;
-        int y = 24;
-        int width = gp.screenWidth - (GamePanel.tileSize * 4);
-        int height = GamePanel.tileSize * 5;
-        Color outerColor = new Color(0, 0, 0, 200);
+        int frameWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        int frameHeight = 16*2 + 48; // 4 * 16 + 48 * 3
+        int frameX = 20;
+        int frameY = 248; // 20 px below the inventory
+        Color outerColor = new Color(216, 178, 129, 127);
         Color innerColor = new Color(255, 255, 255);
-        drawSubWindow(x, y, width, height, g2, outerColor, innerColor);
-        g2.setFont(g2.getFont().deriveFont(32F));
-        x += GamePanel.tileSize / 2;
-        y += 55;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2, outerColor, innerColor);
 
-        for(String line : currentDialogue.split("\n")) { // im not gonna split the text with string length lmao id rather die
-            g2.drawString(line, x, y);
-            y += 40;
+        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
+        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        for(int i = 0 ; i < craftables.size() ; i++) {
+            g2.drawImage(IdToObject.getImageFromId(i), slotX, slotY, 48, 48, null);
+            slotX += GamePanel.tileSize;
+
         }
+
+        int cursorX = slotXstart + (GamePanel.tileSize * inventoryCol);
+        int cursorY = slotYstart + (GamePanel.tileSize * inventoryRow) + inventoryRow * 16;
+        int cursorWidth = GamePanel.tileSize;
+        int cursorHeight = GamePanel.tileSize;
+
+        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+
+    }
+
+    public void initCraftables() {
+        for(int i = 0 ; i < IdToObject.numObjs ; i++) {
+            try {
+                Boolean c = IdToObject.idObject[i].getField("craftable").getBoolean(null);
+                craftables.add(i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
