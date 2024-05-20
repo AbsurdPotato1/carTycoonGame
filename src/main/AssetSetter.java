@@ -30,7 +30,7 @@ public class AssetSetter {
     }
 
     public void setTool(){
-        gp.tools[0] = new ToolPickaxe(gp, 4 * GamePanel.tileSize, 5 * GamePanel.tileSize);
+        gp.tools.add(new ToolPickaxe(gp, 4 * GamePanel.tileSize, 5 * GamePanel.tileSize));
     }
 
     public void setInteractiveTile(){

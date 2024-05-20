@@ -1,16 +1,20 @@
 package entity;
 
 import main.GamePanel;
+import object.ToolPickaxe;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.Random;
 
 
 public class NPC extends Entity { //Just a collection of NPC-wide methods
-    public String[] dialogues = new String[30]; // Max 30 dialogs
-    long lastTalkTime;
-    boolean beganTalking = false;
-    int dialogueNum = 0;
+    public ArrayList<String> dialogues = new ArrayList<>(); // Max 30 dialogs
+    public long lastTalkTime;
+    public boolean beganTalking = false;
+    public int dialogueNum = 0;
+    public boolean firstTimeDialogue = true;
+    public int numTimesTalked;
 
     public NPC(GamePanel gp) {
         super(gp);
@@ -71,13 +75,8 @@ public class NPC extends Entity { //Just a collection of NPC-wide methods
         }
     }
 
-    //dialogue_stage has not yet been implemented but is intended to access an array for the corresponding dialogue that the NPC should say
-    //ds is 0 through 9
-
     public void speak(){
-        if(dialogues[dialogueNum] != null) {
-            gp.ui.currentDialogue = dialogues[dialogueNum];
-        }
+        gp.ui.currentDialogue = dialogues.get(dialogueNum);
     }
 
     public void doDialogue(Graphics2D g2){
@@ -100,12 +99,20 @@ public class NPC extends Entity { //Just a collection of NPC-wide methods
                     }
                 }
             }
+
+            if(firstTimeDialogue && dialogueNum == dialogues.size() - 1){
+                firstTimeDialogue = false;
+            }
+            if(dialogueNum == dialogues.size() - 1){
+                numTimesTalked++;
+            }
+
         }
         else {
             dialogueNum = 0;
             beganTalking = false;
         }
-        if(dialogues[dialogueNum] == null){
+        if(dialogueNum >= dialogues.size()){
             beganTalking = false;
             dialogueNum = 0;
             lastTalkTime = System.nanoTime();

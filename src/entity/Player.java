@@ -200,14 +200,14 @@ public class Player extends Entity{
             lastPickUpTime = currentTime;
             if(i != 99999){
 
-                String objectName = gp.tools[i].name;
+                String objectName = gp.tools.get(i).name;
 
                 switch(objectName){
                     case "pickaxe":
                         if(spaceInInventory(ToolPickaxe.objectId)) {
                             gp.playSE(1); // sound effect
                             addOneToInventory(ToolPickaxe.class);
-                            gp.tools[i] = null;
+                            gp.tools.remove(i);
                             System.out.println("pickaxe");
                             gp.ui.showMessage("You got a pickaxe");
                         }
