@@ -9,12 +9,11 @@ public class copperOreNode extends InteractiveTile{
 
     public copperOreNode(GamePanel gp, int row, int col){
         super(gp, row, col);
-        try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOreNode.png"));
-        } catch(IOException e){
-            e.printStackTrace();
-        }
+        image = gp.player.getImage("objects/copperOreNode.png"); // refactor in the future to not use gp.player
         destructible = true;
+        name = "copperOreNode";
     }
+    public void update(){
 
+    }
 }

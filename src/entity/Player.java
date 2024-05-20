@@ -21,7 +21,9 @@ public class Player extends Entity{
     public final int screenX, screenY;
     public int numCopper = 0; // change to inventory in future
     long lastPickUpTime = System.nanoTime();
+    long lastMineTime = System.nanoTime();
     public HashMap<Integer, Integer> inventory = new HashMap<>();
+    public Integer[] inventoryKeysAsArray; // change inventory to use a array, not hashmap in the future - will be simpler and better
     public int maxObjectPerSlot = 99;
 //    public int[] inventory = new int[255]; // size is number of objects.
 //    public ArrayList<SuperObject> inventory = new ArrayList<>();
@@ -38,6 +40,7 @@ public class Player extends Entity{
         solidAreaDefaultY = solidArea.y;
         setDefaultValues();
         getPlayerImage();
+        getPlayerAttackImage();
         setPlayerStartingItems();
     }
     public void setDefaultValues(){
@@ -65,6 +68,18 @@ public class Player extends Entity{
         down1 = getImage("player/boy_down_1.png");
         left1 = getImage("player/boy_left_1.png");
     }
+
+    public void getPlayerAttackImage(){
+        attackUp1 = getImage("player/boy_attack_up_1.png");
+        attackUp2 = getImage("player/boy_attack_up_2.png");
+        attackRight1 = getImage("player/boy_attack_right_1.png");
+        attackRight2 = getImage("player/boy_attack_right_2.png");
+        attackDown1 = getImage("player/boy_attack_down_1.png");
+        attackDown2 = getImage("player/boy_attack_down_2.png");
+        attackLeft1 = getImage("player/boy_attack_left_1.png");
+        attackLeft2 = getImage("player/boy_attack_left_2.png");
+    }
+
     public void snapPlayerLoc() {
         if (downCollisionOn) {
             // Snap player to the nearest tile below
@@ -176,7 +191,7 @@ public class Player extends Entity{
             }
         }
     }
-    public void pickUpTool(int i) {
+    public void pickUpTool(int i) { // bug: pickaxe sometimes does not pick up immediately.
         long currentTime;
         currentTime = System.nanoTime();
         long pickUpInterval = 5;
@@ -202,8 +217,16 @@ public class Player extends Entity{
         }
     }
     public void interactWithTile(int i){
-        if(i != 99999 && gp.iTile[i].destructible){
-//            gp.iTile[i] = null;
+        long mineInterval = 5;
+        if(gp.iTile[i].name == "copperOreNode"){
+            long currentTime = System.nanoTime();
+            if((currentTime - lastMineTime) / (1000000000 / gp.FPS) >= mineInterval &&
+                    currentTime - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS) &&
+                    gp.ui.hotbarCol < inventory.size() && inventoryKeysAsArray[gp.ui.hotbarCol] == ToolPickaxe.objectId &&
+                    gp.iTile[i].isCloseTo(this) && gp.iTile[i].isClicked()){
+                lastMineTime = currentTime;
+                gp.iTile[i] = null;
+            }
         }
     }
     public void interactNPC(int i){
@@ -212,6 +235,7 @@ public class Player extends Entity{
         }
     }
     public void update(){
+        inventoryKeysAsArray = inventory.keySet().toArray(new Integer[0]);
         if(keyH.jumpPressed){
             direction[0] = true;
         }else{
@@ -240,8 +264,13 @@ public class Player extends Entity{
         // Check tile collision
         gp.cChecker.checkTile(this);
         // Check interaction tile collision
-        int iTileIndex = gp.cChecker.checkTile(this, gp.iTile);
-        interactWithTile(iTileIndex);
+
+        gp.cChecker.checkTile(this, gp.iTile);
+        for(int i = 0; i < gp.iTile.length; i++){
+            if(gp.iTile[i] != null){
+                interactWithTile(i);
+            }
+        }
 
 
         // IF COLLISION IS FALSE, PLAYER CAN MOVE

@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -59,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
     // ENTITIES
     public Player player = new Player(this, keyH);
     public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
+//    public ArrayList<SuperObject> obj = new ArrayList<>();
     public SuperTool[] tools = new SuperTool[100];
     public NPC npc[] = new NPC[100];
     public InteractiveTile[] iTile = new InteractiveTile[50];

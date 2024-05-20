@@ -19,6 +19,8 @@ public class Entity {
     public boolean[] direction = new boolean[4]; // goes clockwise from the top: 0 - up, 1 - right, 2 - down, 3 - left
     public int accel;
     public BufferedImage up1, right1, down1, left1;
+    public BufferedImage attackUp1, attackUp2, attackRight1, attackRight2,
+            attackDown1, attackDown2, attackLeft1, attackLeft2;
     //    public final double gravity = 0.25 * 60 / 60;
     public int spriteCounter = 0;
     public int spriteNum = 1;
@@ -29,6 +31,7 @@ public class Entity {
     public boolean downCollisionOn = false;
     public boolean leftCollisionOn = false;
     public int actionLockCounter = 0;
+    public boolean attacking = false;
 
 
     public Entity(GamePanel gp){
