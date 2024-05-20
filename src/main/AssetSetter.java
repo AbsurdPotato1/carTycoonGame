@@ -5,6 +5,7 @@ import object.ObjectChest;
 import object.ObjectCopperOre;
 import object.ToolPickaxe;
 import tile_interactive.copperOreNode;
+import tile_interactive.shippingBay;
 
 public class AssetSetter {
     GamePanel gp;
@@ -31,12 +32,15 @@ public class AssetSetter {
 
     public void setTool(){
         gp.tools.add(new ToolPickaxe(gp, 4 * GamePanel.tileSize, 5 * GamePanel.tileSize));
+        gp.tools.clear(); // temporary - later just initialize all images in setupGame();
     }
 
     public void setInteractiveTile(){
         for(int i = 0; i < 10; i++){
             gp.iTile[i] = new copperOreNode(gp, (i+10) * GamePanel.tileSize, 4 * GamePanel.tileSize);
         }
+
+        gp.iTile[10] = new shippingBay(gp, 3 * GamePanel.tileSize, 7 * GamePanel.tileSize);
     }
 
     public void setNPC(){

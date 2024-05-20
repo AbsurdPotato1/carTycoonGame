@@ -25,6 +25,7 @@ public class Player extends Entity{
     public HashMap<Integer, Integer> inventory = new HashMap<>();
     public Integer[] inventoryKeysAsArray; // change inventory to use a array, not hashmap in the future - will be simpler and better
     public int maxObjectPerSlot = 99;
+    public int money;
 //    public int[] inventory = new int[255]; // size is number of objects.
 //    public ArrayList<SuperObject> inventory = new ArrayList<>();
     public Player(GamePanel gp, KeyHandler keyH){
