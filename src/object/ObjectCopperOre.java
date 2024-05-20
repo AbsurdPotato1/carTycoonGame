@@ -12,8 +12,8 @@ public class ObjectCopperOre extends SuperObject {
 //    public static final String name = "copperOre";
     public static final int objectId = 2;
     public static BufferedImage inventoryImage;
-    public ObjectCopperOre(GamePanel gp, int row, int col){
-        super(gp, row, col);
+    public ObjectCopperOre(GamePanel gp, int x, int y){
+        super(gp, x, y);
         collisionWidth = 22;
         collisionHeight = 19;
         objectWidth = 48;

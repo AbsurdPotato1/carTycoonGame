@@ -20,8 +20,8 @@ public class Player extends Entity{
 
     public final int screenX, screenY;
     public int numCopper = 0; // change to inventory in future
-    long lastPickUpTime = System.nanoTime();
-    long lastMineTime = System.nanoTime();
+    long lastPickUpTime = 0;
+    long lastMineTime = 0;
     public HashMap<Integer, Integer> inventory = new HashMap<>();
     public Integer[] inventoryKeysAsArray; // change inventory to use a array, not hashmap in the future - will be simpler and better
     public int maxObjectPerSlot = 99;
@@ -171,14 +171,14 @@ public class Player extends Entity{
             lastPickUpTime = currentTime;
             if(i != 99999){
 
-                String objectName = gp.obj[i].name;
+                String objectName = gp.obj.get(i).name;
 
                 switch(objectName){
                     case "copperOre":
                         if(spaceInInventory(ObjectCopperOre.objectId)) {
                             gp.playSE(1); // sound effect
                             addOneToInventory(ObjectCopperOre.class);
-                            gp.obj[i] = null;
+                            gp.obj.remove(i);
                             gp.ui.showMessage("You got a copper ore!");
                         }
                         break;
@@ -195,13 +195,13 @@ public class Player extends Entity{
         long currentTime;
         currentTime = System.nanoTime();
         long pickUpInterval = 5;
+        // bug caused due to line below this - could have been fixed by changing lastPickUpTime = System.nanoTime() to lastPickUpTime = 0; possibly
         if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // checks if last pickup >= 5 frames ago -- TODO: seems to be going 6 frames (10 items / sec) - due to slight inaccuracy in timing
             lastPickUpTime = currentTime;
             if(i != 99999){
 
                 String objectName = gp.tools[i].name;
 
-//                System.out.println("tool test");
                 switch(objectName){
                     case "pickaxe":
                         if(spaceInInventory(ToolPickaxe.objectId)) {
@@ -225,6 +225,7 @@ public class Player extends Entity{
                     gp.ui.hotbarCol < inventory.size() && inventoryKeysAsArray[gp.ui.hotbarCol] == ToolPickaxe.objectId &&
                     gp.iTile[i].isCloseTo(this) && gp.iTile[i].isClicked()){
                 lastMineTime = currentTime;
+                gp.obj.add(new ObjectCopperOre(gp, gp.iTile[i].worldX, gp.iTile[i].worldY));
                 gp.iTile[i] = null;
             }
         }
@@ -309,7 +310,6 @@ public class Player extends Entity{
         if(!leftCollisionOn) {
             if (keyH.leftPressed) {
                 worldX -= speedHor;
-//                System.out.println("HI");
             }
         }
         gp.cChecker.checkTile(this);

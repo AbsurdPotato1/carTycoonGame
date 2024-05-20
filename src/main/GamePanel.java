@@ -59,8 +59,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITIES
     public Player player = new Player(this, keyH);
-    public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
-//    public ArrayList<SuperObject> obj = new ArrayList<>();
+//    public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
+    public ArrayList<SuperObject> obj = new ArrayList<>();
     public SuperTool[] tools = new SuperTool[100];
     public NPC npc[] = new NPC[100];
     public InteractiveTile[] iTile = new InteractiveTile[50];
@@ -180,10 +180,8 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             // Objects
-            for (int i = 0; i < obj.length; i++) {
-                if (obj[i] != null) {
-                    obj[i].draw(g2, this);
-                }
+            for (int i = 0; i < obj.size(); i++) {
+                obj.get(i).draw(g2, this);
             }
             for(int i = 0; i < tools.length; i++){
                 if(tools[i] != null){

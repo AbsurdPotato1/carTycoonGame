@@ -10,8 +10,8 @@ import java.io.IOException;
 public class ToolPickaxe extends SuperTool {
     public static final int objectId = 0;
     public static BufferedImage inventoryImage;
-    public ToolPickaxe(GamePanel gp, int row, int col) {
-        super(gp, row, col);
+    public ToolPickaxe(GamePanel gp, int x, int y) {
+        super(gp, x, y);
         collisionWidth = 48;
         collisionHeight = 48;
         objectWidth = 48;

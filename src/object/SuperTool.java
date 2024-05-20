@@ -23,10 +23,10 @@ public class SuperTool {
     public String description = "";
     public int objectId;
 
-    public SuperTool(GamePanel gp, int row, int col){
+    public SuperTool(GamePanel gp, int x, int y){
         this.gp = gp;
-        worldX = row * GamePanel.tileSize;
-        worldY = col * GamePanel.tileSize;
+        worldX = x;
+        worldY = y;
     }
 
     public void draw(Graphics2D g2, GamePanel gp) {

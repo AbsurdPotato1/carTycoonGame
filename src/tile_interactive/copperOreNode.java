@@ -7,8 +7,8 @@ import java.io.IOException;
 
 public class copperOreNode extends InteractiveTile{
 
-    public copperOreNode(GamePanel gp, int row, int col){
-        super(gp, row, col);
+    public copperOreNode(GamePanel gp, int x, int y){
+        super(gp, x, y);
         image = gp.player.getImage("objects/copperOreNode.png"); // refactor in the future to not use gp.player
         destructible = true;
         name = "copperOreNode";
