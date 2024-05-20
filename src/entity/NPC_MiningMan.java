@@ -27,6 +27,7 @@ public class NPC_MiningMan extends NPC {
         dialogues.add("Hi. I am the chief miner here.");
         dialogues.add("To get started on your mining journey, you need a\npickaxe.");
         dialogues.add("Since it's your first time, i'll give it to you for\n free.");
+        dialogues.add("");
 //        dialogues[3] = "*You receive a pickaxe*";
     }
     public void setAction(){ // possible bug: sometimes gets stuck on tile corners
@@ -43,15 +44,18 @@ public class NPC_MiningMan extends NPC {
             dialogues.clear();
             dialogues.add("How's your mining going?");
             dialogues.add("I hope you're putting my pickaxe to good use.");
+            dialogues.add("");
         }
         if(numTimesTalked == 2){
             dialogues.clear();
             dialogues.add("... Get back to mining.");
+            dialogues.add("");
         }
         if(numTimesTalked == 3){
             dialogues.clear();
             dialogues.add("... Why are you still talking to me?");
             dialogues.add("Don't tell me you've lost my pickaxe.");
+            dialogues.add("");
         }
     }
     @Override
