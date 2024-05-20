@@ -13,6 +13,9 @@ public class Sound {
         soundURL[0] = getClass().getClassLoader().getResource("sound/titlescreen-overdrive-matrika.wav"); // Absolute banger of background music
         soundURL[1] = getClass().getClassLoader().getResource("sound/copperPickUp.wav"); // copper pickup sound effect
         soundURL[2] = getClass().getClassLoader().getResource("sound/backgroundMusic.wav"); // Ethan's bng music
+        soundURL[3] = getClass().getClassLoader().getResource("sound/buttonClick.wav"); // button click
+        soundURL[4] = getClass().getClassLoader().getResource("sound/ignition.wav");
+        soundURL[5] = getClass().getClassLoader().getResource("sound/bocchiBg.wav");
     }
 
     public void setFile(int i){

@@ -7,8 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class SuperObject {
+    GamePanel gp;
+    public BufferedImage inventoryImage; // only exists for readibility (every subclass has a public static BufferedImage inventoryImage)
     public BufferedImage image;
-    public BufferedImage inventoryImage;
     public String name;
     public boolean collision = false;
     public int worldX, worldY;
@@ -22,15 +23,21 @@ public class SuperObject {
     public String description = "";
     public int objectId;
 
+    public SuperObject(GamePanel gp, int x, int y){
+        this.gp = gp;
+        worldX = x;
+        worldY = y;
+    }
+
     public void draw(Graphics2D g2, GamePanel gp){
         int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
         int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
 
-        if(worldX > gp.player.worldX - gp.player.screenX - gp.tileSize &&
+        if(worldX > gp.player.worldX - gp.player.screenX - GamePanel.tileSize &&
            worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
-           worldY > gp.player.worldY - gp.player.screenY - gp.tileSize &&
+           worldY > gp.player.worldY - gp.player.screenY - GamePanel.tileSize &&
            worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
-           g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+           g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
         }
     }
 

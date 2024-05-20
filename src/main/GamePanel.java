@@ -1,16 +1,20 @@
 package main;//package main.Main;
 import data.SaveLoad;
 import entity.Entity;
+import entity.NPC;
 import entity.Player;
 import object.IdToObject;
 import object.SuperObject;
+import object.SuperTool;
 import tile.TileManager;
+import tile_interactive.InteractiveTile;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -19,12 +23,12 @@ public class GamePanel extends JPanel implements Runnable {
 
     // screen settings
 
-    final int originalTileSize = 16; // 16 x 16
-    final int scale = 3; // may not use this stuff since not retro -- pixels; instead use sprites in future
+    final static int originalTileSize = 16; // 16 x 16
+    final static int scale = 3; // may not use this stuff since not retro -- pixels; instead use sprites in future
     // Hopefully sprite classes work
     //https://www.reddit.com/r/gamedev/comments/mct51g/how_to_make_sprite_sheets_in_java/
 
-    public final int tileSize = originalTileSize * scale; // 96 x 96;
+    public static final int tileSize = originalTileSize * scale; // 96 x 96;
     public final int maxScreenCol = 32;
     public final int maxScreenRow = 18;
     public int screenWidth = tileSize * maxScreenCol; // 1536px
@@ -34,16 +38,17 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxWorldCol = 64;
     public final int maxWorldRow = 48;
 
-    public int FPS = 30;
+    public int FPS = 60;
+    public boolean gameStarted = false;
     // SYSTEM
-    TileManager tileM = new TileManager(this);
-    KeyHandler keyH = new KeyHandler(this);
-    MouseHandler mouseH = new MouseHandler(this);
-    Sound music = new Sound();
-    Sound se = new Sound();
+    public TileManager tileM = new TileManager(this);
+    public KeyHandler keyH = new KeyHandler(this);
+    public MouseHandler mouseH = new MouseHandler(this);
+    public Sound music = new Sound();
+    public Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
-    Thread gameThread; // This will run the code continuously (i.e. won't stop)en hs = new TitleScreen(this);
+    public Thread gameThread; // This will run the code continuously (i.e. won't stop)en hs = new TitleScreen(this);
     public TitleScreen ts = new TitleScreen(this);
 
     // GRAPHICS
@@ -54,13 +59,17 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITIES
     public Player player = new Player(this, keyH);
-    public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
-    public Entity npc[] = new Entity[100];
+//    public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
+    public ArrayList<SuperObject> obj = new ArrayList<>();
+    public ArrayList<SuperTool> tools = new ArrayList<>();
+//    public SuperTool[] tools = new SuperTool[100];
+    public NPC npc[] = new NPC[100];
+    public InteractiveTile[] iTile = new InteractiveTile[50];
 
     //states
     public int gameState;
     public static final int titleState = 0;
-    public static final int playerState =1;
+    public static final int playerState = 1;
     public static final int pauseState = 2;
     public static final int dialogueState = 3;
 
@@ -76,8 +85,10 @@ public class GamePanel extends JPanel implements Runnable {
     public void setUpGame(){
         IdToObject.setIdObject();
         aSetter.setObject();
+        aSetter.setTool();
         aSetter.setNPC();
-        //playMusic(0);
+        aSetter.setInteractiveTile();
+        playMusic(0);
         setFullScreen();
 
         //game state
@@ -143,6 +154,11 @@ public class GamePanel extends JPanel implements Runnable {
                 npc[i].update();
             }
         }
+        for(int i = 0; i < iTile.length; i++){
+            if(iTile[i] != null){
+                iTile[i].update();
+            }
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -152,17 +168,24 @@ public class GamePanel extends JPanel implements Runnable {
 
         if (gameState == GamePanel.titleState) {
             ts.draw(g2);
-            g2.dispose();
 
-        } else if (gameState == GamePanel.playerState) {
+        }
+        if(gameState != GamePanel.titleState){
             // Tiles -- Keep in mind drawing order does matter.
             tileM.draw(g2);
 
-            // Objects
-            for (int i = 0; i < obj.length; i++) {
-                if (obj[i] != null) {
-                    obj[i].draw(g2, this);
+            for(int i = 0; i < iTile.length; i++){
+                if(iTile[i] != null){
+                    iTile[i].draw(g2, this);
                 }
+            }
+
+            // Objects
+            for (int i = 0; i < obj.size(); i++) {
+                obj.get(i).draw(g2, this);
+            }
+            for(int i = 0; i < tools.size(); i++){
+                tools.get(i).draw(g2, this);
             }
 
             //NPCs
@@ -176,24 +199,23 @@ public class GamePanel extends JPanel implements Runnable {
             player.draw(g2);
 
             ui.draw(g2);
-
-            g2.dispose(); // saves memory (optimization)
-        } else {
-            System.out.println("UNSUPPORTED COMPONENT. gameState wrong!");
         }
-    }
+        if(gameState == GamePanel.dialogueState){
 
+        }
+        g2.dispose();
+    }
 
     public void playMusic(int i){
-        music.setFile(i);
-        music.play();
-        music.loop(); // repeat music
+//        music.setFile(i);
+//        music.play();
+//        music.loop(); // repeat music
     }
     public void stopMusic(){
-        music.stop(); // stop music
+//        music.stop(); // stop music
     }
     public void playSE(int i){
-        se.setFile(i);
-        se.play(); // sound effects are short, only call once typically.
+//        se.setFile(i);
+//        se.play(); // sound effects are short, only call once typically.
     }
 }

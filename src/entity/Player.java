@@ -2,8 +2,10 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import object.IdToObject;
 import object.ObjectCopperOre;
 import object.SuperObject;
+import object.ToolPickaxe;
 
 import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
@@ -18,23 +20,27 @@ public class Player extends Entity{
 
     public final int screenX, screenY;
     public int numCopper = 0; // change to inventory in future
-    long lastPickUpTime = System.nanoTime();
+    long lastPickUpTime = 0;
+    long lastMineTime = 0;
     public HashMap<Integer, Integer> inventory = new HashMap<>();
+    public Integer[] inventoryKeysAsArray; // change inventory to use a array, not hashmap in the future - will be simpler and better
+    public int maxObjectPerSlot = 99;
 //    public int[] inventory = new int[255]; // size is number of objects.
 //    public ArrayList<SuperObject> inventory = new ArrayList<>();
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp);
         this.keyH = keyH;
 
-        screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
-        screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
+        screenX = gp.screenWidth / 2 - (GamePanel.tileSize / 2);
+        screenY = gp.screenHeight / 2 - (GamePanel.tileSize / 2);
 
-        solidArea = new Rectangle(8, 8 , gp.tileSize - 16, gp.tileSize - 8); // sets hitbox - 8 pixels from left, right, and top of sprite, i.e. hitbox is 32x40
-//        solidArea = new Rectangle(0, 0, gp.tileSize, gp.tileSize); // use for testing
+        solidArea = new Rectangle(8, 8 , GamePanel.tileSize - 16, GamePanel.tileSize - 8); // sets hitbox - 8 pixels from left, right, and top of sprite, i.e. hitbox is 32x40
+//        solidArea = new Rectangle(0, 0, GamePanel.tileSize, GamePanel.tileSize); // use for testing
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         setDefaultValues();
         getPlayerImage();
+        getPlayerAttackImage();
         setPlayerStartingItems();
     }
     public void setDefaultValues(){
@@ -57,16 +63,31 @@ public class Player extends Entity{
     }
 
     public void getPlayerImage(){
-        image1 = getImage("player/boy_down_1.png");
+        up1 = getImage("player/boy_up_1.png");
+        right1 = getImage("player/boy_right_1.png");
+        down1 = getImage("player/boy_down_1.png");
+        left1 = getImage("player/boy_left_1.png");
     }
+
+    public void getPlayerAttackImage(){
+        attackUp1 = getImage("player/boy_attack_up_1.png");
+        attackUp2 = getImage("player/boy_attack_up_2.png");
+        attackRight1 = getImage("player/boy_attack_right_1.png");
+        attackRight2 = getImage("player/boy_attack_right_2.png");
+        attackDown1 = getImage("player/boy_attack_down_1.png");
+        attackDown2 = getImage("player/boy_attack_down_2.png");
+        attackLeft1 = getImage("player/boy_attack_left_1.png");
+        attackLeft2 = getImage("player/boy_attack_left_2.png");
+    }
+
     public void snapPlayerLoc() {
         if (downCollisionOn) {
             // Snap player to the nearest tile below
             int playerBottomY = (int)worldY + solidArea.y + solidArea.height; // Calculate the bottom Y-coordinate of the player
-            int nearestTileBelowY = ((playerBottomY + gp.tileSize - 1) / gp.tileSize) * gp.tileSize; // Calculate nearest tile below
+            int nearestTileBelowY = ((playerBottomY + GamePanel.tileSize - 1) / GamePanel.tileSize) * GamePanel.tileSize; // Calculate nearest tile below
 
             // Calculate the distance to the nearest tile above
-            int nearestTileAboveY = nearestTileBelowY - gp.tileSize;
+            int nearestTileAboveY = nearestTileBelowY - GamePanel.tileSize;
             int distToTileAbove = (int)worldY + solidArea.y + solidArea.height - nearestTileAboveY; // should always be positive
 
             // Calculate the distance to the nearest tile below
@@ -74,18 +95,18 @@ public class Player extends Entity{
 
             // Snap to the nearest tile (above or below)
             if(distToTileAbove < 6){
-                worldY = (nearestTileAboveY + 6) / gp.tileSize * gp.tileSize - solidArea.height;
+                worldY = (nearestTileAboveY + 6) / GamePanel.tileSize * GamePanel.tileSize - solidArea.height;
             }else if(distToTileBelow < 6){
-                worldY = (nearestTileBelowY + 6) / gp.tileSize * gp.tileSize - solidArea.height;;
+                worldY = (nearestTileBelowY + 6) / GamePanel.tileSize * GamePanel.tileSize - solidArea.height;;
             }
         }
         if (upCollisionOn) {
             // Snap player to the nearest tile below
             int playerTopY = (int)worldY; // Calculate the bottom Y-coordinate of the player
-            int nearestTileAboveY = ((playerTopY) / gp.tileSize) * gp.tileSize; // Calculate nearest tile above
+            int nearestTileAboveY = ((playerTopY) / GamePanel.tileSize) * GamePanel.tileSize; // Calculate nearest tile above
 
             // Calculate the distance to the nearest tile above
-            int nearestTileBelowY = nearestTileAboveY + gp.tileSize;
+            int nearestTileBelowY = nearestTileAboveY + GamePanel.tileSize;
             int distToTileAbove = (int)worldY - nearestTileAboveY; // should always be positive
 
             // Calculate the distance to the nearest tile below
@@ -93,19 +114,19 @@ public class Player extends Entity{
 
             // Snap to the nearest tile (above or below)
             if(distToTileAbove < 6){
-                worldY = (nearestTileAboveY + 6) / gp.tileSize * gp.tileSize;
+                worldY = (nearestTileAboveY + 6) / GamePanel.tileSize * GamePanel.tileSize;
             }else if(distToTileBelow < 6){
-                worldY = (nearestTileBelowY + 6) / gp.tileSize * gp.tileSize;
+                worldY = (nearestTileBelowY + 6) / GamePanel.tileSize * GamePanel.tileSize;
             }
         }
 
         if (rightCollisionOn) {
             // Snap player to the nearest tile below
             int playerRightX = (int)worldX + solidArea.x + solidArea.width; // Calculate the right X-coordinate of the player
-            int nearestTileRightX = ((playerRightX + gp.tileSize - 1) / gp.tileSize) * gp.tileSize; // Calculate nearest tile right
+            int nearestTileRightX = ((playerRightX + GamePanel.tileSize - 1) / GamePanel.tileSize) * GamePanel.tileSize; // Calculate nearest tile right
 
             // Calculate the distance to the nearest tile above
-            int nearestTileLeftX = nearestTileRightX - gp.tileSize;
+            int nearestTileLeftX = nearestTileRightX - GamePanel.tileSize;
             int distToTileLeft = (int)worldX + solidArea.x + solidArea.width - nearestTileLeftX; // should always be positive
 
             // Calculate the distance to the nearest tile below
@@ -113,19 +134,19 @@ public class Player extends Entity{
 
             // Snap to the nearest tile (above or below)
             if(distToTileLeft < 6){
-                worldX = (nearestTileLeftX + 6) / gp.tileSize * gp.tileSize - solidArea.width;
+                worldX = (nearestTileLeftX + 6) / GamePanel.tileSize * GamePanel.tileSize - solidArea.width;
             }else if(distToTileRight < 6){
-                worldX = (nearestTileRightX + 6) / gp.tileSize * gp.tileSize - solidArea.width;
+                worldX = (nearestTileRightX + 6) / GamePanel.tileSize * GamePanel.tileSize - solidArea.width;
             }
         }
 
         if (leftCollisionOn) {
             // Snap player to the nearest tile below
             int playerLeftX = (int)worldX; // Calculate the left X-coordinate of the player
-            int nearestTileLeftX = ((playerLeftX) / gp.tileSize) * gp.tileSize; // Calculate nearest tile above
+            int nearestTileLeftX = ((playerLeftX) / GamePanel.tileSize) * GamePanel.tileSize; // Calculate nearest tile above
 
             // Calculate the distance to the nearest tile above
-            int nearestTileRightX = nearestTileLeftX + gp.tileSize;
+            int nearestTileRightX = nearestTileLeftX + GamePanel.tileSize;
             int distToTileLeft = (int)worldX - nearestTileLeftX; // should always be positive
 
             // Calculate the distance to the nearest tile below
@@ -133,28 +154,33 @@ public class Player extends Entity{
 
             // Snap to the nearest tile (above or below)
             if(distToTileLeft < 6){
-                worldX = (nearestTileLeftX + 6) / gp.tileSize * gp.tileSize;
+                worldX = (nearestTileLeftX + 6) / GamePanel.tileSize * GamePanel.tileSize;
             }else if(distToTileRight < 6){
-                worldX = (nearestTileRightX + 6) / gp.tileSize * gp.tileSize;
+                worldX = (nearestTileRightX + 6) / GamePanel.tileSize * GamePanel.tileSize;
             }
         }
+    }
+    public boolean spaceInInventory(int objectId){
+        return gp.ui.inventorySize < 27 || (gp.ui.inventorySize == 27 && inventory.get(objectId) % maxObjectPerSlot > 0);
     }
     public void pickUpObject(int i){
         long currentTime;
         currentTime = System.nanoTime();
         long pickUpInterval = 5;
-        if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // last pickup >= 5 frames ago? -- TODO: seems to be going 6 frames (10 items / sec)
+        if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // checks if last pickup >= 5 frames ago -- TODO: seems to be going 6 frames (10 items / sec) - due to slight inaccuracy in timing
             lastPickUpTime = currentTime;
             if(i != 99999){
 
-                String objectName = gp.obj[i].name;
+                String objectName = gp.obj.get(i).name;
 
                 switch(objectName){
                     case "copperOre":
-                        gp.playSE(1); // sound effect
-                        addOneToInventory(ObjectCopperOre.class);
-                        gp.obj[i] = null;
-                        gp.ui.showMessage("You got a copper ore!");
+                        if(spaceInInventory(ObjectCopperOre.objectId)) {
+                            gp.playSE(1); // sound effect
+                            addOneToInventory(ObjectCopperOre.class);
+                            gp.obj.remove(i);
+                            gp.ui.showMessage("You got a copper ore!");
+                        }
                         break;
                     case "chest":
                         gp.ui.showMessage("L bozo chests don't work yet");
@@ -165,12 +191,52 @@ public class Player extends Entity{
             }
         }
     }
+    public void pickUpTool(int i) { // bug: pickaxe sometimes does not pick up immediately.
+        long currentTime;
+        currentTime = System.nanoTime();
+        long pickUpInterval = 5;
+        // bug caused due to line below this - could have been fixed by changing lastPickUpTime = System.nanoTime() to lastPickUpTime = 0; possibly
+        if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // checks if last pickup >= 5 frames ago -- TODO: seems to be going 6 frames (10 items / sec) - due to slight inaccuracy in timing
+            lastPickUpTime = currentTime;
+            if(i != 99999){
+
+                String objectName = gp.tools.get(i).name;
+
+                switch(objectName){
+                    case "pickaxe":
+                        if(spaceInInventory(ToolPickaxe.objectId)) {
+                            gp.playSE(1); // sound effect
+                            addOneToInventory(ToolPickaxe.class);
+                            gp.tools.remove(i);
+                            System.out.println("pickaxe");
+                            gp.ui.showMessage("You got a pickaxe");
+                        }
+                        break;
+                }
+            }
+        }
+    }
+    public void interactWithTile(int i){
+        long mineInterval = 5;
+        if(gp.iTile[i].name == "copperOreNode"){
+            long currentTime = System.nanoTime();
+            if((currentTime - lastMineTime) / (1000000000 / gp.FPS) >= mineInterval &&
+                    currentTime - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS) &&
+                    gp.ui.hotbarCol < inventory.size() && inventoryKeysAsArray[gp.ui.hotbarCol] == ToolPickaxe.objectId &&
+                    gp.iTile[i].isCloseTo(this) && gp.iTile[i].isClicked()){
+                lastMineTime = currentTime;
+                gp.obj.add(new ObjectCopperOre(gp, gp.iTile[i].worldX, gp.iTile[i].worldY));
+                gp.iTile[i] = null;
+            }
+        }
+    }
     public void interactNPC(int i){
         if(i != 99999){
-            System.out.println("you bonk");
+//            System.out.println("you bonk");
         }
     }
     public void update(){
+        inventoryKeysAsArray = inventory.keySet().toArray(new Integer[0]);
         if(keyH.jumpPressed){
             direction[0] = true;
         }else{
@@ -196,7 +262,18 @@ public class Player extends Entity{
         rightCollisionOn = false;
         downCollisionOn = false;
         leftCollisionOn = false;
+        // Check tile collision
         gp.cChecker.checkTile(this);
+        // Check interaction tile collision
+
+        gp.cChecker.checkTile(this, gp.iTile);
+        for(int i = 0; i < gp.iTile.length; i++){
+            if(gp.iTile[i] != null){
+                interactWithTile(i);
+            }
+        }
+
+
         // IF COLLISION IS FALSE, PLAYER CAN MOVE
 
         gp.cChecker.checkTile(this);
@@ -206,6 +283,9 @@ public class Player extends Entity{
         // Check NPC Collision
         int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
         interactNPC(npcIndex);
+
+        int toolIndex = gp.cChecker.checkTool(this, true);
+        pickUpTool(toolIndex);
 
 //        System.out.println("X: " + worldX + ", Y: " + worldY);
 //        System.out.print("UP: " + upCollisionOn);
@@ -230,7 +310,6 @@ public class Player extends Entity{
         if(!leftCollisionOn) {
             if (keyH.leftPressed) {
                 worldX -= speedHor;
-//                System.out.println("HI");
             }
         }
         gp.cChecker.checkTile(this);
@@ -243,8 +322,12 @@ public class Player extends Entity{
 
         BufferedImage image = null;
 
-        image = image1;
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        if(direction[1])image = right1;
+        else if(direction[3])image = left1;
+        else if(direction[0])image = up1;
+        else if(direction[2])image = down1;
+        else image = down1;
+        g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
 
 
     }

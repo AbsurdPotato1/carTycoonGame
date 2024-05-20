@@ -10,9 +10,10 @@ import java.io.IOException;
 
 public class ObjectCopperOre extends SuperObject {
 //    public static final String name = "copperOre";
-    public static final int objectId = 0;
+    public static final int objectId = 2;
     public static BufferedImage inventoryImage;
-    public ObjectCopperOre(){
+    public ObjectCopperOre(GamePanel gp, int x, int y){
+        super(gp, x, y);
         collisionWidth = 22;
         collisionHeight = 19;
         objectWidth = 48;
@@ -23,8 +24,8 @@ public class ObjectCopperOre extends SuperObject {
         solidArea = new Rectangle(collisionXOffset, collisionYOffset, collisionWidth, collisionHeight);
         name = "copperOre";
         try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre.png")); // image provides the location where the object is drawn.
-            inventoryImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOre22x19.png"));
+            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOreNew.png")); // image provides the location where the object is drawn.
+            inventoryImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/copperOreNew.png"));
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -37,9 +38,9 @@ public class ObjectCopperOre extends SuperObject {
         int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
         int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
 
-        if(worldX > gp.player.worldX - gp.player.screenX - gp.tileSize &&
+        if(worldX > gp.player.worldX - gp.player.screenX - GamePanel.tileSize &&
                 worldX < gp.player.worldX + gp.screenWidth - gp.player.screenX &&
-                worldY > gp.player.worldY - gp.player.screenY - gp.tileSize &&
+                worldY > gp.player.worldY - gp.player.screenY - GamePanel.tileSize &&
                 worldY < gp.player.worldY + gp.screenHeight - gp.player.screenY){
             g2.drawImage(image, screenX, screenY, objectWidth, objectHeight, null);
         }

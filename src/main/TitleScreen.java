@@ -7,11 +7,9 @@ import java.io.IOException;
 
 public class TitleScreen {
     GamePanel gp;
-    boolean playClicked;
 
     public TitleScreen(GamePanel gp) {
         this.gp = gp;
-        playClicked = false;
     }
 
     public void draw(Graphics2D g2)  {
@@ -58,15 +56,11 @@ public class TitleScreen {
         if(gp.mouseH.mouseClicked){
             if(gp.mouseH.mouseX >= (gp.screenWidth - startw) / 2 && gp.mouseH.mouseX <= (gp.screenWidth + startw) / 2 &&
                 gp.mouseH.mouseY >= (gp.screenHeight - starth) /2 && gp.mouseH.mouseY <= (gp.screenHeight + starth) / 2){
-                try {
-                    Animations.fadeOut(g2);
-                    gp.gameState = GamePanel.playerState;
-                    Animations.fadeIn(g2);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                //gp.stopMusic();
-                    //gp.playMusic(2);
+//                gp.a.fadeOut(g2);
+                gp.gameState = GamePanel.playerState;
+                gp.stopMusic();
+                gp.playSE(3);
+                gp.playMusic(5);
             }
         }
     }

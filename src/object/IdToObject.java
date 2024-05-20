@@ -6,8 +6,9 @@ import java.util.HashMap;
 public class IdToObject {
     public static final Class[] idObject = new Class[255];
     public static void setIdObject(){
-        idObject[0] = ObjectCopperOre.class;
+        idObject[0] = ToolPickaxe.class;
         idObject[1] = ObjectChest.class;
+        idObject[2] = ObjectCopperOre.class;
     }
     public static Class getObjectFromId(int id){ // helper function
         return idObject[id];

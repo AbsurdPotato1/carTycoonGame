@@ -38,47 +38,69 @@ public class KeyHandler implements KeyListener {
          * */
 
         int code = e.getKeyCode();
-        if(code == KeyEvent.VK_D){
-            rightPressed = true;
-        }
-        else if(code == KeyEvent.VK_A){
-            leftPressed = true;
-        }
-        else if(code == KeyEvent.VK_W){
-            jumpPressed = true;
-        }
-        else if(code == KeyEvent.VK_S){
-            downPressed = true;
-        }
-        window.addMouseWheelListener(scroll -> {
-            currentTime = System.nanoTime();
-            if(currentTime - lastTime >= frameInterval){
-                int notches = scroll.getWheelRotation();
-                if (notches < 0) {
-                    // Scroll up
-                    if(gp.ui.slotCol == 0){
-                        gp.ui.slotCol = 19;
-                    }
-                    else {
-                        gp.ui.slotCol--;
-                    }
-                        lastTime = System.nanoTime();
-                } else {
-                    // Scroll down
-                    if(gp.ui.slotCol == 19){
-                        gp.ui.slotCol = 0;
-                    }
-                    else { // (UI.drawHotbar.frameWidth - 32) / 48 - 1
-                        gp.ui.slotCol++;
-                    }
-                        lastTime = System.nanoTime();
-                }
+        if(gp.gameState == GamePanel.playerState || gp.gameState == GamePanel.dialogueState) {
+            if (code == KeyEvent.VK_D) {
+                rightPressed = true;
+            } else if (code == KeyEvent.VK_A) {
+                leftPressed = true;
+            } else if (code == KeyEvent.VK_W) {
+                jumpPressed = true;
+            } else if (code == KeyEvent.VK_S) {
+                downPressed = true;
+            }
+            if (code == KeyEvent.VK_E) {
+                inventoryPressed = true;
             }
 
-        });
-        if(code == KeyEvent.VK_E){
-            inventoryPressed = true;
+             window.addMouseWheelListener(scroll -> {
+                currentTime = System.nanoTime();
+                if (currentTime - lastTime >= frameInterval) {
+                    int notches = scroll.getWheelRotation();
+                    if (notches < 0) {
+                        // Scroll up
+                        if (inventoryPressed) { // if in inventory
+                            if (gp.ui.inventoryRow == 0 && gp.ui.inventoryCol == 0) {
+                                gp.ui.inventoryRow = 2;
+                                gp.ui.inventoryCol = 8;
+                            } else if (gp.ui.inventoryCol == 0) {
+                                gp.ui.inventoryRow--;
+                                gp.ui.inventoryCol = 8;
+                            } else {
+                                gp.ui.inventoryCol--;
+                            }
+                        } else { // if in hotbar
+                            if (gp.ui.hotbarCol == 0) {
+                                gp.ui.hotbarCol = 8;
+                            } else {
+                                gp.ui.hotbarCol--;
+                            }
+                        }
+                    } else {
+                        // Scroll down
+                        if (inventoryPressed) { // if in inventory
+                            if (gp.ui.inventoryRow == 2 && gp.ui.inventoryCol == 8) {
+                                gp.ui.inventoryRow = 0;
+                                gp.ui.inventoryCol = 0;
+                            } else if (gp.ui.inventoryCol == 8) {
+                                gp.ui.inventoryRow++;
+                                gp.ui.inventoryCol = 0;
+                            } else { // (UI.drawHotbar.frameWidth - 32) / 48 - 1
+                                gp.ui.inventoryCol++;
+                            }
+                        } else { // if in hotbar
+                            if (gp.ui.hotbarCol == 8) {
+                                gp.ui.hotbarCol = 0;
+                            } else {
+                                gp.ui.hotbarCol++;
+                            }
+                        }
+                    }
+                    lastTime = System.nanoTime();
+                }
+
+            });
         }
+
     }
 
     @Override

@@ -1,12 +1,15 @@
 package object;
 
+import main.GamePanel;
+
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
 public class ObjectChest extends SuperObject {
 //    public static final String name = "chest";
     public static final Integer objectId = 1;
-    public ObjectChest(){
+    public ObjectChest(GamePanel gp, int row, int col){
+        super(gp, row, col);
 //        objectId = 1;
         name = "chest";
         try {

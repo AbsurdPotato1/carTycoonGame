@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public final class Fonts {
-    static Font arial_40 = new Font("Arial", Font.PLAIN, 40);
-    static Font montserrat = Fonts.loadFont("fonts/Montserrat-VariableFont_wght.ttf");
-    static Font pressStart_2P = Fonts.loadFont("fonts/PressStart2P-Regular.ttf");
+    public static Font arial_40 = new Font("Arial", Font.PLAIN, 40);
+    public static Font montserrat = Fonts.loadFont("fonts/Montserrat-VariableFont_wght.ttf");
+    public static Font pressStart_2P = Fonts.loadFont("fonts/PressStart2P-Regular.ttf");
 
 
 

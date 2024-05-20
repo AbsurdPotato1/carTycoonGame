@@ -10,6 +10,7 @@ public class MouseHandler implements MouseListener {
     public GamePanel gp;
     public int mouseX, mouseY;
     public boolean mouseClicked;
+    public long timeClicked;
     public MouseHandler(GamePanel gp){
         this.gp = gp;
     }
@@ -24,6 +25,7 @@ public class MouseHandler implements MouseListener {
         Point point = MouseInfo.getPointerInfo().getLocation();
         mouseX = (int) point.getX();
         mouseY = (int) point.getY();
+        timeClicked = System.nanoTime();
     }
 
     @Override
