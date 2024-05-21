@@ -20,9 +20,12 @@ public class Player extends Entity{
 
     public final int screenX, screenY;
     public int numCopper = 0; // change to inventory in future
-    long lastPickUpTime = System.nanoTime();
+    long lastPickUpTime = 0;
+    long lastMineTime = 0;
     public HashMap<Integer, Integer> inventory = new HashMap<>();
+    public Integer[] inventoryKeysAsArray; // change inventory to use a array, not hashmap in the future - will be simpler and better
     public int maxObjectPerSlot = 99;
+    public int money;
 //    public int[] inventory = new int[255]; // size is number of objects.
 //    public ArrayList<SuperObject> inventory = new ArrayList<>();
     public Player(GamePanel gp, KeyHandler keyH){
@@ -38,6 +41,7 @@ public class Player extends Entity{
         solidAreaDefaultY = solidArea.y;
         setDefaultValues();
         getPlayerImage();
+        getPlayerAttackImage();
         setPlayerStartingItems();
     }
     public void setDefaultValues(){
@@ -65,6 +69,18 @@ public class Player extends Entity{
         down1 = getImage("player/boy_down_1.png");
         left1 = getImage("player/boy_left_1.png");
     }
+
+    public void getPlayerAttackImage(){
+        attackUp1 = getImage("player/boy_attack_up_1.png");
+        attackUp2 = getImage("player/boy_attack_up_2.png");
+        attackRight1 = getImage("player/boy_attack_right_1.png");
+        attackRight2 = getImage("player/boy_attack_right_2.png");
+        attackDown1 = getImage("player/boy_attack_down_1.png");
+        attackDown2 = getImage("player/boy_attack_down_2.png");
+        attackLeft1 = getImage("player/boy_attack_left_1.png");
+        attackLeft2 = getImage("player/boy_attack_left_2.png");
+    }
+
     public void snapPlayerLoc() {
         if (downCollisionOn) {
             // Snap player to the nearest tile below
@@ -156,14 +172,14 @@ public class Player extends Entity{
             lastPickUpTime = currentTime;
             if(i != 99999){
 
-                String objectName = gp.obj[i].name;
+                String objectName = gp.obj.get(i).name;
 
                 switch(objectName){
                     case "copperOre":
                         if(spaceInInventory(ObjectCopperOre.objectId)) {
                             gp.playSE(1); // sound effect
                             addOneToInventory(ObjectCopperOre.class);
-                            gp.obj[i] = null;
+                            gp.obj.remove(i);
                             gp.ui.showMessage("You got a copper ore!");
                         }
                         break;
@@ -176,23 +192,23 @@ public class Player extends Entity{
             }
         }
     }
-    public void pickUpTool(int i) {
+    public void pickUpTool(int i) { // bug: pickaxe sometimes does not pick up immediately.
         long currentTime;
         currentTime = System.nanoTime();
         long pickUpInterval = 5;
+        // bug caused due to line below this - could have been fixed by changing lastPickUpTime = System.nanoTime() to lastPickUpTime = 0; possibly
         if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // checks if last pickup >= 5 frames ago -- TODO: seems to be going 6 frames (10 items / sec) - due to slight inaccuracy in timing
             lastPickUpTime = currentTime;
             if(i != 99999){
 
-                String objectName = gp.tools[i].name;
+                String objectName = gp.tools.get(i).name;
 
-//                System.out.println("tool test");
                 switch(objectName){
                     case "pickaxe":
                         if(spaceInInventory(ToolPickaxe.objectId)) {
                             gp.playSE(1); // sound effect
                             addOneToInventory(ToolPickaxe.class);
-                            gp.tools[i] = null;
+                            gp.tools.remove(i);
                             System.out.println("pickaxe");
                             gp.ui.showMessage("You got a pickaxe");
                         }
@@ -202,8 +218,19 @@ public class Player extends Entity{
         }
     }
     public void interactWithTile(int i){
-        if(i != 99999 && gp.iTile[i].destructible){
-//            gp.iTile[i] = null;
+        long mineInterval = 5;
+        switch(gp.iTile.get(i).name) {
+            case "copperOreNode":
+                long currentTime = System.nanoTime();
+                if ((currentTime - lastMineTime) / (1000000000 / gp.FPS) >= mineInterval &&
+                        currentTime - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS) &&
+                        gp.ui.hotbarCol < inventory.size() && inventoryKeysAsArray[gp.ui.hotbarCol] == ToolPickaxe.objectId &&
+                        gp.iTile.get(i).isCloseTo(this) && gp.iTile.get(i).isClicked()) {
+                    lastMineTime = currentTime;
+                    gp.obj.add(new ObjectCopperOre(gp, gp.iTile.get(i).worldX, gp.iTile.get(i).worldY));
+                    gp.iTile.remove(i);
+                }
+                break;
         }
     }
     public void interactNPC(int i){
@@ -212,6 +239,7 @@ public class Player extends Entity{
         }
     }
     public void update(){
+        inventoryKeysAsArray = inventory.keySet().toArray(new Integer[0]);
         if(keyH.jumpPressed){
             direction[0] = true;
         }else{
@@ -240,8 +268,11 @@ public class Player extends Entity{
         // Check tile collision
         gp.cChecker.checkTile(this);
         // Check interaction tile collision
-        int iTileIndex = gp.cChecker.checkTile(this, gp.iTile);
-        interactWithTile(iTileIndex);
+
+        gp.cChecker.checkTile(this, gp.iTile);
+        for(int i = 0; i < gp.iTile.size(); i++){
+            interactWithTile(i);
+        }
 
 
         // IF COLLISION IS FALSE, PLAYER CAN MOVE
@@ -280,7 +311,6 @@ public class Player extends Entity{
         if(!leftCollisionOn) {
             if (keyH.leftPressed) {
                 worldX -= speedHor;
-//                System.out.println("HI");
             }
         }
         gp.cChecker.checkTile(this);

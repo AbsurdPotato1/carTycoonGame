@@ -3,14 +3,16 @@ package entity;
 import main.GamePanel;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.Random;
 
 
 public class NPC extends Entity { //Just a collection of NPC-wide methods
-    public String[] dialogues = new String[30]; // Max 30 dialogs
-    long lastTalkTime;
-    boolean beganTalking = false;
-    int dialogueNum = 0;
+    public ArrayList<String> dialogues = new ArrayList<>(); // Max 30 dialogs
+    public long lastTalkTime;
+    public boolean talking = false;
+    public int dialogueNum = 0;
+    public int numTimesTalked;
 
     public NPC(GamePanel gp) {
         super(gp);
@@ -71,44 +73,50 @@ public class NPC extends Entity { //Just a collection of NPC-wide methods
         }
     }
 
-    //dialogue_stage has not yet been implemented but is intended to access an array for the corresponding dialogue that the NPC should say
-    //ds is 0 through 9
-
     public void speak(){
-        if(dialogues[dialogueNum] != null) {
-            gp.ui.currentDialogue = dialogues[dialogueNum];
-        }
+        gp.ui.currentDialogue = dialogues.get(dialogueNum);
+    }
+
+    public void changeDialogue(){
+
     }
 
     public void doDialogue(Graphics2D g2){
         long talkInterval = 30; // Minimum time between dialogue transition
-        if(isCloseTo(gp.player)) {
-            if ((System.nanoTime() - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval && !beganTalking && isClicked() && System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) {
+        if(isCloseTo(gp.player)){ // allow dialogue
+            if ((System.nanoTime() - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval && !talking && isClicked() && System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) { // first time talked
                 gp.gameState = GamePanel.dialogueState;
-                beganTalking = true;
+                talking = true;
                 lastTalkTime = System.nanoTime();
             }
-            if (beganTalking) {
+            if(talking){
                 speak();
                 gp.ui.drawDialogueScreen(g2);
-                if (gp.mouseH.mouseClicked &&  System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) {
+                if (gp.mouseH.mouseClicked &&  System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) { // if mouse clicked
                     long currentTime;
                     currentTime = System.nanoTime();
-                    if ((currentTime - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval) {
+                    if ((currentTime - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval) { // if last time talked is sufficiently long enough (30 frames)
                         lastTalkTime = currentTime;
-                        dialogueNum++;
+                        if(dialogueNum == dialogues.size() - 1) { // check if player is done with the current dialogue and clicked
+                            talking = false;
+                            dialogueNum = 0;
+                            numTimesTalked++;
+                            changeDialogue(); // switch to new dialogue
+                        }
+                        else {
+                            dialogueNum++;
+                        }
+
                     }
                 }
             }
-        }
-        else {
+        } else { // if player not close enough
+            if(dialogueNum == dialogues.size() - 1){ // check if player is done with the current dialogue
+                numTimesTalked++;
+                changeDialogue();
+            }
             dialogueNum = 0;
-            beganTalking = false;
-        }
-        if(dialogues[dialogueNum] == null){
-            beganTalking = false;
-            dialogueNum = 0;
-            lastTalkTime = System.nanoTime();
+            talking = false; // npc no longer talking
         }
     }
 
@@ -116,8 +124,8 @@ public class NPC extends Entity { //Just a collection of NPC-wide methods
         int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
         int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
         if(gp.mouseH.mouseClicked){
-            if(gp.mouseH.mouseX >= (screenX) && gp.mouseH.mouseX <= (screenX + solidArea.width) &&
-                    gp.mouseH.mouseY >= (screenY) && gp.mouseH.mouseY <= (screenY + solidArea.height)){
+            if(gp.mouseH.mouseX >= (screenX) && gp.mouseH.mouseX <= (screenX + solidArea.x + solidArea.width) &&
+                    gp.mouseH.mouseY >= (screenY) && gp.mouseH.mouseY <= (screenY + solidArea.y + solidArea.height)){
                 return true;
             }
         }

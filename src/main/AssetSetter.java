@@ -5,7 +5,7 @@ import object.ObjectChest;
 import object.ObjectCopperOre;
 import object.ToolPickaxe;
 import tile_interactive.copperOreNode;
-import tile_interactive.craftingBench;
+import tile_interactive.shippingBay;
 
 public class AssetSetter {
     GamePanel gp;
@@ -16,33 +16,35 @@ public class AssetSetter {
 
     public void setObject(){
         for(int i = 0; i < 255; i++){
-            gp.obj[i] = new ObjectCopperOre(gp, 3, 3);
+            gp.obj.add(new ObjectCopperOre(gp, 3 * GamePanel.tileSize, 3 * GamePanel.tileSize));
         }
-        gp.obj[0] = new ObjectCopperOre(gp, 9, 9);
+        gp.obj.add(new ObjectCopperOre(gp, 9 * GamePanel.tileSize, 9 * GamePanel.tileSize));
 
-        gp.obj[1] = new ObjectCopperOre(gp, 14, 8);
+        gp.obj.add(new ObjectCopperOre(gp, 14 * GamePanel.tileSize, 8 * GamePanel.tileSize));
 
-        gp.obj[2] = new ObjectChest(gp, 3, 10);
+        gp.obj.add(new ObjectChest(gp, 3 * GamePanel.tileSize, 10 * GamePanel.tileSize));
 
-        gp.obj[3] = new ObjectChest(gp, 4, 9);
+        gp.obj.add(new ObjectChest(gp, 4 * GamePanel.tileSize, 9 * GamePanel.tileSize));
 
-        gp.obj[4] = new ObjectCopperOre(gp,  4, 9); // Objects are layer-able - be careful
+        gp.obj.add(new ObjectCopperOre(gp,  4 * GamePanel.tileSize, 9 * GamePanel.tileSize)); // Objects are layer-able - be careful
 
     }
 
     public void setTool(){
-        gp.tools[0] = new ToolPickaxe(gp, 4, 5);
+        gp.tools.add(new ToolPickaxe(gp, 4 * GamePanel.tileSize, 5 * GamePanel.tileSize));
+        gp.tools.clear(); // temporary - later just initialize all images in setupGame();
     }
 
     public void setInteractiveTile(){
         for(int i = 0; i < 10; i++){
-            gp.iTile[i] = new copperOreNode(gp, i+10, 4);
+            gp.iTile.add(new copperOreNode(gp, (i+10) * GamePanel.tileSize, 4 * GamePanel.tileSize));
         }
-        gp.iTile[11] = new craftingBench(gp, 5, 5); // arbitrary cords
+
+        gp.iTile.add(new shippingBay(gp, 3 * GamePanel.tileSize, 7 * GamePanel.tileSize));
     }
 
     public void setNPC(){
-        gp.npc[0] = new NPC_MiningMan(gp, GamePanel.tileSize * 5, GamePanel.tileSize * 5);
+        gp.npc[0] = new NPC_MiningMan(gp, GamePanel.tileSize * 7, GamePanel.tileSize * 5);
     }
 
 }

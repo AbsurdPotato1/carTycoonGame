@@ -14,6 +14,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.sql.Array;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -58,10 +60,13 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ENTITIES
     public Player player = new Player(this, keyH);
-    public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
-    public SuperTool[] tools = new SuperTool[100];
+//    public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
+    public ArrayList<SuperObject> obj = new ArrayList<>();
+    public ArrayList<SuperTool> tools = new ArrayList<>();
+//    public SuperTool[] tools = new SuperTool[100];
     public NPC npc[] = new NPC[100];
-    public InteractiveTile[] iTile = new InteractiveTile[50];
+    public ArrayList<InteractiveTile> iTile = new ArrayList<InteractiveTile>();
+//    public InteractiveTile[] iTile = new InteractiveTile[50];
 
     //states
     public int gameState;
@@ -151,10 +156,8 @@ public class GamePanel extends JPanel implements Runnable {
                 npc[i].update();
             }
         }
-        for(int i = 0; i < iTile.length; i++){
-            if(iTile[i] != null){
-                iTile[i].update();
-            }
+        for(int i = 0; i < iTile.size(); i++){
+            iTile.get(i).update();
         }
     }
 
@@ -171,22 +174,16 @@ public class GamePanel extends JPanel implements Runnable {
             // Tiles -- Keep in mind drawing order does matter.
             tileM.draw(g2);
 
-            for(int i = 0; i < iTile.length; i++){
-                if(iTile[i] != null){
-                    iTile[i].draw(g2, this);
-                }
+            for(int i = 0; i < iTile.size(); i++){
+                iTile.get(i).draw(g2, this);
             }
 
             // Objects
-            for (int i = 0; i < obj.length; i++) {
-                if (obj[i] != null) {
-                    obj[i].draw(g2, this);
-                }
+            for (int i = 0; i < obj.size(); i++) {
+                obj.get(i).draw(g2, this);
             }
-            for(int i = 0; i < tools.length; i++){
-                if(tools[i] != null){
-                    tools[i].draw(g2, this);
-                }
+            for(int i = 0; i < tools.size(); i++){
+                tools.get(i).draw(g2, this);
             }
 
             //NPCs
