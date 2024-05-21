@@ -199,21 +199,22 @@ public class UI {
         final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
+        int i = 0;
+        //for(int i = 0 ; i < craftables.size() ; i++) {
+        g2.drawImage(IdToObject.getImageFromId(craftables.get(i)), slotX, slotY, 48, 48, null);
+        slotX += GamePanel.tileSize;
+        int j = 0; // For loop
+        gp.mouseH.mouseInside(slotXstart + 48*j, slotXstart + 48*(j+1), frameY + 16 , frameY + 16 + 48);
+        //}
 
-        for(int i = 0 ; i < craftables.size() ; i++) {
-            g2.drawImage(IdToObject.getImageFromId(i), slotX, slotY, 48, 48, null);
-            slotX += GamePanel.tileSize;
-
-        }
-
-        int cursorX = slotXstart + (GamePanel.tileSize * inventoryCol);
+        /*int cursorX = slotXstart + (GamePanel.tileSize * inventoryCol);
         int cursorY = slotYstart + (GamePanel.tileSize * inventoryRow) + inventoryRow * 16;
         int cursorWidth = GamePanel.tileSize;
         int cursorHeight = GamePanel.tileSize;
 
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(3));
-        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);*/
 
     }
 
@@ -221,7 +222,7 @@ public class UI {
         for(int i = 0 ; i < IdToObject.numObjs ; i++) {
             try {
                 Boolean c = IdToObject.idObject[i].getField("craftable").getBoolean(null);
-                craftables.add(i);
+                if(c) craftables.add(i);
             } catch (Exception e) {
                 e.printStackTrace();
             }
