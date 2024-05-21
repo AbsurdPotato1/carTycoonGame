@@ -9,8 +9,9 @@ import java.io.IOException;
 
 public class ToolPickaxe extends SuperObject {
     public static final int objectId = 0;
+    public static final boolean craftable = true;
+    public static final boolean sellable = true;
     public static BufferedImage inventoryImage;
-    public static boolean sellable = true;
     public ToolPickaxe(GamePanel gp, int x, int y) {
         super(gp, x, y);
         collisionWidth = 48;
@@ -28,6 +29,5 @@ public class ToolPickaxe extends SuperObject {
             e.printStackTrace();
         }
         name = "pickaxe";
-        craftable = true;
     }
 }

@@ -4,7 +4,13 @@ import entity.Entity;
 import main.GamePanel;
 import object.SuperObject;
 
-public class InteractiveTile extends SuperObject {
+public class InteractiveTile extends SuperObject { // WHEN CREATING A NEW SUPEROBJECT OR INTERACTIVE TILE MAKE SURE TO ASSIGN THESE:
+    // public static final Integer objectId = 1;
+    // public static final boolean craftable = someValue;
+    // public static final boolean sellable = someValue;
+    // public static BufferedImage inventoryImage; <-- assigned in constructor
+    // increase IdToObject numObjs
+    // Place your object's class in IdToObject's idObject class
     GamePanel gp;
     public boolean destructible = false;
     public InteractiveTile(GamePanel gp, int row, int col){

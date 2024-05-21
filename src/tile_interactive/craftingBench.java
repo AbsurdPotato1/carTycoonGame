@@ -5,14 +5,20 @@ import main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class craftingBench extends InteractiveTile{
-    public boolean crafting = false;
-    public boolean beginCrafting = false;
+    public boolean crafting = false; // tracks crafting status - whether or not you are crafting
+    public boolean beginCrafting = false; // tracks whether or not crafting has begun - used for one time calls then set to true
+    public static final int objectId = 4;
+    public static final boolean  craftable = true;
+    public static final boolean sellable = false;
+    public static BufferedImage inventoryImage;
     public craftingBench(GamePanel gp, int row, int col){
         super(gp, row, col);
         image = UtilityTool.getImage("objects/craftingbench.png");
+        inventoryImage = image;
         destructible = false;
         name = "craftingbench";
     }

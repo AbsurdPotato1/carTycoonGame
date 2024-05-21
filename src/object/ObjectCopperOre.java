@@ -10,8 +10,9 @@ import java.io.IOException;
 
 public class ObjectCopperOre extends SuperObject {
     public static final int objectId = 2;
+    public static final boolean craftable = false;
+    public static final boolean sellable = true;
     public static BufferedImage inventoryImage;
-    public static boolean sellable = true;
     public ObjectCopperOre(GamePanel gp, int x, int y){
         super(gp, x, y);
         collisionWidth = 22;

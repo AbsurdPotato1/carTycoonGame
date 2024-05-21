@@ -4,13 +4,19 @@ import main.GamePanel;
 import main.UtilityTool;
 
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 public class shippingBay extends InteractiveTile {
-    public boolean selling = false;
-    public boolean beginSelling = false;
+    public boolean selling = false; // tracks selling status - whether or not you are selling
+    public boolean beginSelling = false; // tracks whether or not selling has begun - used for one time calls then set to true
+    public static final int objectId = 3;
+    public static final boolean craftable = false;
+    public static final boolean sellable = false;
+    public static BufferedImage inventoryImage;
     public shippingBay(GamePanel gp, int x, int y){
         super(gp, x, y);
         image = UtilityTool.getImage("blocks/shippingBay.png");
+        inventoryImage = image;
         destructible = false;
         name = "shippingBay";
     }
