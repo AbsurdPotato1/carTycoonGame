@@ -17,10 +17,10 @@ public class craftingBench extends InteractiveTile{
     public static BufferedImage inventoryImage;
     public craftingBench(GamePanel gp, int row, int col){
         super(gp, row, col);
-        image = UtilityTool.getImage("objects/craftingbench.png");
+        image = UtilityTool.getImage("objects/craftingBench.png");
         inventoryImage = image;
         destructible = false;
-        name = "craftingbench";
+        name = "craftingBench";
     }
     public void update(){
         if(isCloseTo(gp.player)){

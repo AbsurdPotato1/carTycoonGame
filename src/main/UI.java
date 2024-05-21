@@ -36,9 +36,6 @@ public class UI {
     public void draw(Graphics2D g2){
         if(gp.keyH.inventoryPressed){
             drawInventory(g2);
-            if(gp.player.isCloseTo(gp.iTile.get(11))) { // change this to be in update()
-                drawCraftingScreen(g2);
-            }
         }else {
             drawHotbar(g2);
         }
