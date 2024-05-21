@@ -48,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
     public AssetSetter aSetter = new AssetSetter(this);
     public Thread gameThread; // This will run the code continuously (i.e. won't stop)en hs = new TitleScreen(this);
     public TitleScreen ts = new TitleScreen(this);
+    public Quests quest = new Quests(this);
 
     // GRAPHICS
     public UI ui = new UI(this);
@@ -91,6 +92,7 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setInteractiveTile();
         IdToObject.getAllCraftables();
         IdToObject.getAllSellables();
+        quest.loadInitialQuests();
         playMusic(0);
         setFullScreen();
         //game state
@@ -165,6 +167,7 @@ public class GamePanel extends JPanel implements Runnable {
             for (int i = 0; i < iTile.size(); i++) {
                 iTile.get(i).update();
             }
+            quest.update();
         }
     }
 
@@ -205,6 +208,8 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             ui.draw(g2);
+
+            quest.draw(g2);
         }
         if(gameState == GamePanel.dialogueState){
 

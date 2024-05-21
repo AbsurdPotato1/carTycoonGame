@@ -24,9 +24,9 @@ public class NPC_MiningMan extends NPC {
         left1 = getImage("npc/oldman_left_1.png");
     }
     public void setDialogue(){
-        dialogues.add("Hi. I am the chief miner here.");
-        dialogues.add("To get started on your mining journey, you need a\npickaxe.");
-        dialogues.add("Since it's your first time, i'll give it to you for\nfree.");
+        dialogues.add("Hi I am the chief miner here.");
+        dialogues.add("To get started on your mining journey, you need a pickaxe.");
+        dialogues.add("Since it's your first time, i'll give it to you for free.");
 //        dialogues[3] = "*You receive a pickaxe*";
     }
     public void setAction(){ // possible bug: sometimes gets stuck on tile corners

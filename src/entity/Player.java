@@ -186,7 +186,6 @@ public class Player extends Entity{
                             gp.playSE(1); // sound effect
                             addToInventory(ObjectCopperOre.class, 1);
                             gp.obj.remove(i);
-                            gp.ui.showMessage("You got a copper ore!");
                         }
                         break;
                     case "chest":

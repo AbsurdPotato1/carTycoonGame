@@ -12,7 +12,9 @@ public class KeyHandler implements KeyListener {
      *  https://stackoverflow.com/questions/22741215/how-to-use-key-bindings-instead-of-key-listeners
      * *///
 
-    public boolean leftPressed, rightPressed, jumpPressed, downPressed, inventoryPressed, escapePressed;
+    public boolean leftPressed, rightPressed, jumpPressed, downPressed,
+            inventoryPressed, escapePressed, questPressed;
+
     public boolean acceptMovement = true;
     public GamePanel gp;
     double frameInterval;
@@ -51,6 +53,9 @@ public class KeyHandler implements KeyListener {
             }
             if (code == KeyEvent.VK_E) {
                 inventoryPressed = true;
+            }
+            if(code == KeyEvent.VK_F){
+                questPressed = true;
             }
         }
          window.addMouseWheelListener(scroll -> {
@@ -126,6 +131,9 @@ public class KeyHandler implements KeyListener {
         }
         if(code == KeyEvent.VK_ESCAPE){
             escapePressed = false;
+        }
+        if(code == KeyEvent.VK_F){
+            questPressed = false;
         }
     }
     public void unPressAll(){
