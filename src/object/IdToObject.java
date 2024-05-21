@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 public class IdToObject { // this entire class completely disregards type safety lmao - use with care
+    public static final int numObjs = 3;
     public static final Class[] idObject = new Class[255];
     public static void setIdObject(){
         idObject[0] = ToolPickaxe.class;

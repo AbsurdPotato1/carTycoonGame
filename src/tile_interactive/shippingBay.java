@@ -17,14 +17,14 @@ public class shippingBay extends InteractiveTile {
     public void update(){
         if(isCloseTo(gp.player)){
             if(isClicked()) {
-                selling = true;
+                selling = true; // sets selling status to true
             }
         }else {
             selling = false;
         }
         if(selling){
-            if(!beginSelling) { // only ran once every time player enters selling
-                gp.keyH.unPressAll();
+            if(!beginSelling) { // only ran once every time player enters object
+                gp.keyH.unPressAll(); // stops ongoing movement/input
             }
             beginSelling = true;
             gp.keyH.acceptMovement = false;
@@ -35,7 +35,7 @@ public class shippingBay extends InteractiveTile {
                 gp.drawPlayer = true;
             }
         }else{
-            beginSelling = false;
+            beginSelling = false; // sets selling status to false
         }
     }
     public void draw(Graphics2D g2){

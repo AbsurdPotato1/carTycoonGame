@@ -22,6 +22,7 @@ public class UI {
     public int inventoryCol = 0;
     public int inventorySize;
     public String currentDialogue = "";
+    public ArrayList<Integer> craftables = new ArrayList<Integer>();
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -35,6 +36,9 @@ public class UI {
     public void draw(Graphics2D g2){
         if(gp.keyH.inventoryPressed){
             drawInventory(g2);
+            if(gp.player.isCloseTo(gp.iTile.get(11))) { // change this to be in update()
+                drawCraftingScreen(g2);
+            }
         }else {
             drawHotbar(g2);
         }
@@ -112,6 +116,33 @@ public class UI {
 
     }
 
+    public void drawSubWindow(int x, int y, int width, int height, Graphics2D g2, Color outer, Color inner){
+        g2.setColor(outer);
+        g2.fillRoundRect(x, y, width, height, 35, 35);
+
+        g2.setColor(inner);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x + 7, y + 7, width - 14, height - 14, 25, 25);
+    }
+
+    public void drawDialogueScreen(Graphics2D g2) {
+        int x = 96;
+        int y = 24;
+        int width = gp.screenWidth - (GamePanel.tileSize * 4);
+        int height = GamePanel.tileSize * 5;
+        Color outerColor = new Color(0, 0, 0, 200);
+        Color innerColor = new Color(255, 255, 255);
+        drawSubWindow(x, y, width, height, g2, outerColor, innerColor);
+        g2.setFont(g2.getFont().deriveFont(32F));
+        x += GamePanel.tileSize / 2;
+        y += 55;
+
+        for(String line : currentDialogue.split("\n")) { // im not gonna split the text with string length lmao id rather die
+            g2.drawString(line, x, y);
+            y += 40;
+        }
+    }
+
     public void drawInventory(Graphics2D g2){
         int frameWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
         int frameHeight = 208; // 4 * 16 + 48 * 3
@@ -159,42 +190,47 @@ public class UI {
         g2.setColor(Color.white);
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
-
-
     }
+    public void drawCraftingScreen(Graphics2D g2) {
+        // this method does not account for the number of items being greater than the number there is (make second page in the future)
+        // scrolling is probably difficult - pages easier lol
 
-    public void drawSubWindow(int x, int y, int width, int height, Graphics2D g2, Color outer, Color inner){
-        g2.setColor(outer);
-        g2.fillRoundRect(x, y, width, height, 35, 35);
+        int width = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        int height = 336; // 6 * 16 + 48 * 5
+        int frameX = gp.screenWidth / 2 - width / 2;
+        int frameY = gp.screenHeight / 2 - height/ 2;
+        Color outerColor = new Color(216, 178, 129, 200);
+        Color innerColor = new Color(0, 0, 0);
+        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
 
-        g2.setColor(inner);
-        g2.setStroke(new BasicStroke(5));
-        g2.drawRoundRect(x + 7, y + 7, width - 14, height - 14, 25, 25);
-    }
+        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
+        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
 
-    public void drawDialogueScreen(Graphics2D g2) {
-        int x = 96;
-        int y = 24;
-        int width = gp.screenWidth - (GamePanel.tileSize * 4);
-        int height = GamePanel.tileSize * 5;
-        Color outerColor = new Color(0, 0, 0, 200);
-        Color innerColor = new Color(255, 255, 255);
-        drawSubWindow(x, y, width, height, g2, outerColor, innerColor);
-        g2.setFont(g2.getFont().deriveFont(32F));
-        x += GamePanel.tileSize / 2;
-        y += 55;
-
-        for(String line : currentDialogue.split("\n")) { // im not gonna split the text with string length lmao id rather die
-            g2.drawString(line, x, y);
-            y += 40;
+        int curCraftSlot = 0;
+        for(int objId = 0; objId < IdToObject.numObjs; objId++){
+            if((boolean)IdToObject.getStaticVariable(objId, "craftable")){
+                if(curCraftSlot != 0 && curCraftSlot % 9 == 0){
+                    slotY += GamePanel.tileSize + 16;
+                    slotX = slotXstart;
+                }
+                g2.setFont(Fonts.pressStart_2P);
+                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
+                slotX += GamePanel.tileSize;
+                curCraftSlot++;
+            }
         }
     }
 
     public void drawSellScreen(Graphics2D g2){
-        int width = 480;
-        int height = 480;
+        // this method does not account for the number of items being greater than the number there is (make second page in the future)
+        // scrolling is probably difficult - pages easier lol
+
+        int width = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        int height = 336; // 6 * 16 + 48 * 5
         int frameX = gp.screenWidth / 2 - width / 2;
-        int frameY = gp.screenHeight / 2 - width / 2;
+        int frameY = gp.screenHeight / 2 - height / 2;
         Color outerColor = new Color(216, 178, 129, 200);
         Color innerColor = new Color(0, 0, 0);
 
@@ -205,17 +241,17 @@ public class UI {
         int slotX = slotXstart;
         int slotY = slotYstart;
 
-        int curCraftSlot = 0;
-        for(int objId = 0; objId <= 2; objId++){ // draw all objects
+        int curSellSlot = 0;
+        for(int objId = 0; objId < IdToObject.numObjs; objId++){ // draw all objects
             if((boolean)IdToObject.getStaticVariable(objId, "sellable")){
-                if(curCraftSlot != 0 && curCraftSlot % 9 == 0){
+                if(curSellSlot != 0 && curSellSlot % 9 == 0){
                     slotY += GamePanel.tileSize + 16;
                     slotX = slotXstart;
                 }
                 g2.setFont(Fonts.pressStart_2P);
                 g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
                 slotX += GamePanel.tileSize;
-                curCraftSlot++;
+                curSellSlot++;
             }
         }
     }

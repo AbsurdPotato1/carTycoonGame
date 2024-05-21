@@ -5,6 +5,7 @@ import object.ObjectChest;
 import object.ObjectCopperOre;
 import object.ToolPickaxe;
 import tile_interactive.copperOreNode;
+import tile_interactive.craftingBench;
 import tile_interactive.shippingBay;
 
 public class AssetSetter {
@@ -41,6 +42,7 @@ public class AssetSetter {
         }
 
         gp.iTile.add(new shippingBay(gp, 3 * GamePanel.tileSize, 7 * GamePanel.tileSize));
+        gp.iTile.add(new craftingBench(gp, 6 * GamePanel.tileSize, 6 * GamePanel.tileSize));
     }
 
     public void setNPC(){

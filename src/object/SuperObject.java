@@ -22,6 +22,8 @@ public class SuperObject {
     public int collisionYOffset = 0; // vertical offset into the tile for an object
     public String description = "";
     public int objectId;
+    public static boolean craftable = false;
+    public static boolean getCraftable() { return craftable; }
 
     public SuperObject(GamePanel gp, int x, int y){
         this.gp = gp;
