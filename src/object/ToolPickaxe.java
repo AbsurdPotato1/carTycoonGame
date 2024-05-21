@@ -12,6 +12,7 @@ public class ToolPickaxe extends SuperObject {
     public static final boolean craftable = true;
     public static final boolean sellable = true;
     public static int sellPrice = 10;
+    public static String sellDescription = "Sells for $" + sellPrice;
     public static BufferedImage inventoryImage;
     public ToolPickaxe(GamePanel gp, int x, int y) {
         super(gp, x, y);

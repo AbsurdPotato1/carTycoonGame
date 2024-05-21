@@ -11,6 +11,7 @@ public class ObjectChest extends SuperObject {
     public static final boolean craftable = true;
     public static final boolean sellable = true;
     public static int sellPrice = 1;
+    public static String sellDescription = "Sells for $" + sellPrice;
     public static BufferedImage inventoryImage;
     public ObjectChest(GamePanel gp, int row, int col){
         super(gp, row, col);

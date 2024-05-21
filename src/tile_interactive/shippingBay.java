@@ -5,7 +5,6 @@ import main.UtilityTool;
 import object.IdToObject;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 public class shippingBay extends InteractiveTile {
@@ -14,7 +13,9 @@ public class shippingBay extends InteractiveTile {
     public static final int objectId = 3;
     public static final boolean craftable = false;
     public static final boolean sellable = false;
+    public static boolean showDescription = false;
     public static BufferedImage inventoryImage;
+    public String description;
     public shippingBay(GamePanel gp, int x, int y){
         super(gp, x, y);
         image = UtilityTool.getImage("blocks/shippingBay.png");
@@ -36,9 +37,16 @@ public class shippingBay extends InteractiveTile {
             if(hoverSlotX != -1 && hoverSlotY != -1){
                 Class item = getItemAtSlot(hoverSlotX, hoverSlotY); // item clicked
                 if(item != null) { // if item is present at that location
-
+                    description = (String)IdToObject.getStaticVariable(IdToObject.getIdFromClass(item), "sellDescription");
+                    showDescription = true;
+                }else{
+                    showDescription = false;
                 }
+            }else{
+                showDescription = false;
             }
+        }else{
+            showDescription = false;
         }
         if(gp.mouseH.mouseClicked && System.nanoTime() - gp.mouseH.timeClicked <= 1 * (1000000000 / gp.FPS)){ // if clicked less than one frame ago
             if(gp.mouseH.mouseInsideScreen(gp.ui.sellFrameX + 16, gp.ui.sellFrameX + gp.ui.sellWidth - 16, gp.ui.sellFrameY + 16, gp.ui.sellFrameY + gp.ui.sellHeight - 16)){
@@ -85,12 +93,16 @@ public class shippingBay extends InteractiveTile {
             }
         }else{
             beginSelling = false; // sets selling status to false
+            showDescription = false;
         }
     }
     public void draw(Graphics2D g2){
         super.draw(g2);
         if(selling){
             gp.ui.drawSellScreen(g2);
+        }
+        if(showDescription){
+            gp.ui.showSellDescription(g2, description);
         }
     }
 }

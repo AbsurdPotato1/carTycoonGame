@@ -44,11 +44,6 @@ public class MouseHandler implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         mouseClicked = true;
-//        Point point = MouseInfo.getPointerInfo().getLocation();
-//        mouseScreenX = (int) point.getX();
-//        mouseScreenY = (int) point.getY();
-//        mouseWorldX = mouseScreenX + (int)gp.player.worldX - gp.player.screenX;
-//        mouseWorldY = mouseScreenY + (int)gp.player.worldY - gp.player.screenY;
         timeClicked = System.nanoTime();
     }
 

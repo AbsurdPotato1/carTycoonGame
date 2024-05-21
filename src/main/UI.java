@@ -1,15 +1,9 @@
 package main;
 
 import object.IdToObject;
-import object.ObjectCopperOre;
-import object.SuperObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 
 public class UI {
     GamePanel gp;
@@ -66,8 +60,8 @@ public class UI {
     }
 
     public void drawMoney(Graphics2D g2) {
-        int moneyTextLength = (int)g2.getFontMetrics().getStringBounds((int)gp.player.money + "Money: ", g2).getWidth();
-        g2.drawString("Money: " + (int)gp.player.money, gp.screenWidth - moneyTextLength - 30, 65);
+        int moneyTextLength = (int)g2.getFontMetrics().getStringBounds("Money: $" + gp.player.money, g2).getWidth();
+        g2.drawString("Money: $" + gp.player.money, gp.screenWidth - moneyTextLength - 30, 65);
     }
 
     public void drawHotbar(Graphics2D g2){
@@ -263,9 +257,15 @@ public class UI {
         }
     }
 
-    public void showDescription(String desc){
-//        int
-//        drawSubWindow(gp.mouseH.mouseScreenX, gp.mouseH.mouseScreenY, )
+    public void showSellDescription(Graphics2D g2, String description){
+        g2.setFont(Fonts.pressStart_2P.deriveFont(18f));
+        int width = (int)g2.getFontMetrics().getStringBounds(description, g2).getWidth() + 52;
+        int height = 64;
+        Color outerColor = new Color(0, 0, 0, 127);
+        Color innerColor = new Color(255, 255, 255, 255);
+        drawSubWindow(gp.mouseH.mouseScreenX, gp.mouseH.mouseScreenY, width, height, g2, outerColor, innerColor);
+        int descriptionTextLength = (int)g2.getFontMetrics().getStringBounds(description, g2).getWidth();
+        g2.drawString(description, gp.mouseH.mouseScreenX + 20, gp.mouseH.mouseScreenY + 40);
     }
 
 }
