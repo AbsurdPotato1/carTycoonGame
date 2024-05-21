@@ -79,7 +79,7 @@ public class NPC_MiningMan extends NPC {
                             }
                             numTimesTalked++;
                             changeDialogue(); // switch to new dialogue
-
+                            gp.gameState = GamePanel.dialogueState;
                         }
                         else {
                             dialogueNum++;
@@ -97,13 +97,16 @@ public class NPC_MiningMan extends NPC {
             }
             dialogueNum = 0;
             talking = false; // npc no longer talking
+            gp.gameState = GamePanel.playerState;
         }
     }
 
     @Override
     public void update(){
         super.update(); // check collisions
-        moveRandomly();
+        if(gp.gameState != GamePanel.dialogueState) {
+            moveRandomly();
+        }
     }
     public void draw(Graphics2D g2) {
         super.draw(g2);
