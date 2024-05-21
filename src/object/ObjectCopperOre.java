@@ -1,7 +1,6 @@
 package object;
 
 import main.GamePanel;
-import main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -10,9 +9,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class ObjectCopperOre extends SuperObject {
-//    public static final String name = "copperOre";
     public static final int objectId = 2;
     public static BufferedImage inventoryImage;
+    public static boolean sellable = true;
     public ObjectCopperOre(GamePanel gp, int x, int y){
         super(gp, x, y);
         collisionWidth = 22;

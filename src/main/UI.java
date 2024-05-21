@@ -38,15 +38,16 @@ public class UI {
         }else {
             drawHotbar(g2);
         }
-        int playTimeTextLength;
+//        int playTimeTextLength;
         g2.setFont(Fonts.pressStart_2P);
         g2.setFont(g2.getFont().deriveFont(30f));
         g2.setColor(Color.white);
 
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time
-        playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
+//        playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
 
 //        g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
+        drawMoney(g2);
         if(messageOn){
             g2.drawString(message, GamePanel.tileSize / 2, GamePanel.tileSize * 5);
 
@@ -57,6 +58,11 @@ public class UI {
             }
         }
 
+    }
+
+    public void drawMoney(Graphics2D g2) {
+        int moneyTextLength = (int)g2.getFontMetrics().getStringBounds((int)gp.player.money + "Money: ", g2).getWidth();
+        g2.drawString("Money: " + (int)gp.player.money, gp.screenWidth - moneyTextLength - 30, 65);
     }
 
     public void drawHotbar(Graphics2D g2){
@@ -84,7 +90,7 @@ public class UI {
                     break;
                 }
                 g2.setFont(Fonts.pressStart_2P);
-                g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
+                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
                 int curNumObj = Math.min(gp.player.maxObjectPerSlot, numObject - numDrawn); // number to draw
                 int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(curNumObj), g2).getWidth(); // length of number string to draw
                 g2.drawString(String.valueOf(curNumObj), slotX+44 - numLength, slotY+44); // draw number of objects
@@ -115,35 +121,35 @@ public class UI {
         Color innerColor = new Color(255, 255, 255);
         drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2, outerColor, innerColor);
 
-        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
+        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2; // 16px margins
         final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
 
-        int inventorySlot = 0;
+        int curInventorySlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
-            if(inventorySlot == 9 || inventorySlot == 18){
+            if(curInventorySlot == 9 || curInventorySlot == 18){
                 slotY += GamePanel.tileSize + 16;
                 slotX = slotXstart;
             }
             int numObject = gp.player.inventory.get(objId); // number of objects
             int numDrawn = 0; // number of objects of current object that have been drawn
             for(int i = 0; i < (numObject-1) / gp.player.maxObjectPerSlot + 1; i++){
-                if(inventorySlot == 9 || inventorySlot == 18){
+                if(curInventorySlot == 9 || curInventorySlot == 18){
                     slotY += GamePanel.tileSize + 16;
                     slotX = slotXstart;
                 }
                 g2.setFont(Fonts.pressStart_2P);
-                g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
+                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
                 int curNumObj = Math.min(gp.player.maxObjectPerSlot, numObject - numDrawn); // number to draw
                 int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(curNumObj), g2).getWidth(); // length of number string to draw
                 g2.drawString(String.valueOf(curNumObj), slotX+44 - numLength, slotY+44); // draw number of objects
                 slotX += GamePanel.tileSize;
                 numDrawn += gp.player.maxObjectPerSlot;
-                inventorySlot++;
+                curInventorySlot++;
             }
         }
-        inventorySize = Math.max(inventorySize, inventorySlot);
+        inventorySize = Math.max(inventorySize, curInventorySlot);
 
         int cursorX = slotXstart + (GamePanel.tileSize * inventoryCol);
         int cursorY = slotYstart + (GamePanel.tileSize * inventoryRow) + inventoryRow * 16;
@@ -183,4 +189,35 @@ public class UI {
             y += 40;
         }
     }
+
+    public void drawSellScreen(Graphics2D g2){
+        int width = 480;
+        int height = 480;
+        int frameX = gp.screenWidth / 2 - width / 2;
+        int frameY = gp.screenHeight / 2 - width / 2;
+        Color outerColor = new Color(216, 178, 129, 200);
+        Color innerColor = new Color(0, 0, 0);
+
+        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
+
+        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2; // 16px margins
+        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        int curCraftSlot = 0;
+        for(int objId = 0; objId <= 2; objId++){ // draw all objects
+            if((boolean)IdToObject.getStaticVariable(objId, "sellable")){
+                if(curCraftSlot != 0 && curCraftSlot % 9 == 0){
+                    slotY += GamePanel.tileSize + 16;
+                    slotX = slotXstart;
+                }
+                g2.setFont(Fonts.pressStart_2P);
+                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
+                slotX += GamePanel.tileSize;
+                curCraftSlot++;
+            }
+        }
+    }
+
 }

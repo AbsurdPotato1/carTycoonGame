@@ -29,7 +29,7 @@ public class SuperObject {
         worldY = y;
     }
 
-    public void draw(Graphics2D g2, GamePanel gp){
+    public void draw(Graphics2D g2){
         int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
         int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
 

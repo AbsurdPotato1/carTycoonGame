@@ -44,7 +44,7 @@ public class AssetSetter {
     }
 
     public void setNPC(){
-        gp.npc[0] = new NPC_MiningMan(gp, GamePanel.tileSize * 7, GamePanel.tileSize * 5);
+        gp.npc.add(new NPC_MiningMan(gp, GamePanel.tileSize * 7, GamePanel.tileSize * 5));
     }
 
 }
