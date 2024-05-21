@@ -37,10 +37,10 @@ public class AssetSetter {
 
     public void setInteractiveTile(){
         for(int i = 0; i < 10; i++){
-            gp.iTile[i] = new copperOreNode(gp, (i+10) * GamePanel.tileSize, 4 * GamePanel.tileSize);
+            gp.iTile.add(new copperOreNode(gp, (i+10) * GamePanel.tileSize, 4 * GamePanel.tileSize));
         }
 
-        gp.iTile[10] = new shippingBay(gp, 3 * GamePanel.tileSize, 7 * GamePanel.tileSize);
+        gp.iTile.add(new shippingBay(gp, 3 * GamePanel.tileSize, 7 * GamePanel.tileSize));
     }
 
     public void setNPC(){

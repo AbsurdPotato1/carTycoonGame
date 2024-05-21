@@ -5,6 +5,8 @@ import entity.Entity;
 import object.SuperTool;
 import tile_interactive.InteractiveTile;
 
+import java.util.ArrayList;
+
 public class CollisionChecker {
 
     GamePanel gp;
@@ -200,60 +202,57 @@ public class CollisionChecker {
 
         return index;
     }
-    public int checkTile(Entity entity, InteractiveTile[] target){
+    public int checkTile(Entity entity, ArrayList<InteractiveTile> target){
         int index = 99999;
-        for(int i = 0; i < target.length; i++){ // using for loop is technically inefficient - maybe do search pruning (only nearby objects) if performance is impacted
-            if(target[i] != null){
-                entity.solidArea.x = (int)entity.worldX + entity.solidArea.x; // move entity solidArea temporarily
-                entity.solidArea.y = (int)entity.worldY + entity.solidArea.y; // move entity solidArea temporarily
+        for(int i = 0; i < target.size(); i++){ // using for loop is technically inefficient - maybe do search pruning (only nearby objects) if performance is impacted
+            entity.solidArea.x = (int)entity.worldX + entity.solidArea.x; // move entity solidArea temporarily
+            entity.solidArea.y = (int)entity.worldY + entity.solidArea.y; // move entity solidArea temporarily
 
-                target[i].solidArea.x = target[i].worldX + target[i].solidArea.x; // move obj solidArea temporarily
-                target[i].solidArea.y = target[i].worldY + target[i].solidArea.y; // move obj solidArea temporarily
+            target.get(i).solidArea.x = target.get(i).worldX + target.get(i).solidArea.x; // move obj solidArea temporarily
+            target.get(i).solidArea.y = target.get(i).worldY + target.get(i).solidArea.y; // move obj solidArea temporarily
 
-                if(entity.direction[0]) { // up
-                    entity.solidArea.y -= entity.speedVert; // move solidArea to next frame position temporarily
-                }
-                if(entity.solidArea.intersects(target[i].solidArea)){ // if touching
-                    entity.upCollisionOn = true;
-                    index = i;
-                }
-                if(entity.direction[0]) {
-                    entity.solidArea.y += entity.speedVert; // reverting changes - works since speed DOES NOT change
-                }
-                if(entity.direction[1]) { // right
-                    entity.solidArea.x += entity.speedHor;
-                }
-                if(entity.solidArea.intersects(target[i].solidArea)){
-                    entity.rightCollisionOn = true;
-                    index = i;
-                }
-                if(entity.direction[1]) {
-                    entity.solidArea.x -= entity.speedHor;
-                }
-                if(entity.direction[2]) { // down
-                    entity.solidArea.y += entity.speedVert;
-                }
-                if(entity.solidArea.intersects(target[i].solidArea)){
-                    entity.downCollisionOn = true;
-                    index = i;
-                }
-                if(entity.direction[2]) {
-                    entity.solidArea.y -= entity.speedVert;
-                }
-                if(entity.direction[3]) { // left
-                    entity.solidArea.x -= entity.speedHor;
-                }
-                if(entity.solidArea.intersects(target[i].solidArea)){
-                    entity.leftCollisionOn = true;
-                    index = i;
-                }
-                entity.solidArea.x = entity.solidAreaDefaultX;
-                entity.solidArea.y = entity.solidAreaDefaultY;
-                target[i].solidArea.x = target[i].solidAreaDefaultX;
-                target[i].solidArea.y = target[i].solidAreaDefaultY;
+            if(entity.direction[0]) { // up
+                entity.solidArea.y -= entity.speedVert; // move solidArea to next frame position temporarily
             }
+            if(entity.solidArea.intersects(target.get(i).solidArea)){ // if touching
+                entity.upCollisionOn = true;
+                index = i;
+            }
+            if(entity.direction[0]) {
+                entity.solidArea.y += entity.speedVert; // reverting changes - works since speed DOES NOT change
+            }
+            if(entity.direction[1]) { // right
+                entity.solidArea.x += entity.speedHor;
+            }
+            if(entity.solidArea.intersects(target.get(i).solidArea)){
+                entity.rightCollisionOn = true;
+                index = i;
+            }
+            if(entity.direction[1]) {
+                entity.solidArea.x -= entity.speedHor;
+            }
+            if(entity.direction[2]) { // down
+                entity.solidArea.y += entity.speedVert;
+            }
+            if(entity.solidArea.intersects(target.get(i).solidArea)){
+                entity.downCollisionOn = true;
+                index = i;
+            }
+            if(entity.direction[2]) {
+                entity.solidArea.y -= entity.speedVert;
+            }
+            if(entity.direction[3]) { // left
+                entity.solidArea.x -= entity.speedHor;
+            }
+            if(entity.solidArea.intersects(target.get(i).solidArea)){
+                entity.leftCollisionOn = true;
+                index = i;
+            }
+            entity.solidArea.x = entity.solidAreaDefaultX;
+            entity.solidArea.y = entity.solidAreaDefaultY;
+            target.get(i).solidArea.x = target.get(i).solidAreaDefaultX;
+            target.get(i).solidArea.y = target.get(i).solidAreaDefaultY;
         }
-
         return index;
     }
     public int checkTool(Entity entity, boolean player){ // args: entity - entity to check collision with; player - true if entity is player, false if other (NPC, etc.)

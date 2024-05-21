@@ -1,7 +1,6 @@
 package entity;
 
 import main.GamePanel;
-import object.ToolPickaxe;
 
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -11,9 +10,8 @@ import java.util.Random;
 public class NPC extends Entity { //Just a collection of NPC-wide methods
     public ArrayList<String> dialogues = new ArrayList<>(); // Max 30 dialogs
     public long lastTalkTime;
-    public boolean beganTalking = false;
+    public boolean talking = false;
     public int dialogueNum = 0;
-    public boolean firstTimeDialogue = true;
     public int numTimesTalked;
 
     public NPC(GamePanel gp) {
@@ -79,43 +77,46 @@ public class NPC extends Entity { //Just a collection of NPC-wide methods
         gp.ui.currentDialogue = dialogues.get(dialogueNum);
     }
 
+    public void changeDialogue(){
+
+    }
+
     public void doDialogue(Graphics2D g2){
         long talkInterval = 30; // Minimum time between dialogue transition
-        if(isCloseTo(gp.player)) {
-            if ((System.nanoTime() - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval && !beganTalking && isClicked() && System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) {
+        if(isCloseTo(gp.player)){ // allow dialogue
+            if ((System.nanoTime() - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval && !talking && isClicked() && System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) { // first time talked
                 gp.gameState = GamePanel.dialogueState;
-                beganTalking = true;
+                talking = true;
                 lastTalkTime = System.nanoTime();
             }
-            if (beganTalking) {
+            if(talking){
                 speak();
                 gp.ui.drawDialogueScreen(g2);
-                if (gp.mouseH.mouseClicked &&  System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) {
+                if (gp.mouseH.mouseClicked &&  System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) { // if mouse clicked
                     long currentTime;
                     currentTime = System.nanoTime();
-                    if ((currentTime - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval) {
+                    if ((currentTime - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval) { // if last time talked is sufficiently long enough (30 frames)
                         lastTalkTime = currentTime;
-                        dialogueNum++;
+                        if(dialogueNum == dialogues.size() - 1) { // check if player is done with the current dialogue and clicked
+                            talking = false;
+                            dialogueNum = 0;
+                            numTimesTalked++;
+                            changeDialogue(); // switch to new dialogue
+                        }
+                        else {
+                            dialogueNum++;
+                        }
+
                     }
                 }
             }
-
-            if(firstTimeDialogue && dialogueNum == dialogues.size() - 1){
-                firstTimeDialogue = false;
-            }
-            if(dialogueNum == dialogues.size() - 1){
+        } else { // if player not close enough
+            if(dialogueNum == dialogues.size() - 1){ // check if player is done with the current dialogue
                 numTimesTalked++;
+                changeDialogue();
             }
-
-        }
-        else {
             dialogueNum = 0;
-            beganTalking = false;
-        }
-        if(dialogueNum >= dialogues.size()){
-            beganTalking = false;
-            dialogueNum = 0;
-            lastTalkTime = System.nanoTime();
+            talking = false; // npc no longer talking
         }
     }
 
