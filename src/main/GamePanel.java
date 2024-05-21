@@ -89,6 +89,8 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setTool();
         aSetter.setNPC();
         aSetter.setInteractiveTile();
+        IdToObject.getAllCraftables();
+        IdToObject.getAllSellables();
         playMusic(0);
         setFullScreen();
         //game state
@@ -148,18 +150,21 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
     public void update(){
+        mouseH.updateMousePosition();
         if(gameState == titleState){
             keyH.acceptMovement = false;
         }
         if(gameState == playerState || gameState == dialogueState){
             keyH.acceptMovement = true;
         }
-        player.update();
-        for(int i = 0; i < npc.size(); i++){
-            npc.get(i).update();
-        }
-        for(int i = 0; i < iTile.size(); i++){
-            iTile.get(i).update();
+        if(gameState != titleState && gameState != dialogueState) {
+            player.update();
+            for (int i = 0; i < npc.size(); i++) {
+                npc.get(i).update();
+            }
+            for (int i = 0; i < iTile.size(); i++) {
+                iTile.get(i).update();
+            }
         }
     }
 

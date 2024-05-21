@@ -12,6 +12,7 @@ public class ObjectCopperOre extends SuperObject {
     public static final int objectId = 2;
     public static final boolean craftable = false;
     public static final boolean sellable = true;
+    public static int sellPrice = 3;
     public static BufferedImage inventoryImage;
     public ObjectCopperOre(GamePanel gp, int x, int y){
         super(gp, x, y);

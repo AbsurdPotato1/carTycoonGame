@@ -85,6 +85,9 @@ public class UI {
         int slotY = slotYstart;
         int hotbarSlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
+            if(gp.player.inventory.get(objId) == 0){
+                continue; // if player has 0 of the object
+            }
             if(hotbarSlot == 9){
                 break;
             }
@@ -160,6 +163,9 @@ public class UI {
 
         int curInventorySlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
+            if(gp.player.inventory.get(objId) == 0){
+                continue; // if player has 0 of the object
+            }
             if(curInventorySlot == 9 || curInventorySlot == 18){
                 slotY += GamePanel.tileSize + 16;
                 slotX = slotXstart;
@@ -255,6 +261,11 @@ public class UI {
                 curSellSlot++;
             }
         }
+    }
+
+    public void showDescription(String desc){
+//        int
+//        drawSubWindow(gp.mouseH.mouseScreenX, gp.mouseH.mouseScreenY, )
     }
 
 }

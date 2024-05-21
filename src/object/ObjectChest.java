@@ -10,6 +10,7 @@ public class ObjectChest extends SuperObject {
     public static final Integer objectId = 1;
     public static final boolean craftable = true;
     public static final boolean sellable = true;
+    public static int sellPrice = 1;
     public static BufferedImage inventoryImage;
     public ObjectChest(GamePanel gp, int row, int col){
         super(gp, row, col);
