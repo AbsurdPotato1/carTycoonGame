@@ -1,15 +1,10 @@
 package main;
 
 import object.IdToObject;
-import object.ObjectCopperOre;
-import object.SuperObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UI {
     GamePanel gp;
@@ -22,7 +17,9 @@ public class UI {
     public int inventoryCol = 0;
     public int inventorySize;
     public String currentDialogue = "";
-    public ArrayList<Integer> craftables = new ArrayList<Integer>();
+    public int inventoryWidth, inventoryHeight, inventoryFrameX, inventoryFrameY;
+    public int craftingWidth, craftingHeight, craftingFrameX, craftingFrameY;
+    public int sellWidth, sellHeight, sellFrameX, sellFrameY;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -36,9 +33,6 @@ public class UI {
     public void draw(Graphics2D g2){
         if(gp.keyH.inventoryPressed){
             drawInventory(g2);
-            if(gp.player.isCloseTo(gp.iTile.get(11))) { // change this to be in update()
-                drawCraftingScreen(g2);
-            }
         }else {
             drawHotbar(g2);
         }
@@ -51,7 +45,9 @@ public class UI {
 //        playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
 
 //        g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
-        drawMoney(g2);
+        if(gp.gameState != gp.dialogueState) {
+            drawMoney(g2);
+        }
         if(messageOn){
             g2.drawString(message, GamePanel.tileSize / 2, GamePanel.tileSize * 5);
 
@@ -65,8 +61,8 @@ public class UI {
     }
 
     public void drawMoney(Graphics2D g2) {
-        int moneyTextLength = (int)g2.getFontMetrics().getStringBounds((int)gp.player.money + "Money: ", g2).getWidth();
-        g2.drawString("Money: " + (int)gp.player.money, gp.screenWidth - moneyTextLength - 30, 65);
+        int moneyTextLength = (int)g2.getFontMetrics().getStringBounds("Money: $" + gp.player.money, g2).getWidth();
+        g2.drawString("Money: $" + gp.player.money, gp.screenWidth - moneyTextLength - 30, 65);
     }
 
     public void drawHotbar(Graphics2D g2){
@@ -84,6 +80,9 @@ public class UI {
         int slotY = slotYstart;
         int hotbarSlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
+            if(gp.player.inventory.get(objId) == 0){
+                continue; // if player has 0 of the object
+            }
             if(hotbarSlot == 9){
                 break;
             }
@@ -144,21 +143,24 @@ public class UI {
     }
 
     public void drawInventory(Graphics2D g2){
-        int frameWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
-        int frameHeight = 208; // 4 * 16 + 48 * 3
-        int frameX = 20;
-        int frameY = 20;
+        inventoryWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        inventoryHeight = 208; // 4 * 16 + 48 * 3
+        inventoryFrameX = 20;
+        inventoryFrameY = 20;
         Color outerColor = new Color(216, 178, 129, 127);
         Color innerColor = new Color(255, 255, 255);
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2, outerColor, innerColor);
+        drawSubWindow(inventoryFrameX, inventoryFrameY, inventoryWidth, inventoryHeight, g2, outerColor, innerColor);
 
-        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2; // 16px margins
-        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
+        final int slotXstart = inventoryFrameX + (80 - GamePanel.tileSize) / 2; // 16px margins
+        final int slotYstart = inventoryFrameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
 
         int curInventorySlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
+            if(gp.player.inventory.get(objId) == 0){
+                continue; // if player has 0 of the object
+            }
             if(curInventorySlot == 9 || curInventorySlot == 18){
                 slotY += GamePanel.tileSize + 16;
                 slotX = slotXstart;
@@ -191,20 +193,20 @@ public class UI {
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
     }
-    public void drawCraftingScreen(Graphics2D g2) {
+    public void drawCraftScreen(Graphics2D g2) {
         // this method does not account for the number of items being greater than the number there is (make second page in the future)
         // scrolling is probably difficult - pages easier lol
 
-        int width = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
-        int height = 336; // 6 * 16 + 48 * 5
-        int frameX = gp.screenWidth / 2 - width / 2;
-        int frameY = gp.screenHeight / 2 - height/ 2;
+        craftingWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        craftingHeight= 336; // 6 * 16 + 48 * 5
+        craftingFrameX = gp.screenWidth / 2 - craftingWidth / 2;
+        craftingFrameY = gp.screenHeight / 2 - craftingHeight/ 2;
         Color outerColor = new Color(216, 178, 129, 200);
         Color innerColor = new Color(0, 0, 0);
-        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
+        drawSubWindow(craftingFrameX, craftingFrameY, craftingWidth, craftingHeight, g2, outerColor, innerColor);
 
-        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
-        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
+        final int slotXstart = craftingFrameX + (80 - GamePanel.tileSize) / 2;
+        final int slotYstart = craftingFrameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
 
@@ -227,17 +229,17 @@ public class UI {
         // this method does not account for the number of items being greater than the number there is (make second page in the future)
         // scrolling is probably difficult - pages easier lol
 
-        int width = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
-        int height = 336; // 6 * 16 + 48 * 5
-        int frameX = gp.screenWidth / 2 - width / 2;
-        int frameY = gp.screenHeight / 2 - height / 2;
+        sellWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        sellHeight = 336; // 6 * 16 + 48 * 5
+        sellFrameX = gp.screenWidth / 2 - sellWidth / 2;
+        sellFrameY = gp.screenHeight / 2 - sellHeight / 2;
         Color outerColor = new Color(216, 178, 129, 200);
         Color innerColor = new Color(0, 0, 0);
 
-        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
+        drawSubWindow(sellFrameX, sellFrameY, sellWidth, sellHeight, g2, outerColor, innerColor);
 
-        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2; // 16px margins
-        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
+        final int slotXstart = sellFrameX + (80 - GamePanel.tileSize) / 2; // 16px margins
+        final int slotYstart = sellFrameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
 
@@ -246,13 +248,45 @@ public class UI {
             if((boolean)IdToObject.getStaticVariable(objId, "sellable")){
                 if(curSellSlot != 0 && curSellSlot % 9 == 0){
                     slotY += GamePanel.tileSize + 16;
-                    slotX = slotXstart;
+                    slotX = slotXstart; // TODO: change slotX to have margins in the future
                 }
                 g2.setFont(Fonts.pressStart_2P);
                 g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
                 slotX += GamePanel.tileSize;
                 curSellSlot++;
             }
+        }
+    }
+
+    public void showSellDescription(Graphics2D g2, String description){
+        g2.setFont(Fonts.pressStart_2P.deriveFont(18f));
+        int width = (int)g2.getFontMetrics().getStringBounds(description, g2).getWidth() + 52;
+        int height = 64;
+        Color outerColor = new Color(0, 0, 0, 127);
+        Color innerColor = new Color(255, 255, 255, 255);
+        drawSubWindow(gp.mouseH.mouseScreenX, gp.mouseH.mouseScreenY, width, height, g2, outerColor, innerColor);
+        g2.drawString(description, gp.mouseH.mouseScreenX + 20, gp.mouseH.mouseScreenY + 40);
+    }
+
+    public void showCraftDescription(Graphics2D g2, Class object){
+        int objId = IdToObject.getIdFromClass(object);
+        HashMap<Integer, Integer> recipe = (HashMap<Integer, Integer>)IdToObject.getStaticVariable(objId, "craftingRecipe");
+        g2.setFont(Fonts.pressStart_2P.deriveFont(18f));
+        int frameX = gp.mouseH.mouseScreenX; //
+        int frameY = gp.mouseH.mouseScreenY;
+        int width = 160;
+        int height = 40 + 48 * recipe.size();
+        Color outerColor = new Color(0, 0, 0, 127);
+        Color innerColor = new Color(255, 255, 255, 255);
+        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
+        int stringX = frameX + 20;
+        int stringY = frameY + 40;
+        for(Integer recipeObjId : (recipe.keySet())){
+            int numReqForRecipe = recipe.get(recipeObjId);
+            int textLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(numReqForRecipe) + "x", g2).getWidth();
+            g2.drawString(String.valueOf(numReqForRecipe) + "x", stringX, stringY);
+            g2.drawImage((BufferedImage)IdToObject.getStaticVariable(recipeObjId, "inventoryImage"), stringX + textLength, stringY - 30, 48, 48, null);
+            stringY += 48;
         }
     }
 

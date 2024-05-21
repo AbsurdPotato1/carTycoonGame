@@ -89,7 +89,9 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setTool();
         aSetter.setNPC();
         aSetter.setInteractiveTile();
-        //playMusic(0);
+        IdToObject.getAllCraftables();
+        IdToObject.getAllSellables();
+        playMusic(0);
         setFullScreen();
         //game state
         gameState = GamePanel.titleState;
@@ -148,18 +150,22 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
     public void update(){
+        System.out.println(gameState);
+        mouseH.updateMousePosition();
         if(gameState == titleState){
             keyH.acceptMovement = false;
         }
         if(gameState == playerState || gameState == dialogueState){
             keyH.acceptMovement = true;
         }
-        player.update();
-        for(int i = 0; i < npc.size(); i++){
-            npc.get(i).update();
-        }
-        for(int i = 0; i < iTile.size(); i++){
-            iTile.get(i).update();
+        if(gameState != titleState) {
+            player.update();
+            for (int i = 0; i < npc.size(); i++) {
+                npc.get(i).update();
+            }
+            for (int i = 0; i < iTile.size(); i++) {
+                iTile.get(i).update();
+            }
         }
     }
 
@@ -178,19 +184,20 @@ public class GamePanel extends JPanel implements Runnable {
 
             // Objects
             for (int i = 0; i < obj.size(); i++) {
-                obj.get(i).draw(g2);
+                obj.get(i).draw(g2); // change order depending on what state you are in
             }
             for(int i = 0; i < tools.size(); i++){
                 tools.get(i).draw(g2);
             }
 
-            for(int i = 0; i < iTile.size(); i++){
-                iTile.get(i).draw(g2);
-            }
-
             //NPCs
             for (int i = 0; i < npc.size(); i++) {
                 npc.get(i).draw(g2);
+            }
+
+
+            for(int i = 0; i < iTile.size(); i++){
+                iTile.get(i).draw(g2);
             }
 
             // Player
@@ -207,15 +214,15 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void playMusic(int i){
-//        music.setFile(i);
-//        music.play();
-//        music.loop(); // repeat music
+        music.setFile(i);
+        music.play();
+        music.loop(); // repeat music
     }
     public void stopMusic(){
-//        music.stop(); // stop music
+        music.stop(); // stop music
     }
     public void playSE(int i){
-//        se.setFile(i);
-//        se.play(); // sound effects are short, only call once typically.
+        se.setFile(i);
+        se.play(); // sound effects are short, only call once typically.
     }
 }

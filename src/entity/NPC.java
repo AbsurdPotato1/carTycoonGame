@@ -99,6 +99,7 @@ public class NPC extends Entity { //Just a collection of NPC-wide methods
                         lastTalkTime = currentTime;
                         if(dialogueNum == dialogues.size() - 1) { // check if player is done with the current dialogue and clicked
                             talking = false;
+                            gp.gameState = gp.playerState;
                             dialogueNum = 0;
                             numTimesTalked++;
                             changeDialogue(); // switch to new dialogue
@@ -106,26 +107,24 @@ public class NPC extends Entity { //Just a collection of NPC-wide methods
                         else {
                             dialogueNum++;
                         }
-
                     }
                 }
             }
-        } else { // if player not close enough
+        } else { // if player is not close enough
             if(dialogueNum == dialogues.size() - 1){ // check if player is done with the current dialogue
                 numTimesTalked++;
                 changeDialogue();
             }
             dialogueNum = 0;
             talking = false; // npc no longer talking
+            gp.gameState = gp.playerState;
         }
     }
 
     public boolean isClicked() {
-        int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
-        int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
         if(gp.mouseH.mouseClicked){
-            if(gp.mouseH.mouseX >= (screenX) && gp.mouseH.mouseX <= (screenX + solidArea.x + solidArea.width) &&
-                    gp.mouseH.mouseY >= (screenY) && gp.mouseH.mouseY <= (screenY + solidArea.y + solidArea.height)){
+            if(gp.mouseH.mouseWorldX >= (worldX) && gp.mouseH.mouseWorldX <= (worldX + solidArea.x + solidArea.width) &&
+                    gp.mouseH.mouseWorldY >= (worldY) && gp.mouseH.mouseWorldY <= (worldY + solidArea.y + solidArea.height)){
                 return true;
             }
         }

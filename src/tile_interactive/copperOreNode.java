@@ -11,6 +11,8 @@ public class copperOreNode extends InteractiveTile{
     public static final int objectId = 5;
     public static final boolean craftable = false;
     public static final boolean sellable = true;
+    public static int sellPrice = 2;
+    public static String sellDescription = "Sells for $" + sellPrice;
     public static BufferedImage inventoryImage;
 
     public copperOreNode(GamePanel gp, int x, int y){

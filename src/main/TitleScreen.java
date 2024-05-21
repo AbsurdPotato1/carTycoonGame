@@ -54,13 +54,13 @@ public class TitleScreen {
         int loadingScreenTextHeight = (int)g2.getFontMetrics().getStringBounds(toDisplay, g2).getHeight();
         g2.drawString(toDisplay, (gp.screenWidth - loadingScreenTextLength) / 2, (gp.screenHeight - loadingScreenTextHeight - 170) / 2);
         if(gp.mouseH.mouseClicked){
-            if(gp.mouseH.mouseX >= (gp.screenWidth - startw) / 2 && gp.mouseH.mouseX <= (gp.screenWidth + startw) / 2 &&
-                gp.mouseH.mouseY >= (gp.screenHeight - starth) /2 && gp.mouseH.mouseY <= (gp.screenHeight + starth) / 2){
+            if(gp.mouseH.mouseScreenX >= (gp.screenWidth - startw) / 2 && gp.mouseH.mouseScreenX <= (gp.screenWidth + startw) / 2 &&
+                gp.mouseH.mouseScreenY >= (gp.screenHeight - starth) /2 && gp.mouseH.mouseScreenY <= (gp.screenHeight + starth) / 2){
 //                gp.a.fadeOut(g2);
                 gp.gameState = GamePanel.playerState;
-                //gp.stopMusic();
+                gp.stopMusic();
                 gp.playSE(3);
-                //gp.playMusic(5);
+                gp.playMusic(5);
             }
         }
     }

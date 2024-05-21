@@ -56,6 +56,7 @@ public class Entity {
         downCollisionOn = false;
         leftCollisionOn = false;
         gp.cChecker.checkTile(this);
+        gp.cChecker.checkTile(this, gp.iTile);
         gp.cChecker.checkObject(this, false);
         gp.cChecker.checkPlayer(this);
         if(!upCollisionOn) {

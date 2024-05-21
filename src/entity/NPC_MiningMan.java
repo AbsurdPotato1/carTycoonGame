@@ -75,11 +75,11 @@ public class NPC_MiningMan extends NPC {
                             talking = false;
                             dialogueNum = 0;
                             if(numTimesTalked == 0 && gp.player.spaceInInventory(ToolPickaxe.objectId)) { // if first dialogue completed
-                                gp.player.addOneToInventory(ToolPickaxe.class);
+                                gp.player.addToInventory(ToolPickaxe.class, 1);
                             }
                             numTimesTalked++;
                             changeDialogue(); // switch to new dialogue
-
+                            gp.gameState = GamePanel.dialogueState;
                         }
                         else {
                             dialogueNum++;
@@ -90,20 +90,21 @@ public class NPC_MiningMan extends NPC {
         } else { // if player not close enough
             if(dialogueNum == dialogues.size() - 1){ // check if player is done with the current dialogue
                 if(numTimesTalked == 0 && gp.player.spaceInInventory(ToolPickaxe.objectId)) { // if first dialogue completed
-                    gp.player.addOneToInventory(ToolPickaxe.class);
+                    gp.player.addToInventory(ToolPickaxe.class, 1);
                 }
                 numTimesTalked++;
                 changeDialogue();
             }
             dialogueNum = 0;
             talking = false; // npc no longer talking
+            gp.gameState = GamePanel.playerState;
         }
     }
 
     @Override
     public void update(){
+        super.update(); // check collisions
         if(gp.gameState != GamePanel.dialogueState) {
-            super.update(); // check collisions
             moveRandomly();
         }
     }

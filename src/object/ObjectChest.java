@@ -8,8 +8,10 @@ import java.io.IOException;
 
 public class ObjectChest extends SuperObject {
     public static final Integer objectId = 1;
-    public static final boolean craftable = true;
+    public static final boolean craftable = false; // change back to true later
     public static final boolean sellable = true;
+    public static int sellPrice = 1;
+    public static String sellDescription = "Sells for $" + sellPrice;
     public static BufferedImage inventoryImage;
     public ObjectChest(GamePanel gp, int row, int col){
         super(gp, row, col);

@@ -50,12 +50,18 @@ public class Player extends Entity{
         speedHor = 2 * 60.0 / gp.FPS;
         speedVert = 2 * 60.0 / gp.FPS;
     }
-    public void addOneToInventory(Class c){
+    public void addToInventory(Class c, int amount){
         try {
-            inventory.merge((Integer)c.getField("objectId").get(null), 1, Integer::sum); // increments key (count) of value (SuperObject)
+            inventory.merge((Integer)c.getField("objectId").get(null), amount, Integer::sum); // increments key (count) of value (SuperObject)
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+    public void removeOneFromInventory(Class c){
+
+    }
+    public boolean inInventory(Class c, int amount){
+        return inventory.getOrDefault((int)IdToObject.getIdFromClass(c), 0) >= amount;
     }
     public void setPlayerStartingItems(){
 //        addOneToInventory(ObjectCopperOre.class);
@@ -178,7 +184,7 @@ public class Player extends Entity{
                     case "copperOre":
                         if(spaceInInventory(ObjectCopperOre.objectId)) {
                             gp.playSE(1); // sound effect
-                            addOneToInventory(ObjectCopperOre.class);
+                            addToInventory(ObjectCopperOre.class, 1);
                             gp.obj.remove(i);
                             gp.ui.showMessage("You got a copper ore!");
                         }
@@ -207,7 +213,7 @@ public class Player extends Entity{
                     case "pickaxe":
                         if(spaceInInventory(ToolPickaxe.objectId)) {
                             gp.playSE(1); // sound effect
-                            addOneToInventory(ToolPickaxe.class);
+                            addToInventory(ToolPickaxe.class, 1);
                             gp.tools.remove(i);
                             System.out.println("pickaxe");
                             gp.ui.showMessage("You got a pickaxe");
@@ -273,7 +279,6 @@ public class Player extends Entity{
         for(int i = 0; i < gp.iTile.size(); i++){
             interactWithTile(i);
         }
-
 
         // IF COLLISION IS FALSE, PLAYER CAN MOVE
 
