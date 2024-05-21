@@ -6,6 +6,7 @@ import object.IdToObject;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 public class craftingBench extends InteractiveTile{
     public boolean crafting = false; // tracks crafting status - whether or not you are crafting
@@ -16,6 +17,7 @@ public class craftingBench extends InteractiveTile{
     public static boolean showDescription = false;
     public static BufferedImage inventoryImage;
     public Class displayCraft;
+    public boolean curClicking = false;
     public craftingBench(GamePanel gp, int row, int col){
         super(gp, row, col);
         image = UtilityTool.getImage("objects/craftingBench.png");
@@ -46,24 +48,37 @@ public class craftingBench extends InteractiveTile{
         }else{
             showDescription = false;
         }
-        if(gp.mouseH.mouseClicked && System.nanoTime() - gp.mouseH.timeClicked <= 1 * (1000000000 / gp.FPS)){ // if clicked less than one frame ago
-            if(gp.mouseH.mouseInsideScreen(gp.ui.craftingFrameX + 16, gp.ui.craftingFrameX + gp.ui.craftingWidth - 16, gp.ui.craftingFrameY + 16, gp.ui.craftingFrameY + gp.ui.craftingHeight - 16)){
-                // this if statement first does search pruning - optimization
-                // checks if mouse is inside the sell UI area.
-                int clickedSlotX, clickedSlotY;
-                // % 48 <= 48 is to make sure that it is not inside a margin
-                clickedSlotX = (gp.mouseH.mouseScreenX - (gp.ui.craftingFrameX + 16)) / 48; // x has no margins at the moment - will add in the future
-                clickedSlotY = (gp.mouseH.mouseScreenY - (gp.ui.craftingFrameY + 16)) % 64 <= 48 ? (gp.mouseH.mouseScreenY - (gp.ui.craftingFrameY + 16)) / 48 : -1;
+        if(!gp.mouseH.mouseClicked)curClicking = false;
+        if(gp.mouseH.mouseClicked && System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)){ // if clicked less than one frame ago
+            if(!curClicking) {
+                if (gp.mouseH.mouseInsideScreen(gp.ui.craftingFrameX + 16, gp.ui.craftingFrameX + gp.ui.craftingWidth - 16, gp.ui.craftingFrameY + 16, gp.ui.craftingFrameY + gp.ui.craftingHeight - 16)) {
+                    // this if statement first does search pruning - optimization
+                    // checks if mouse is inside the sell UI area.
+                    int clickedSlotX, clickedSlotY;
+                    // % 48 <= 48 is to make sure that it is not inside a margin
+                    clickedSlotX = (gp.mouseH.mouseScreenX - (gp.ui.craftingFrameX + 16)) / 48; // x has no margins at the moment - will add in the future
+                    clickedSlotY = (gp.mouseH.mouseScreenY - (gp.ui.craftingFrameY + 16)) % 64 <= 48 ? (gp.mouseH.mouseScreenY - (gp.ui.craftingFrameY + 16)) / 48 : -1;
 
-                if(clickedSlotX != -1 && clickedSlotY != -1){ // if not in margin
-                    Class item = getItemAtSlot(clickedSlotX, clickedSlotY); // item clicked
-                    if(item != null) { // if item is present at that location
-                        if (gp.player.inInventory(item, 1)) {
-                            gp.player.money += (int) IdToObject.getStaticVariable(IdToObject.getIdFromClass(item), "sellPrice"); // increase money
-                            gp.player.addToInventory(item, -1); // remove from inventory
+                    if (clickedSlotX != -1 && clickedSlotY != -1) { // if not in margin
+                        Class item = getItemAtSlot(clickedSlotX, clickedSlotY); // item clicked
+                        if (item != null) { // if item is present at that location
+                            boolean hasAllItems = true;
+                            int objId = IdToObject.getIdFromClass(item);
+                            HashMap<Integer, Integer> recipe = (HashMap<Integer, Integer>)IdToObject.getStaticVariable(objId, "craftingRecipe");
+                            for(Integer recipeObjId : recipe.keySet()){
+                                if(gp.player.inventory.get(recipeObjId) < recipe.get(recipeObjId)){ // if player does not have enough npcs
+                                    hasAllItems = false;
+                                }
+                            }
+                            if (hasAllItems) { // if player has all items
+                                for(Integer recipeObjId : recipe.keySet()){
+                                    gp.player.addToInventory(IdToObject.getObjectFromId(recipeObjId), recipe.get(recipeObjId)); // remove recipe items from player.
+                                }
+                            }
                         }
                     }
                 }
+                curClicking = true;
             }
         }
     }

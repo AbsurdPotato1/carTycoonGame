@@ -19,7 +19,7 @@ public class ToolPickaxe extends SuperObject {
     public static HashMap<Integer, Integer> craftingRecipe = new HashMap<>();
     public void setCraftingRecipe(){
         craftingRecipe.put(IdToObject.getIdFromClass(ObjectCopperOre.class), 3);
-        craftingRecipe.put(IdToObject.getIdFromClass(copperOreNode.class), 2);
+//        craftingRecipe.put(IdToObject.getIdFromClass(copperOreNode.class), 2);
     }
     public ToolPickaxe(GamePanel gp, int x, int y) {
         super(gp, x, y);

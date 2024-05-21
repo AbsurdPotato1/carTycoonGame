@@ -16,6 +16,7 @@ public class shippingBay extends InteractiveTile {
     public static boolean showDescription = false;
     public static BufferedImage inventoryImage;
     public String description;
+    public boolean curClicking = false;
     public shippingBay(GamePanel gp, int x, int y){
         super(gp, x, y);
         image = UtilityTool.getImage("blocks/shippingBay.png");
@@ -48,24 +49,28 @@ public class shippingBay extends InteractiveTile {
         }else{
             showDescription = false;
         }
-        if(gp.mouseH.mouseClicked && System.nanoTime() - gp.mouseH.timeClicked <= 1 * (1000000000 / gp.FPS)){ // if clicked less than one frame ago
-            if(gp.mouseH.mouseInsideScreen(gp.ui.sellFrameX + 16, gp.ui.sellFrameX + gp.ui.sellWidth - 16, gp.ui.sellFrameY + 16, gp.ui.sellFrameY + gp.ui.sellHeight - 16)){
-                // this if statement first does search pruning - optimization
-                // checks if mouse is inside the sell UI area.
-                int clickedSlotX, clickedSlotY;
-                // % 48 <= 48 is to make sure that it is not inside a margin
-                clickedSlotX = (gp.mouseH.mouseScreenX - (gp.ui.sellFrameX + 16)) / 48; // x has no margins at the moment - will add in the future
-                clickedSlotY = (gp.mouseH.mouseScreenY - (gp.ui.sellFrameY + 16)) % 64 <= 48 ? (gp.mouseH.mouseScreenY - (gp.ui.sellFrameY + 16)) / 48 : -1;
+        if(!gp.mouseH.mouseClicked)curClicking = false;
+        if(gp.mouseH.mouseClicked && System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)){ // if clicked less than 1.5 frame ago
+            if(!curClicking) {
+                if (gp.mouseH.mouseInsideScreen(gp.ui.sellFrameX + 16, gp.ui.sellFrameX + gp.ui.sellWidth - 16, gp.ui.sellFrameY + 16, gp.ui.sellFrameY + gp.ui.sellHeight - 16)) {
+                    // this if statement first does search pruning - optimization
+                    // checks if mouse is inside the sell UI area.
+                    int clickedSlotX, clickedSlotY;
+                    // % 48 <= 48 is to make sure that it is not inside a margin
+                    clickedSlotX = (gp.mouseH.mouseScreenX - (gp.ui.sellFrameX + 16)) / 48; // x has no margins at the moment - will add in the future
+                    clickedSlotY = (gp.mouseH.mouseScreenY - (gp.ui.sellFrameY + 16)) % 64 <= 48 ? (gp.mouseH.mouseScreenY - (gp.ui.sellFrameY + 16)) / 48 : -1;
 
-                if(clickedSlotX != -1 && clickedSlotY != -1){ // if not in margin
-                    Class item = getItemAtSlot(clickedSlotX, clickedSlotY); // item clicked
-                    if(item != null) { // if item is present at that location
-                        if (gp.player.inInventory(item, 1)) {
-                            gp.player.money += (int) IdToObject.getStaticVariable(IdToObject.getIdFromClass(item), "sellPrice"); // increase money
-                            gp.player.addToInventory(item, -1); // remove from inventory
+                    if (clickedSlotX != -1 && clickedSlotY != -1) { // if not in margin
+                        Class item = getItemAtSlot(clickedSlotX, clickedSlotY); // item clicked
+                        if (item != null) { // if item is present at that location
+                            if (gp.player.inInventory(item, 1)) {
+                                gp.player.money += (int) IdToObject.getStaticVariable(IdToObject.getIdFromClass(item), "sellPrice"); // increase money
+                                gp.player.addToInventory(item, -1); // remove from inventory
+                            }
                         }
                     }
                 }
+                curClicking = true;
             }
         }
     }

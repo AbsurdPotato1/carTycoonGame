@@ -283,8 +283,9 @@ public class UI {
         int stringY = frameY + 40;
         for(Integer recipeObjId : (recipe.keySet())){
             int numReqForRecipe = recipe.get(recipeObjId);
-            g2.drawString(String.valueOf(numReqForRecipe), stringX, stringY);
-            g2.drawImage(IdToObject.getStaticVariable(recipeObjId, "inventoryImage"), stringX + );
+            int textLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(numReqForRecipe) + "x", g2).getWidth();
+            g2.drawString(String.valueOf(numReqForRecipe) + "x", stringX, stringY);
+            g2.drawImage((BufferedImage)IdToObject.getStaticVariable(recipeObjId, "inventoryImage"), stringX + textLength, stringY - 30, 48, 48, null);
             stringY += 48;
         }
     }
