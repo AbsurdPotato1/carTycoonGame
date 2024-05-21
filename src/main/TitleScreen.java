@@ -58,9 +58,9 @@ public class TitleScreen {
                 gp.mouseH.mouseY >= (gp.screenHeight - starth) /2 && gp.mouseH.mouseY <= (gp.screenHeight + starth) / 2){
 //                gp.a.fadeOut(g2);
                 gp.gameState = GamePanel.playerState;
-                //gp.stopMusic();
+                gp.stopMusic();
                 gp.playSE(3);
-                //gp.playMusic(5);
+                gp.playMusic(5);
             }
         }
     }
