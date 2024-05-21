@@ -48,7 +48,9 @@ public class UI {
 //        playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
 
 //        g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
-        drawMoney(g2);
+        if(gp.gameState != gp.dialogueState) {
+            drawMoney(g2);
+        }
         if(messageOn){
             g2.drawString(message, GamePanel.tileSize / 2, GamePanel.tileSize * 5);
 
