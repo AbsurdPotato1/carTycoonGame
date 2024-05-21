@@ -150,7 +150,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
     public void update(){
-        System.out.println(gameState);
         mouseH.updateMousePosition();
         if(gameState == titleState){
             keyH.acceptMovement = false;

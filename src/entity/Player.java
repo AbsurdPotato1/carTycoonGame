@@ -190,7 +190,6 @@ public class Player extends Entity{
                         }
                         break;
                     case "chest":
-                        gp.ui.showMessage("L bozo chests don't work yet");
                         break;
 
                     }
@@ -215,8 +214,6 @@ public class Player extends Entity{
                             gp.playSE(1); // sound effect
                             addToInventory(ToolPickaxe.class, 1);
                             gp.tools.remove(i);
-                            System.out.println("pickaxe");
-                            gp.ui.showMessage("You got a pickaxe");
                         }
                         break;
                 }
