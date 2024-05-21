@@ -1,11 +1,13 @@
 package object;
 
 import main.GamePanel;
+import tile_interactive.copperOreNode;
 
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class ToolPickaxe extends SuperObject {
     public static final int objectId = 0;
@@ -14,6 +16,11 @@ public class ToolPickaxe extends SuperObject {
     public static int sellPrice = 10;
     public static String sellDescription = "Sells for $" + sellPrice;
     public static BufferedImage inventoryImage;
+    public static HashMap<Integer, Integer> craftingRecipe = new HashMap<>();
+    public void setCraftingRecipe(){
+        craftingRecipe.put(IdToObject.getIdFromClass(ObjectCopperOre.class), 3);
+        craftingRecipe.put(IdToObject.getIdFromClass(copperOreNode.class), 2);
+    }
     public ToolPickaxe(GamePanel gp, int x, int y) {
         super(gp, x, y);
         collisionWidth = 48;
@@ -31,5 +38,6 @@ public class ToolPickaxe extends SuperObject {
             e.printStackTrace();
         }
         name = "pickaxe";
+        setCraftingRecipe();
     }
 }

@@ -4,6 +4,7 @@ import object.IdToObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 public class UI {
     GamePanel gp;
@@ -192,7 +193,7 @@ public class UI {
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
     }
-    public void drawCraftingScreen(Graphics2D g2) {
+    public void drawCraftScreen(Graphics2D g2) {
         // this method does not account for the number of items being greater than the number there is (make second page in the future)
         // scrolling is probably difficult - pages easier lol
 
@@ -264,8 +265,28 @@ public class UI {
         Color outerColor = new Color(0, 0, 0, 127);
         Color innerColor = new Color(255, 255, 255, 255);
         drawSubWindow(gp.mouseH.mouseScreenX, gp.mouseH.mouseScreenY, width, height, g2, outerColor, innerColor);
-        int descriptionTextLength = (int)g2.getFontMetrics().getStringBounds(description, g2).getWidth();
         g2.drawString(description, gp.mouseH.mouseScreenX + 20, gp.mouseH.mouseScreenY + 40);
+    }
+
+    public void showCraftDescription(Graphics2D g2, Class object){
+        int objId = IdToObject.getIdFromClass(object);
+        HashMap<Integer, Integer> recipe = (HashMap<Integer, Integer>)IdToObject.getStaticVariable(objId, "craftingRecipe");
+        g2.setFont(Fonts.pressStart_2P.deriveFont(18f));
+        int frameX = gp.mouseH.mouseScreenX; //
+        int frameY = gp.mouseH.mouseScreenY;
+        int width = 160;
+        int height = 40 + 48 * recipe.size();
+        Color outerColor = new Color(0, 0, 0, 127);
+        Color innerColor = new Color(255, 255, 255, 255);
+        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
+        int stringX = frameX + 20;
+        int stringY = frameY + 40;
+        for(Integer recipeObjId : (recipe.keySet())){
+            int numReqForRecipe = recipe.get(recipeObjId);
+            g2.drawString(String.valueOf(numReqForRecipe), stringX, stringY);
+            g2.drawImage(IdToObject.getStaticVariable(recipeObjId, "inventoryImage"), stringX + );
+            stringY += 48;
+        }
     }
 
 }
