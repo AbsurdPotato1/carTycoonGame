@@ -219,16 +219,18 @@ public class Player extends Entity{
     }
     public void interactWithTile(int i){
         long mineInterval = 5;
-        if(gp.iTile[i].name == "copperOreNode"){
-            long currentTime = System.nanoTime();
-            if((currentTime - lastMineTime) / (1000000000 / gp.FPS) >= mineInterval &&
-                    currentTime - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS) &&
-                    gp.ui.hotbarCol < inventory.size() && inventoryKeysAsArray[gp.ui.hotbarCol] == ToolPickaxe.objectId &&
-                    gp.iTile[i].isCloseTo(this) && gp.iTile[i].isClicked()){
-                lastMineTime = currentTime;
-                gp.obj.add(new ObjectCopperOre(gp, gp.iTile[i].worldX, gp.iTile[i].worldY));
-                gp.iTile[i] = null;
-            }
+        switch(gp.iTile.get(i).name) {
+            case "copperOreNode":
+                long currentTime = System.nanoTime();
+                if ((currentTime - lastMineTime) / (1000000000 / gp.FPS) >= mineInterval &&
+                        currentTime - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS) &&
+                        gp.ui.hotbarCol < inventory.size() && inventoryKeysAsArray[gp.ui.hotbarCol] == ToolPickaxe.objectId &&
+                        gp.iTile.get(i).isCloseTo(this) && gp.iTile.get(i).isClicked()) {
+                    lastMineTime = currentTime;
+                    gp.obj.add(new ObjectCopperOre(gp, gp.iTile.get(i).worldX, gp.iTile.get(i).worldY));
+                    gp.iTile.remove(i);
+                }
+                break;
         }
     }
     public void interactNPC(int i){
@@ -268,10 +270,8 @@ public class Player extends Entity{
         // Check interaction tile collision
 
         gp.cChecker.checkTile(this, gp.iTile);
-        for(int i = 0; i < gp.iTile.length; i++){
-            if(gp.iTile[i] != null){
-                interactWithTile(i);
-            }
+        for(int i = 0; i < gp.iTile.size(); i++){
+            interactWithTile(i);
         }
 
 
