@@ -274,7 +274,6 @@ public class Player extends Entity{
             interactWithTile(i);
         }
 
-
         // IF COLLISION IS FALSE, PLAYER CAN MOVE
 
         gp.cChecker.checkTile(this);

@@ -20,6 +20,27 @@ public class shippingBay extends InteractiveTile {
         destructible = false;
         name = "shippingBay";
     }
+
+    public void getItemAtSlot(int slotX, int slotY){
+        // make a list of all sellables in the future in assetsetter or setupgame(), then just access with % like in UI.inventory. In the future just use 2D array bruh. Refactoring will come later on.
+    }
+
+    public void doSales(){
+        if(gp.mouseH.mouseClicked && System.nanoTime() - gp.mouseH.timeClicked <= 1 * (1000000000 / gp.FPS)){ // if clicked less than one frame ago
+            if(gp.mouseH.mouseInsideScreen(gp.ui.sellFrameX, gp.ui.sellFrameX + gp.ui.sellWidth, gp.ui.sellFrameY, gp.ui.sellFrameY + gp.ui.sellHeight)){
+                // this if statement first does search pruning - optimization
+                // checks if mouse is inside the sell UI area.
+                int clickedSlotX, clickedSlotY;
+                // % 48 <= 48 is to make sure that it is not inside a margin
+                clickedSlotX = (gp.mouseH.mouseScreenX - (gp.ui.sellFrameX + 16)) % 64 <= 48 ? (gp.mouseH.mouseScreenX - (gp.ui.sellFrameX + 16)) / 48 : -1;
+                clickedSlotY = (gp.mouseH.mouseScreenY - (gp.ui.sellFrameY + 16)) % 64 <= 48 ? (gp.mouseH.mouseScreenY - (gp.ui.sellFrameY + 16)) / 48 : -1;
+                if(clickedSlotX != -1 && clickedSlotY != -1){
+
+                }
+            }
+        }
+    }
+
     public void update(){
         if(isCloseTo(gp.player)){
             if(isClicked()) {
@@ -35,6 +56,7 @@ public class shippingBay extends InteractiveTile {
             beginSelling = true;
             gp.keyH.acceptMovement = false;
             gp.drawPlayer = false;
+            doSales();
             if(gp.keyH.escapePressed){
                 selling = false;
                 gp.keyH.acceptMovement = true;

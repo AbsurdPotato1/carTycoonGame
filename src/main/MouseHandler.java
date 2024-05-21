@@ -8,7 +8,8 @@ import java.awt.event.MouseListener;
 public class MouseHandler implements MouseListener {
 
     public GamePanel gp;
-    public int mouseX, mouseY; // Screen x and y
+    public int mouseWorldX, mouseWorldY; // Mouse world x and y
+    public int mouseScreenX, mouseScreenY; // Mouse screen x and y
     public boolean mouseClicked;
     public long timeClicked;
     public MouseHandler(GamePanel gp){
@@ -19,19 +20,27 @@ public class MouseHandler implements MouseListener {
 
     }
 
-    public boolean mouseInside(int x1, int x2, int y1, int y2) {
-        return this.mouseX >= x1 &&
-                this.mouseX <= x2 &&
-                this.mouseY >= y1 &&
-                this.mouseY <= y2;
+    public boolean mouseInsideScreen(int leftX, int rightX, int topY, int bottomY) {
+        return this.mouseScreenX >= leftX &&
+                this.mouseScreenX <= rightX &&
+                this.mouseScreenY >= topY &&
+                this.mouseScreenY <= bottomY;
+    }
+    public boolean mouseInsideWorld(int leftX, int rightX, int topY, int bottomY) {
+        return this.mouseWorldX >= leftX &&
+                this.mouseWorldX <= rightX &&
+                this.mouseWorldY >= topY &&
+                this.mouseWorldY <= bottomY;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         mouseClicked = true;
         Point point = MouseInfo.getPointerInfo().getLocation();
-        mouseX = (int) point.getX();
-        mouseY = (int) point.getY();
+        mouseScreenX = (int) point.getX();
+        mouseScreenY = (int) point.getY();
+        mouseWorldX = mouseScreenX + (int)gp.player.worldX - gp.player.screenX;
+        mouseWorldY = mouseScreenY + (int)gp.player.worldY - gp.player.screenY;
         timeClicked = System.nanoTime();
     }
 

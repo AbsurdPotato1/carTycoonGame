@@ -22,7 +22,9 @@ public class UI {
     public int inventoryCol = 0;
     public int inventorySize;
     public String currentDialogue = "";
-    public ArrayList<Integer> craftables = new ArrayList<Integer>();
+    public int inventoryWidth, inventoryHeight, inventoryFrameX, inventoryFrameY;
+    public int craftingWidth, craftingHeight, craftingFrameX, craftingFrameY;
+    public int sellWidth, sellHeight, sellFrameX, sellFrameY;
 
     public UI(GamePanel gp){
         this.gp = gp;
@@ -143,16 +145,16 @@ public class UI {
     }
 
     public void drawInventory(Graphics2D g2){
-        int frameWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
-        int frameHeight = 208; // 4 * 16 + 48 * 3
-        int frameX = 20;
-        int frameY = 20;
+        inventoryWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        inventoryHeight = 208; // 4 * 16 + 48 * 3
+        inventoryFrameX = 20;
+        inventoryFrameY = 20;
         Color outerColor = new Color(216, 178, 129, 127);
         Color innerColor = new Color(255, 255, 255);
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2, outerColor, innerColor);
+        drawSubWindow(inventoryFrameX, inventoryFrameY, inventoryWidth, inventoryHeight, g2, outerColor, innerColor);
 
-        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2; // 16px margins
-        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
+        final int slotXstart = inventoryFrameX + (80 - GamePanel.tileSize) / 2; // 16px margins
+        final int slotYstart = inventoryFrameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
 
@@ -194,16 +196,16 @@ public class UI {
         // this method does not account for the number of items being greater than the number there is (make second page in the future)
         // scrolling is probably difficult - pages easier lol
 
-        int width = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
-        int height = 336; // 6 * 16 + 48 * 5
-        int frameX = gp.screenWidth / 2 - width / 2;
-        int frameY = gp.screenHeight / 2 - height/ 2;
+        craftingWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        craftingHeight= 336; // 6 * 16 + 48 * 5
+        craftingFrameX = gp.screenWidth / 2 - craftingWidth / 2;
+        craftingFrameY = gp.screenHeight / 2 - craftingHeight/ 2;
         Color outerColor = new Color(216, 178, 129, 200);
         Color innerColor = new Color(0, 0, 0);
-        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
+        drawSubWindow(craftingFrameX, craftingFrameY, craftingWidth, craftingHeight, g2, outerColor, innerColor);
 
-        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
-        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
+        final int slotXstart = craftingFrameX + (80 - GamePanel.tileSize) / 2;
+        final int slotYstart = craftingFrameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
 
@@ -226,17 +228,17 @@ public class UI {
         // this method does not account for the number of items being greater than the number there is (make second page in the future)
         // scrolling is probably difficult - pages easier lol
 
-        int width = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
-        int height = 336; // 6 * 16 + 48 * 5
-        int frameX = gp.screenWidth / 2 - width / 2;
-        int frameY = gp.screenHeight / 2 - height / 2;
+        sellWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        sellHeight = 336; // 6 * 16 + 48 * 5
+        sellFrameX = gp.screenWidth / 2 - sellWidth / 2;
+        sellFrameY = gp.screenHeight / 2 - sellHeight / 2;
         Color outerColor = new Color(216, 178, 129, 200);
         Color innerColor = new Color(0, 0, 0);
 
-        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
+        drawSubWindow(sellFrameX, sellFrameY, sellWidth, sellHeight, g2, outerColor, innerColor);
 
-        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2; // 16px margins
-        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
+        final int slotXstart = sellFrameX + (80 - GamePanel.tileSize) / 2; // 16px margins
+        final int slotYstart = sellFrameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
 
@@ -245,7 +247,7 @@ public class UI {
             if((boolean)IdToObject.getStaticVariable(objId, "sellable")){
                 if(curSellSlot != 0 && curSellSlot % 9 == 0){
                     slotY += GamePanel.tileSize + 16;
-                    slotX = slotXstart;
+                    slotX = slotXstart; // TODO: change slotX to have margins in the future
                 }
                 g2.setFont(Fonts.pressStart_2P);
                 g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);

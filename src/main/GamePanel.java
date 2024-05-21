@@ -148,7 +148,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
     public void update(){
-        System.out.println(gameState);
         if(gameState == titleState){
             keyH.acceptMovement = false;
         }
@@ -179,7 +178,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             // Objects
             for (int i = 0; i < obj.size(); i++) {
-                obj.get(i).draw(g2);
+                obj.get(i).draw(g2); // change order depending on what state you are in
             }
             for(int i = 0; i < tools.size(); i++){
                 tools.get(i).draw(g2);
