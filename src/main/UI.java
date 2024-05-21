@@ -36,21 +36,22 @@ public class UI {
     public void draw(Graphics2D g2){
         if(gp.keyH.inventoryPressed){
             drawInventory(g2);
-            if(gp.player.isCloseTo(gp.iTile[11])) {
-                drawCraftingUI(g2);
+            if(gp.player.isCloseTo(gp.iTile.get(11))) { // change this to be in update()
+                drawCraftingScreen(g2);
             }
         }else {
             drawHotbar(g2);
         }
-        int playTimeTextLength;
+//        int playTimeTextLength;
         g2.setFont(Fonts.pressStart_2P);
         g2.setFont(g2.getFont().deriveFont(30f));
         g2.setColor(Color.white);
 
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time
-        playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
+//        playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
 
 //        g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
+        drawMoney(g2);
         if(messageOn){
             g2.drawString(message, GamePanel.tileSize / 2, GamePanel.tileSize * 5);
 
@@ -61,6 +62,11 @@ public class UI {
             }
         }
 
+    }
+
+    public void drawMoney(Graphics2D g2) {
+        int moneyTextLength = (int)g2.getFontMetrics().getStringBounds((int)gp.player.money + "Money: ", g2).getWidth();
+        g2.drawString("Money: " + (int)gp.player.money, gp.screenWidth - moneyTextLength - 30, 65);
     }
 
     public void drawHotbar(Graphics2D g2){
@@ -88,7 +94,7 @@ public class UI {
                     break;
                 }
                 g2.setFont(Fonts.pressStart_2P);
-                g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
+                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
                 int curNumObj = Math.min(gp.player.maxObjectPerSlot, numObject - numDrawn); // number to draw
                 int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(curNumObj), g2).getWidth(); // length of number string to draw
                 g2.drawString(String.valueOf(curNumObj), slotX+44 - numLength, slotY+44); // draw number of objects
@@ -146,35 +152,35 @@ public class UI {
         Color innerColor = new Color(255, 255, 255);
         drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2, outerColor, innerColor);
 
-        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
+        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2; // 16px margins
         final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
 
-        int inventorySlot = 0;
+        int curInventorySlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
-            if(inventorySlot == 9 || inventorySlot == 18){
+            if(curInventorySlot == 9 || curInventorySlot == 18){
                 slotY += GamePanel.tileSize + 16;
                 slotX = slotXstart;
             }
             int numObject = gp.player.inventory.get(objId); // number of objects
             int numDrawn = 0; // number of objects of current object that have been drawn
             for(int i = 0; i < (numObject-1) / gp.player.maxObjectPerSlot + 1; i++){
-                if(inventorySlot == 9 || inventorySlot == 18){
+                if(curInventorySlot == 9 || curInventorySlot == 18){
                     slotY += GamePanel.tileSize + 16;
                     slotX = slotXstart;
                 }
                 g2.setFont(Fonts.pressStart_2P);
-                g2.drawImage(IdToObject.getImageFromId(objId), slotX, slotY, 48, 48, null);
+                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
                 int curNumObj = Math.min(gp.player.maxObjectPerSlot, numObject - numDrawn); // number to draw
                 int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(curNumObj), g2).getWidth(); // length of number string to draw
                 g2.drawString(String.valueOf(curNumObj), slotX+44 - numLength, slotY+44); // draw number of objects
                 slotX += GamePanel.tileSize;
                 numDrawn += gp.player.maxObjectPerSlot;
-                inventorySlot++;
+                curInventorySlot++;
             }
         }
-        inventorySize = Math.max(inventorySize, inventorySlot);
+        inventorySize = Math.max(inventorySize, curInventorySlot);
 
         int cursorX = slotXstart + (GamePanel.tileSize * inventoryCol);
         int cursorY = slotYstart + (GamePanel.tileSize * inventoryRow) + inventoryRow * 16;
@@ -185,48 +191,69 @@ public class UI {
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
     }
-    public void drawCraftingUI(Graphics2D g2) {
+    public void drawCraftingScreen(Graphics2D g2) {
+        // this method does not account for the number of items being greater than the number there is (make second page in the future)
+        // scrolling is probably difficult - pages easier lol
 
-        int frameWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
-        int frameHeight = 16*2 + 48; // 4 * 16 + 48 * 3
-        int frameX = 20;
-        int frameY = 248; // 20 px below the inventory
-        Color outerColor = new Color(216, 178, 129, 127);
-        Color innerColor = new Color(255, 255, 255);
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight, g2, outerColor, innerColor);
+        int width = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        int height = 336; // 6 * 16 + 48 * 5
+        int frameX = gp.screenWidth / 2 - width / 2;
+        int frameY = gp.screenHeight / 2 - height/ 2;
+        Color outerColor = new Color(216, 178, 129, 200);
+        Color innerColor = new Color(0, 0, 0);
+        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
 
         final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2;
         final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
-        int i = 0;
-        //for(int i = 0 ; i < craftables.size() ; i++) {
-        g2.drawImage(IdToObject.getImageFromId(craftables.get(i)), slotX, slotY, 48, 48, null);
-        slotX += GamePanel.tileSize;
-        int j = 0; // For loop
-        gp.mouseH.mouseInside(slotXstart + 48*j, slotXstart + 48*(j+1), frameY + 16 , frameY + 16 + 48);
-        //}
 
-        /*int cursorX = slotXstart + (GamePanel.tileSize * inventoryCol);
-        int cursorY = slotYstart + (GamePanel.tileSize * inventoryRow) + inventoryRow * 16;
-        int cursorWidth = GamePanel.tileSize;
-        int cursorHeight = GamePanel.tileSize;
-
-        g2.setColor(Color.white);
-        g2.setStroke(new BasicStroke(3));
-        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);*/
-
-    }
-
-    public void initCraftables() {
-        for(int i = 0 ; i < IdToObject.numObjs ; i++) {
-            try {
-                Boolean c = IdToObject.idObject[i].getField("craftable").getBoolean(null);
-                if(c) craftables.add(i);
-            } catch (Exception e) {
-                e.printStackTrace();
+        int curCraftSlot = 0;
+        for(int objId = 0; objId < IdToObject.numObjs; objId++){
+            if((boolean)IdToObject.getStaticVariable(objId, "craftable")){
+                if(curCraftSlot != 0 && curCraftSlot % 9 == 0){
+                    slotY += GamePanel.tileSize + 16;
+                    slotX = slotXstart;
+                }
+                g2.setFont(Fonts.pressStart_2P);
+                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
+                slotX += GamePanel.tileSize;
+                curCraftSlot++;
             }
         }
-
     }
+
+    public void drawSellScreen(Graphics2D g2){
+        // this method does not account for the number of items being greater than the number there is (make second page in the future)
+        // scrolling is probably difficult - pages easier lol
+
+        int width = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        int height = 336; // 6 * 16 + 48 * 5
+        int frameX = gp.screenWidth / 2 - width / 2;
+        int frameY = gp.screenHeight / 2 - height / 2;
+        Color outerColor = new Color(216, 178, 129, 200);
+        Color innerColor = new Color(0, 0, 0);
+
+        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
+
+        final int slotXstart = frameX + (80 - GamePanel.tileSize) / 2; // 16px margins
+        final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        int curSellSlot = 0;
+        for(int objId = 0; objId < IdToObject.numObjs; objId++){ // draw all objects
+            if((boolean)IdToObject.getStaticVariable(objId, "sellable")){
+                if(curSellSlot != 0 && curSellSlot % 9 == 0){
+                    slotY += GamePanel.tileSize + 16;
+                    slotX = slotXstart;
+                }
+                g2.setFont(Fonts.pressStart_2P);
+                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
+                slotX += GamePanel.tileSize;
+                curSellSlot++;
+            }
+        }
+    }
+
 }

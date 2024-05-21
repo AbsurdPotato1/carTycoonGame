@@ -6,8 +6,15 @@ import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-public class SuperObject {
+public class SuperObject { // WHEN CREATING A NEW SUPEROBJECT OR INTERACTIVE TILE MAKE SURE TO ASSIGN THESE:
+    // public static final Integer objectId = 1;
+    // public static final boolean craftable = someValue;
+    // public static final boolean sellable = someValue;
+    // public static BufferedImage inventoryImage; <-- assigned in constructor
+    // increase IdToObject numObjs
+    // Place your object's class in IdToObject's idObject class
     GamePanel gp;
+
     public BufferedImage inventoryImage; // only exists for readibility (every subclass has a public static BufferedImage inventoryImage)
     public BufferedImage image;
     public String name;
@@ -22,8 +29,6 @@ public class SuperObject {
     public int collisionYOffset = 0; // vertical offset into the tile for an object
     public String description = "";
     public int objectId;
-    public static boolean craftable = false;
-    public static boolean getCraftable() { return craftable; }
 
     public SuperObject(GamePanel gp, int x, int y){
         this.gp = gp;
@@ -31,7 +36,7 @@ public class SuperObject {
         worldY = y;
     }
 
-    public void draw(Graphics2D g2, GamePanel gp){
+    public void draw(Graphics2D g2){
         int screenX = worldX - (int)gp.player.worldX + gp.player.screenX;
         int screenY = worldY - (int)gp.player.worldY + gp.player.screenY;
 

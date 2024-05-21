@@ -1,11 +1,9 @@
 package main;//package main.Main;
 import data.SaveLoad;
-import entity.Entity;
 import entity.NPC;
 import entity.Player;
 import object.IdToObject;
 import object.SuperObject;
-import object.SuperTool;
 import tile.TileManager;
 import tile_interactive.InteractiveTile;
 
@@ -14,7 +12,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
-import java.sql.Array;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -62,11 +59,11 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyH);
 //    public SuperObject[] obj = new SuperObject[1000]; // display up to 100 objects at the same time
     public ArrayList<SuperObject> obj = new ArrayList<>();
-    public ArrayList<SuperTool> tools = new ArrayList<>();
+    public ArrayList<SuperObject> tools = new ArrayList<>();
 //    public SuperTool[] tools = new SuperTool[100];
-    public NPC npc[] = new NPC[100];
-    public ArrayList<InteractiveTile> iTile = new ArrayList<InteractiveTile>();
-//    public InteractiveTile[] iTile = new InteractiveTile[50];
+    public ArrayList<NPC> npc = new ArrayList<>();
+//    public NPC npc[] = new NPC[100];
+    public ArrayList<InteractiveTile> iTile = new ArrayList<>();
 
     //states
     public int gameState;
@@ -74,6 +71,8 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int playerState = 1;
     public static final int pauseState = 2;
     public static final int dialogueState = 3;
+
+    public boolean drawPlayer = true; // whether or not to draw player
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -92,7 +91,6 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setInteractiveTile();
         //playMusic(0);
         setFullScreen();
-        ui.initCraftables();
         //game state
         gameState = GamePanel.titleState;
     }
@@ -150,11 +148,15 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
     public void update(){
+        if(gameState == titleState){
+            keyH.acceptMovement = false;
+        }
+        if(gameState == playerState || gameState == dialogueState){
+            keyH.acceptMovement = true;
+        }
         player.update();
-        for(int i = 0; i < npc.length; i++){
-            if(npc[i] != null){
-                npc[i].update();
-            }
+        for(int i = 0; i < npc.size(); i++){
+            npc.get(i).update();
         }
         for(int i = 0; i < iTile.size(); i++){
             iTile.get(i).update();
@@ -174,27 +176,27 @@ public class GamePanel extends JPanel implements Runnable {
             // Tiles -- Keep in mind drawing order does matter.
             tileM.draw(g2);
 
-            for(int i = 0; i < iTile.size(); i++){
-                iTile.get(i).draw(g2, this);
-            }
-
             // Objects
             for (int i = 0; i < obj.size(); i++) {
-                obj.get(i).draw(g2, this);
+                obj.get(i).draw(g2);
             }
             for(int i = 0; i < tools.size(); i++){
-                tools.get(i).draw(g2, this);
+                tools.get(i).draw(g2);
+            }
+
+            for(int i = 0; i < iTile.size(); i++){
+                iTile.get(i).draw(g2);
             }
 
             //NPCs
-            for (int i = 0; i < npc.length; i++) {
-                if (npc[i] != null) {
-                    npc[i].draw(g2);
-                }
+            for (int i = 0; i < npc.size(); i++) {
+                npc.get(i).draw(g2);
             }
 
             // Player
-            player.draw(g2);
+            if(drawPlayer) {
+                player.draw(g2);
+            }
 
             ui.draw(g2);
         }

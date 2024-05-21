@@ -7,8 +7,10 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class ToolPickaxe extends SuperTool {
+public class ToolPickaxe extends SuperObject {
     public static final int objectId = 0;
+    public static final boolean craftable = true;
+    public static final boolean sellable = true;
     public static BufferedImage inventoryImage;
     public ToolPickaxe(GamePanel gp, int x, int y) {
         super(gp, x, y);
@@ -27,6 +29,5 @@ public class ToolPickaxe extends SuperTool {
             e.printStackTrace();
         }
         name = "pickaxe";
-        craftable = true;
     }
 }
