@@ -41,8 +41,8 @@ public class Player extends Entity{
         setPlayerStartingItems();
     }
     public void setDefaultValues(){
-        worldX = 50;
-        worldY = 500;
+        worldX = 1000;
+        worldY = 1000;
         speedHor = 2 * 60.0 / gp.FPS;
         speedVert = 2 * 60.0 / gp.FPS;
     }

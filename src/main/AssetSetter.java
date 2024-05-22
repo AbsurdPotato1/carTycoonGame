@@ -18,42 +18,49 @@ public class AssetSetter {
     }
 
     public void setObject(){
-        for(int i = 0; i < 255; i++){
-            gp.obj.add(new ObjectCopperOre(gp, 3 * GamePanel.tileSize, 3 * GamePanel.tileSize));
-        }
-        gp.obj.add(new ObjectCopperOre(gp, 9 * GamePanel.tileSize, 9 * GamePanel.tileSize));
-
-        gp.obj.add(new ObjectCopperOre(gp, 14 * GamePanel.tileSize, 8 * GamePanel.tileSize));
-
-        gp.obj.add(new ObjectChest(gp, 3 * GamePanel.tileSize, 10 * GamePanel.tileSize));
-
-        gp.obj.add(new ObjectChest(gp, 4 * GamePanel.tileSize, 9 * GamePanel.tileSize));
-
-        gp.obj.add(new ObjectCopperOre(gp,  4 * GamePanel.tileSize, 9 * GamePanel.tileSize)); // Objects are layer-able - be careful
-
+        gp.obj.add(new ObjectChest(gp, 26 * GamePanel.tileSize, 21 * GamePanel.tileSize));
     }
 
     public void setTool(){
         new ToolPickaxe(gp, 0, 0);
-//        gp.tools.add(new ToolPickaxe(gp, 4 * GamePanel.tileSize, 5 * GamePanel.tileSize));
-//        gp.tools.clear(); // temporary - later just initialize all images in setupGame();
         new ObjectStick(gp, 0, 0);
     }
 
     public void setInteractiveTile(){
-        for(int i = 0; i < 10; i++){
-            gp.iTile.add(new copperOreNode(gp, (i+10) * GamePanel.tileSize, 4 * GamePanel.tileSize));
+        for(int i = 32; i <= 35; i++){
+            for(int j = 17; j <= 19; j++){
+                gp.iTile.add(new choppableTree(gp, i * GamePanel.tileSize, j * GamePanel.tileSize));
+            }
+        }
+        for(int i = 23; i <= 27; i++){
+            for(int j = 27; j <= 29; j++){
+                gp.iTile.add(new choppableTree(gp, i * GamePanel.tileSize, j * GamePanel.tileSize));
+            }
+        }
+        for(int i = 42; i <= 46; i++){
+            for(int j = 22; j <= 24; j++){
+                gp.iTile.add(new choppableTree(gp, i * GamePanel.tileSize, j * GamePanel.tileSize));
+            }
+        }
+        for(int i = 42; i <= 45; i++){
+            for(int j = 31; j <= 35; j++){
+                gp.iTile.add(new choppableTree(gp, i * GamePanel.tileSize, j * GamePanel.tileSize));
+            }
         }
 
-        gp.iTile.add(new shippingBay(gp, 3 * GamePanel.tileSize, 7 * GamePanel.tileSize));
-        gp.iTile.add(new craftingBench(gp, 6 * GamePanel.tileSize, 6 * GamePanel.tileSize));
-        for(int i = 0; i < 20; i++){
-            gp.iTile.add(new choppableTree(gp, (i+2) * GamePanel.tileSize, (i+3) * 2 * GamePanel.tileSize));
+
+        for(int i = 32; i < 35; i++){
+            for(int j = 24; j <= 27; j++) {
+                gp.iTile.add(new copperOreNode(gp, i * GamePanel.tileSize, j * GamePanel.tileSize));
+            }
         }
+
+        gp.iTile.add(new shippingBay(gp, 28 * GamePanel.tileSize, 21 * GamePanel.tileSize));
+        gp.iTile.add(new craftingBench(gp, 25 * GamePanel.tileSize, 21 * GamePanel.tileSize));
     }
 
     public void setNPC(){
-        gp.npc.add(new NPC_MiningMan(gp, GamePanel.tileSize * 7, GamePanel.tileSize * 5));
+        gp.npc.add(new NPC_MiningMan(gp, 1000, 800));
     }
 
 }

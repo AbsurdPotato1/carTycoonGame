@@ -29,8 +29,9 @@ public class Quests {
     public void loadInitialQuests(){
         questList.put("Get a pickaxe", 0);
         questList.put("Mine some ore", 0);
-        questList.put("Break some trees", 0);
+        questList.put("Break some trees with your pickaxe", 0);
         questList.put("Craft a chest", 0);
+        questList.put("Sell some things for money", 0);
     }
     public void draw(Graphics2D g2){
         if(!inQuestMenu){
@@ -60,11 +61,15 @@ public class Quests {
             questList.replace("Mine some ore", 1);
         }
         if(gp.player.inInventory(ObjectStick.class, 10)){
-            questList.replace("Break some trees", 1);
+            questList.replace("Break some trees with your pickaxe", 1);
         }
         if(gp.player.inInventory(ObjectChest.class, 1)){
             questList.replace("Craft a chest", 1);
         }
+        if(gp.player.money >= 10){
+            questList.replace("Sell some things for money", 1);
+        }
+
     }
     public boolean isClicked() {
         if(gp.mouseH.mouseClicked && (System.nanoTime() - gp.mouseH.timeClicked) / (1000000000 / gp.FPS) <= 2){

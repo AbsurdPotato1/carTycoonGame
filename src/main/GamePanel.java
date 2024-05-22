@@ -33,8 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
     public int screenHeight = tileSize * maxScreenRow; // 864
 
     // world settings
-    public final int maxWorldCol = 64;
-    public final int maxWorldRow = 48;
+    public int maxWorldCol;
+    public int maxWorldRow;
 
     public int FPS = 30;
     public boolean gameStarted = false;
@@ -72,6 +72,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int playerState = 1;
     public static final int pauseState = 2;
     public static final int dialogueState = 3;
+    public static final int interactingState = 4;
 
     public boolean drawPlayer = true; // whether or not to draw player
 
@@ -196,14 +197,24 @@ public class GamePanel extends JPanel implements Runnable {
                 tools.get(i).draw(g2);
             }
 
-            //NPCs
-            for (int i = 0; i < npc.size(); i++) {
-                npc.get(i).draw(g2);
+
+            if(gameState == dialogueState || gameState == interactingState) {
+                //NPCs
+                for (int i = 0; i < npc.size(); i++) {
+                    npc.get(i).draw(g2);
+                }
+                for (int i = 0; i < iTile.size(); i++) {
+                    iTile.get(i).draw(g2);
+                }
+
             }
-
-
-            for(int i = 0; i < iTile.size(); i++){
-                iTile.get(i).draw(g2);
+            else if(gameState == playerState){
+                for (int i = 0; i < iTile.size(); i++) {
+                    iTile.get(i).draw(g2);
+                }
+                for (int i = 0; i < npc.size(); i++) {
+                    npc.get(i).draw(g2);
+                }
             }
 
             // Player

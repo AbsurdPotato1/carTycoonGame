@@ -47,6 +47,7 @@ public class UI {
 
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time
 //        playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
+        System.out.println(gp.gameState);
 
 //        g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
         if(gp.gameState != gp.dialogueState) {
@@ -66,6 +67,7 @@ public class UI {
 
     public void drawMoney(Graphics2D g2) {
         int moneyTextLength = (int)g2.getFontMetrics().getStringBounds("Money: $" + gp.player.money, g2).getWidth();
+
         g2.drawString("Money: $" + gp.player.money, gp.screenWidth - moneyTextLength - 30, 65);
     }
 
