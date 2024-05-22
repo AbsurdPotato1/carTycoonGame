@@ -18,10 +18,10 @@ public class NPC_MiningMan extends NPC {
         setDialogue();
     }
     public void getMiningManImage(){
-        up1 = getImage("npc/oldman_up_1.png");
-        right1 = getImage("npc/oldman_right_1.png");
-        down1 = getImage("npc/oldman_down_1.png");
-        left1 = getImage("npc/oldman_left_1.png");
+        up1 = getImage("npc/miner_up_1.png");
+        right1 = getImage("npc/miner_right_1.png");
+        down1 = getImage("npc/miner_down_1.png");
+        left1 = getImage("npc/miner_left_1.png");
     }
     public void setDialogue(){
         dialogues.add("Hi I am the chief miner here.");

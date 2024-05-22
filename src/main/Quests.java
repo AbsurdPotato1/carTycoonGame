@@ -9,6 +9,7 @@ import object.ToolPickaxe;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 public class Quests {
@@ -19,7 +20,7 @@ public class Quests {
     public static int questIncomplete = 0;
     public static int questComplete = 1;
 //    public ArrayList<String> questList = new ArrayList<>(); // stores current quests
-    public HashMap<String, Integer> questList = new HashMap<>();
+    public LinkedHashMap<String, Integer> questList = new LinkedHashMap<>(); // ordered hashmap - based on insertion order
 
     public Quests(GamePanel gp){
 
