@@ -20,8 +20,10 @@ public class Player extends Entity{
 
     public final int screenX, screenY;
     public int numCopper = 0; // change to inventory in future
-    long lastPickUpTime = 0;
-    long lastMineTime = 0;
+    public long lastPickUpTime = 0;
+    public long lastMineTime = 0;
+    public int mineInterval = 20;
+    public int pickUpInterval = 5; // Could be one frame too much possibly
     public HashMap<Integer, Integer> inventory = new HashMap<>();
     public Integer[] inventoryKeysAsArray; // change inventory to use a array, not hashmap in the future - will be simpler and better
     public int maxObjectPerSlot = 99;
@@ -170,69 +172,14 @@ public class Player extends Entity{
     public boolean spaceInInventory(int objectId){
         return gp.ui.inventorySize < 27 || (gp.ui.inventorySize == 27 && inventory.get(objectId) % maxObjectPerSlot > 0);
     }
-    public void pickUpObject(int i){
-        long currentTime;
-        currentTime = System.nanoTime();
-        long pickUpInterval = 5;
-        if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // checks if last pickup >= 5 frames ago -- TODO: seems to be going 6 frames (10 items / sec) - due to slight inaccuracy in timing
-            lastPickUpTime = currentTime;
-            if(i != 99999){
-
-                String objectName = gp.obj.get(i).name;
-
-                switch(objectName){
-                    case "copperOre":
-                        if(spaceInInventory(ObjectCopperOre.objectId)) {
-                            gp.playSE(1); // sound effect
-                            addToInventory(ObjectCopperOre.class, 1);
-                            gp.obj.remove(i);
-                        }
-                        break;
-                    case "chest":
-                        break;
-
-                    }
-
-            }
+    public void pickUpObject(int i) {
+        if(i != 99999) {
+            gp.obj.get(i).pickUpObject(i);
         }
     }
     public void pickUpTool(int i) { // bug: pickaxe sometimes does not pick up immediately.
-        long currentTime;
-        currentTime = System.nanoTime();
-        long pickUpInterval = 5;
-        // bug caused due to line below this - could have been fixed by changing lastPickUpTime = System.nanoTime() to lastPickUpTime = 0; possibly
-        if((currentTime - lastPickUpTime) / (1000000000 / gp.FPS) >= pickUpInterval){ // checks if last pickup >= 5 frames ago -- TODO: seems to be going 6 frames (10 items / sec) - due to slight inaccuracy in timing
-            lastPickUpTime = currentTime;
-            if(i != 99999){
-
-                String objectName = gp.tools.get(i).name;
-
-                switch(objectName){
-                    case "pickaxe":
-                        if(spaceInInventory(ToolPickaxe.objectId)) {
-                            gp.playSE(1); // sound effect
-                            addToInventory(ToolPickaxe.class, 1);
-                            gp.tools.remove(i);
-                        }
-                        break;
-                }
-            }
-        }
-    }
-    public void interactWithTile(int i){
-        long mineInterval = 5;
-        switch(gp.iTile.get(i).name) {
-            case "copperOreNode":
-                long currentTime = System.nanoTime();
-                if ((currentTime - lastMineTime) / (1000000000 / gp.FPS) >= mineInterval &&
-                        currentTime - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS) &&
-                        gp.ui.hotbarCol < inventory.size() && inventoryKeysAsArray[gp.ui.hotbarCol] == ToolPickaxe.objectId &&
-                        gp.iTile.get(i).isCloseTo(this) && gp.iTile.get(i).isClicked()) {
-                    lastMineTime = currentTime;
-                    gp.obj.add(new ObjectCopperOre(gp, gp.iTile.get(i).worldX, gp.iTile.get(i).worldY));
-                    gp.iTile.remove(i);
-                }
-                break;
+        if(i != 99999){
+            gp.obj.get(i).pickUpObject(i);
         }
     }
     public void interactNPC(int i){
@@ -273,7 +220,7 @@ public class Player extends Entity{
 
         gp.cChecker.checkTile(this, gp.iTile);
         for(int i = 0; i < gp.iTile.size(); i++){
-            interactWithTile(i);
+            gp.iTile.get(i).interactWithTile(i);
         }
 
         // IF COLLISION IS FALSE, PLAYER CAN MOVE

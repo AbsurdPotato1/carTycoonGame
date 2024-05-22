@@ -11,11 +11,9 @@ public class InteractiveTile extends SuperObject { // WHEN CREATING A NEW SUPERO
     // public static BufferedImage inventoryImage; <-- assigned in constructor
     // increase IdToObject numObjs
     // Place your object's class in IdToObject's idObject class
-    GamePanel gp;
     public boolean destructible = false;
     public InteractiveTile(GamePanel gp, int row, int col){
         super(gp, row, col);
-        this.gp = gp;
     }
     public void update(){
 
@@ -35,4 +33,6 @@ public class InteractiveTile extends SuperObject { // WHEN CREATING A NEW SUPERO
                 Math.abs(entity.worldY - worldY) <= 96;
     }
 
+    public void interactWithTile(int i) {
+    }
 }

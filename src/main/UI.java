@@ -3,6 +3,7 @@ package main;
 import object.IdToObject;
 
 import java.awt.*;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -327,20 +328,24 @@ public class UI {
         int stringX = x + 20;
         int stringY = y + 40;
         g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
+
         for(String key : gp.quest.questList.keySet()){
-            if(gp.quest.questList.get(key) == 0) {
-                String text = key;
-                String[] textArr = text.split(" "); // this block of code automatically formats text with newlines without \n
-                int j = 0;
-                while (j != textArr.length) {
-                    String strToDraw = "";
-                    while (j < textArr.length && stringX + getStringSize(strToDraw + textArr[j] + " ", g2) < gp.screenWidth) {
-                        strToDraw += textArr[j] + " ";
-                        j++;
-                    }
-                    g2.drawString(strToDraw, stringX, stringY);
-                    stringY += 40;
+            if(gp.quest.questList.get(key) == 1){
+                g2.setFont(Fonts.pressStart_2P_strikethrough.deriveFont(20f));
+            }else{
+                g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
+            }
+            String text = key;
+            String[] textArr = text.split(" "); // this block of code automatically formats text with newlines without \n
+            int j = 0;
+            while (j != textArr.length) {
+                String strToDraw = "";
+                while (j < textArr.length && stringX + getStringSize(strToDraw + textArr[j] + " ", g2) < gp.screenWidth) {
+                    strToDraw += textArr[j] + " ";
+                    j++;
                 }
+                g2.drawString(strToDraw, stringX, stringY);
+                stringY += 40;
             }
         }
     }

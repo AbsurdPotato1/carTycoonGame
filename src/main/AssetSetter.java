@@ -3,7 +3,9 @@ package main;
 import entity.NPC_MiningMan;
 import object.ObjectChest;
 import object.ObjectCopperOre;
+import object.ObjectStick;
 import object.ToolPickaxe;
+import tile_interactive.choppableTree;
 import tile_interactive.copperOreNode;
 import tile_interactive.craftingBench;
 import tile_interactive.shippingBay;
@@ -32,8 +34,10 @@ public class AssetSetter {
     }
 
     public void setTool(){
-        gp.tools.add(new ToolPickaxe(gp, 4 * GamePanel.tileSize, 5 * GamePanel.tileSize));
-        gp.tools.clear(); // temporary - later just initialize all images in setupGame();
+        new ToolPickaxe(gp, 0, 0);
+//        gp.tools.add(new ToolPickaxe(gp, 4 * GamePanel.tileSize, 5 * GamePanel.tileSize));
+//        gp.tools.clear(); // temporary - later just initialize all images in setupGame();
+        new ObjectStick(gp, 0, 0);
     }
 
     public void setInteractiveTile(){
@@ -43,6 +47,9 @@ public class AssetSetter {
 
         gp.iTile.add(new shippingBay(gp, 3 * GamePanel.tileSize, 7 * GamePanel.tileSize));
         gp.iTile.add(new craftingBench(gp, 6 * GamePanel.tileSize, 6 * GamePanel.tileSize));
+        for(int i = 0; i < 20; i++){
+            gp.iTile.add(new choppableTree(gp, (i+2) * GamePanel.tileSize, (i+3) * 2 * GamePanel.tileSize));
+        }
     }
 
     public void setNPC(){

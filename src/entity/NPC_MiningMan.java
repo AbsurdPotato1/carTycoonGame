@@ -83,7 +83,7 @@ public class NPC_MiningMan extends NPC {
                             }
                             numTimesTalked++;
                             changeDialogue(); // switch to new dialogue
-                            gp.gameState = GamePanel.dialogueState;
+                            gp.gameState = GamePanel.playerState;
                         }
                         else {
                             dialogueNum++;

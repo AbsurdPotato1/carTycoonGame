@@ -55,10 +55,11 @@ public class KeyHandler implements KeyListener {
                 if (code == KeyEvent.VK_E) {
                     inventoryPressed = true;
                 }
+                if(code == KeyEvent.VK_F){
+                    questPressed = true;
+                }
             }
-            if(code == KeyEvent.VK_F){
-                questPressed = true;
-            }
+
         }
          window.addMouseWheelListener(scroll -> {
             currentTime = System.nanoTime();

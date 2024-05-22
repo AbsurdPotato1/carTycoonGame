@@ -85,6 +85,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setUpGame(){
+        Fonts.setStrikethrough();
         IdToObject.setIdObject();
         aSetter.setObject();
         aSetter.setTool();
@@ -212,12 +213,14 @@ public class GamePanel extends JPanel implements Runnable {
 
             ui.draw(g2);
 
-            quest.draw(g2);
-        }
-        if(gameState == GamePanel.dialogueState){
-
+            if(gameState != dialogueState) {
+                quest.draw(g2);
+            }
         }
         g2.dispose();
+        if(gameState == dialogueState){
+            quest.inQuestMenu = false;
+        }
     }
 
     public void playMusic(int i){
