@@ -18,15 +18,15 @@ public class NPC_MiningMan extends NPC {
         setDialogue();
     }
     public void getMiningManImage(){
-        up1 = getImage("npc/oldman_up_1.png");
-        right1 = getImage("npc/oldman_right_1.png");
-        down1 = getImage("npc/oldman_down_1.png");
-        left1 = getImage("npc/oldman_left_1.png");
+        up1 = getImage("npc/miner_up_1.png");
+        right1 = getImage("npc/miner_right_1.png");
+        down1 = getImage("npc/miner_down_1.png");
+        left1 = getImage("npc/miner_left_1.png");
     }
     public void setDialogue(){
-        dialogues.add("Hi. I am the chief miner here.");
-        dialogues.add("To get started on your mining journey, you need a\npickaxe.");
-        dialogues.add("Since it's your first time, i'll give it to you for\nfree.");
+        dialogues.add("Hi I am the chief miner here.");
+        dialogues.add("To get started on your mining journey, you need a pickaxe.");
+        dialogues.add("Since it's your first time, i'll give it to you for free.");
 //        dialogues[3] = "*You receive a pickaxe*";
     }
     public void setAction(){ // possible bug: sometimes gets stuck on tile corners
@@ -57,6 +57,10 @@ public class NPC_MiningMan extends NPC {
     @Override
     public void doDialogue(Graphics2D g2){
         long talkInterval = 30; // Minimum time between dialogue transition
+        if(gp.keyH.escapePressed){
+            talking = false;
+            gp.gameState = GamePanel.playerState;
+        }
         if(isCloseTo(gp.player)){ // allow dialogue
             if ((System.nanoTime() - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval && !talking && isClicked() && System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) { // first time talked
                 gp.gameState = GamePanel.dialogueState;
@@ -79,7 +83,7 @@ public class NPC_MiningMan extends NPC {
                             }
                             numTimesTalked++;
                             changeDialogue(); // switch to new dialogue
-                            gp.gameState = GamePanel.dialogueState;
+                            gp.gameState = GamePanel.playerState;
                         }
                         else {
                             dialogueNum++;
@@ -106,6 +110,12 @@ public class NPC_MiningMan extends NPC {
         super.update(); // check collisions
         if(gp.gameState != GamePanel.dialogueState) {
             moveRandomly();
+        }
+        if(gp.gameState == GamePanel.dialogueState){
+            direction[0] = false;
+            direction[1] = false;
+            direction[2] = false;
+            direction[3] = false;
         }
     }
     public void draw(Graphics2D g2) {

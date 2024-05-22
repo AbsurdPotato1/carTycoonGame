@@ -19,7 +19,7 @@ public class ToolPickaxe extends SuperObject {
     public static HashMap<Integer, Integer> craftingRecipe = new HashMap<>();
     public void setCraftingRecipe(){
         craftingRecipe.put(IdToObject.getIdFromClass(ObjectCopperOre.class), 3);
-//        craftingRecipe.put(IdToObject.getIdFromClass(copperOreNode.class), 2);
+        craftingRecipe.put(IdToObject.getIdFromClass(ObjectStick.class), 2);
     }
     public ToolPickaxe(GamePanel gp, int x, int y) {
         super(gp, x, y);
@@ -39,5 +39,17 @@ public class ToolPickaxe extends SuperObject {
         }
         name = "pickaxe";
         setCraftingRecipe();
+    }
+    public void pickUpObject(int i){
+        long currentTime;
+        currentTime = System.nanoTime();
+        if((currentTime - gp.player.lastPickUpTime) / (1000000000 / gp.FPS) >= gp.player.pickUpInterval){
+            gp.player.lastPickUpTime = currentTime;
+            if(gp.player.spaceInInventory(this.objectId)) {
+                gp.playSE(1); // sound effect
+                gp.player.addToInventory(getClass(), 1);
+                gp.obj.remove(i);
+            }
+        }
     }
 }

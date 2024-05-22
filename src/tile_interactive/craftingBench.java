@@ -87,11 +87,14 @@ public class craftingBench extends InteractiveTile{
         if(isCloseTo(gp.player)){
             if(isClicked()){
                 crafting = true; // sets crafting status to true
+//                gp.gameState = GamePanel.interactingState;
             }
         }else {
             crafting = false;
+//            gp.gameState = GamePanel.interactingState;
         }
         if(crafting){
+//            gp.gameState = GamePanel.interactingState;
             if(!beginCrafting){ // only ran once every time player enters crafting object
                 gp.keyH.unPressAll(); // stops ongoing movement/input
             }
@@ -107,6 +110,7 @@ public class craftingBench extends InteractiveTile{
         }else {
             beginCrafting = false; // sets crafting status to false
             showDescription = false;
+//            gp.gameState = GamePanel.interactingState;
         }
     }
     public void draw(Graphics2D g2){

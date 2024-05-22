@@ -33,10 +33,10 @@ public class GamePanel extends JPanel implements Runnable {
     public int screenHeight = tileSize * maxScreenRow; // 864
 
     // world settings
-    public final int maxWorldCol = 64;
-    public final int maxWorldRow = 48;
+    public int maxWorldCol;
+    public int maxWorldRow;
 
-    public int FPS = 60;
+    public int FPS = 30;
     public boolean gameStarted = false;
     // SYSTEM
     public TileManager tileM = new TileManager(this);
@@ -48,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
     public AssetSetter aSetter = new AssetSetter(this);
     public Thread gameThread; // This will run the code continuously (i.e. won't stop)en hs = new TitleScreen(this);
     public TitleScreen ts = new TitleScreen(this);
+    public Quests quest = new Quests(this);
 
     // GRAPHICS
     public UI ui = new UI(this);
@@ -71,6 +72,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int playerState = 1;
     public static final int pauseState = 2;
     public static final int dialogueState = 3;
+    public static final int interactingState = 4;
 
     public boolean drawPlayer = true; // whether or not to draw player
 
@@ -84,6 +86,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setUpGame(){
+        Fonts.setStrikethrough();
         IdToObject.setIdObject();
         aSetter.setObject();
         aSetter.setTool();
@@ -91,6 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setInteractiveTile();
         IdToObject.getAllCraftables();
         IdToObject.getAllSellables();
+        quest.loadInitialQuests();
         playMusic(0);
         setFullScreen();
         //game state
@@ -150,7 +154,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
     public void update(){
-        System.out.println(gameState);
         mouseH.updateMousePosition();
         if(gameState == titleState){
             keyH.acceptMovement = false;
@@ -166,6 +169,10 @@ public class GamePanel extends JPanel implements Runnable {
             for (int i = 0; i < iTile.size(); i++) {
                 iTile.get(i).update();
             }
+            quest.update();
+        }
+        if(gameState == dialogueState){
+            keyH.inventoryPressed = false;
         }
     }
 
@@ -190,14 +197,24 @@ public class GamePanel extends JPanel implements Runnable {
                 tools.get(i).draw(g2);
             }
 
-            //NPCs
-            for (int i = 0; i < npc.size(); i++) {
-                npc.get(i).draw(g2);
+
+            if(gameState == dialogueState) {
+                for (int i = 0; i < iTile.size(); i++) {
+                    iTile.get(i).draw(g2);
+                }
+                //NPCs
+                for (int i = 0; i < npc.size(); i++) {
+                    npc.get(i).draw(g2);
+                }
+
             }
-
-
-            for(int i = 0; i < iTile.size(); i++){
-                iTile.get(i).draw(g2);
+            else if(gameState != titleState){
+                for (int i = 0; i < npc.size(); i++) {
+                    npc.get(i).draw(g2);
+                }
+                for (int i = 0; i < iTile.size(); i++) {
+                    iTile.get(i).draw(g2);
+                }
             }
 
             // Player
@@ -206,11 +223,15 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             ui.draw(g2);
-        }
-        if(gameState == GamePanel.dialogueState){
 
+            if(gameState != dialogueState) {
+                quest.draw(g2);
+            }
         }
         g2.dispose();
+        if(gameState == dialogueState){
+            quest.inQuestMenu = false;
+        }
     }
 
     public void playMusic(int i){

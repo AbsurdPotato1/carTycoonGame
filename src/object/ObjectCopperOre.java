@@ -48,4 +48,16 @@ public class ObjectCopperOre extends SuperObject {
             g2.drawImage(image, screenX, screenY, objectWidth, objectHeight, null);
         }
     }
+    public void pickUpObject(int i){
+        long currentTime;
+        currentTime = System.nanoTime();
+        if((currentTime - gp.player.lastPickUpTime) / (1000000000 / gp.FPS) >= gp.player.pickUpInterval){
+            gp.player.lastPickUpTime = currentTime;
+            if(gp.player.spaceInInventory(this.objectId)) {
+                gp.playSE(1); // sound effect
+                gp.player.addToInventory(getClass(), 1);
+                gp.obj.remove(i);
+            }
+        }
+    }
 }

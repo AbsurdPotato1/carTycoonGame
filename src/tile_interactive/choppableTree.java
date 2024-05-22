@@ -3,28 +3,22 @@ package tile_interactive;
 import main.GamePanel;
 import main.UtilityTool;
 import object.ObjectCopperOre;
+import object.ObjectStick;
 import object.ToolPickaxe;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-public class copperOreNode extends InteractiveTile{
-    public static final int objectId = 5;
-    public static final boolean craftable = false;
-    public static final boolean sellable = true;
-    public static int sellPrice = 2;
-    public static String sellDescription = "Sells for $" + sellPrice;
-    public static BufferedImage inventoryImage;
-
-    public copperOreNode(GamePanel gp, int x, int y){
-        super(gp, x, y);
-        image = UtilityTool.getImage("objects/copperOreNode.png");
+public class choppableTree extends InteractiveTile{
+    public static final Integer objectId = 6;
+     public static final boolean craftable = false;
+     public static final boolean sellable = false;
+     public static BufferedImage inventoryImage;
+     public boolean destructible = true;
+    public choppableTree(GamePanel gp, int row, int col) {
+        super(gp, row, col);
+        image = UtilityTool.getImage("objects/tree.png");
         inventoryImage = image;
-        destructible = true;
-        name = "copperOreNode";
     }
-    @Override
     public void update(){
 
     }
@@ -36,8 +30,12 @@ public class copperOreNode extends InteractiveTile{
                 gp.ui.hotbarCol < gp.player.inventory.size() && gp.player.inventoryKeysAsArray[gp.ui.hotbarCol] == ToolPickaxe.objectId &&
                 isCloseTo(gp.player) && isClicked()) { // if holding pickaxe and adequate conditions met.
             gp.player.lastMineTime = currentTime;
-            gp.obj.add(new ObjectCopperOre(gp, worldX, worldY)); // drop copper ore
+            gp.obj.add(new ObjectStick(gp, worldX, worldY)); // drop 3 stick
+            gp.obj.add(new ObjectStick(gp, worldX, worldY));
+            gp.obj.add(new ObjectStick(gp, worldX, worldY));
+
             gp.iTile.remove(i); // remove from existence -- boom
         }
     }
+
 }

@@ -13,7 +13,7 @@ public class SuperObject { // WHEN CREATING A NEW SUPEROBJECT OR INTERACTIVE TIL
     // public static BufferedImage inventoryImage; <-- assigned in constructor
     // increase IdToObject numObjs
     // Place your object's class in IdToObject's idObject class
-    GamePanel gp;
+    public GamePanel gp;
 
     public BufferedImage inventoryImage; // only exists for readibility (every subclass has a public static BufferedImage inventoryImage)
     public BufferedImage image;
@@ -47,5 +47,5 @@ public class SuperObject { // WHEN CREATING A NEW SUPEROBJECT OR INTERACTIVE TIL
            g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
         }
     }
-
+    public void pickUpObject(int i){}
 }

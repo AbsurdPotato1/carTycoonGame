@@ -3,6 +3,7 @@ package main;
 import object.IdToObject;
 
 import java.awt.*;
+import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -20,9 +21,12 @@ public class UI {
     public int inventoryWidth, inventoryHeight, inventoryFrameX, inventoryFrameY;
     public int craftingWidth, craftingHeight, craftingFrameX, craftingFrameY;
     public int sellWidth, sellHeight, sellFrameX, sellFrameY;
+    public int questBoxX, questBoxY, questBoxWidth, questBoxHeight;
+    public BufferedImage questExclamation;
 
     public UI(GamePanel gp){
         this.gp = gp;
+        questExclamation = UtilityTool.getImage("ui/exclamationmark.png");
     }
 
 
@@ -43,6 +47,7 @@ public class UI {
 
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time
 //        playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
+        System.out.println(gp.gameState);
 
 //        g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
         if(gp.gameState != gp.dialogueState) {
@@ -62,6 +67,7 @@ public class UI {
 
     public void drawMoney(Graphics2D g2) {
         int moneyTextLength = (int)g2.getFontMetrics().getStringBounds("Money: $" + gp.player.money, g2).getWidth();
+
         g2.drawString("Money: $" + gp.player.money, gp.screenWidth - moneyTextLength - 30, 65);
     }
 
@@ -136,10 +142,20 @@ public class UI {
         x += GamePanel.tileSize / 2;
         y += 55;
 
-        for(String line : currentDialogue.split("\n")) { // im not gonna split the text with string length lmao id rather die
-            g2.drawString(line, x, y);
+        String text = currentDialogue;
+        String[] textArr = text.split(" ");
+        int textLength = getStringSize(text, g2) ;
+        int j = 0;
+        while(j != textArr.length) {
+            String strToDraw = "";
+            while (j < textArr.length && x + getStringSize(strToDraw + textArr[j] + " ", g2) < x + width) {
+                strToDraw += textArr[j] + " ";
+                j++;
+            }
+            g2.drawString(strToDraw, x, y);
             y += 40;
         }
+        // welp i guess i split it by text directly :shrug
     }
 
     public void drawInventory(Graphics2D g2){
@@ -281,6 +297,7 @@ public class UI {
         drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
         int stringX = frameX + 20;
         int stringY = frameY + 40;
+        g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
         for(Integer recipeObjId : (recipe.keySet())){
             int numReqForRecipe = recipe.get(recipeObjId);
             int textLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(numReqForRecipe) + "x", g2).getWidth();
@@ -290,4 +307,51 @@ public class UI {
         }
     }
 
+    public void drawQuestBox(Graphics2D g2){
+        g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
+        Color outerColor = new Color(216, 178, 129, 200);
+        Color innerColor = new Color(0, 0, 0);
+        questBoxX = gp.screenWidth - 96;
+        questBoxY = 180;
+        questBoxWidth = 72;
+        questBoxHeight = 72;
+        drawSubWindow(questBoxX, questBoxY, questBoxWidth, questBoxHeight, g2, outerColor, innerColor);
+//        g2.drawString("!", x, y);
+        g2.drawImage(questExclamation, questBoxX+12, questBoxY+12, 48, 48, null);
+    }
+    public void drawQuests(Graphics2D g2){
+        Color outerColor = new Color(0,139, 139, 127);
+        Color innerColor = new Color(255, 255, 255, 127);
+        int width = 300;
+        int height = 640;
+        int x = gp.screenWidth - width - 20;
+        int y = gp.screenHeight / 2 - height / 2;
+        drawSubWindow(x, y, width, height, g2, outerColor, innerColor);
+        int stringX = x + 20;
+        int stringY = y + 40;
+        g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
+
+        for(String key : gp.quest.questList.keySet()){
+            if(gp.quest.questList.get(key) == 1){
+                g2.setFont(Fonts.pressStart_2P_strikethrough.deriveFont(20f));
+            }else{
+                g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
+            }
+            String text = key;
+            String[] textArr = text.split(" "); // this block of code automatically formats text with newlines without \n
+            int j = 0;
+            while (j != textArr.length) {
+                String strToDraw = "";
+                while (j < textArr.length && stringX + getStringSize(strToDraw + textArr[j] + " ", g2) < gp.screenWidth) {
+                    strToDraw += textArr[j] + " ";
+                    j++;
+                }
+                g2.drawString(strToDraw, stringX, stringY);
+                stringY += 40;
+            }
+        }
+    }
+    public int getStringSize(String str, Graphics2D g2){
+        return (int)g2.getFontMetrics().getStringBounds(str, g2).getWidth();
+    }
 }
