@@ -46,10 +46,6 @@ public class UI {
         g2.setColor(Color.white);
 
         playTime += (double) 1/gp.FPS; // each frame add 1/60 of time
-//        playTimeTextLength = (int)g2.getFontMetrics().getStringBounds((int)playTime + "Time: ", g2).getWidth();
-        System.out.println(gp.gameState);
-
-//        g2.drawString("Time: " + (int)playTime, gp.screenWidth - playTimeTextLength - 30, 65);
         if(gp.gameState != gp.dialogueState) {
             drawMoney(g2);
         }
