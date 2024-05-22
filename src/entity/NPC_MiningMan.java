@@ -107,6 +107,12 @@ public class NPC_MiningMan extends NPC {
         if(gp.gameState != GamePanel.dialogueState) {
             moveRandomly();
         }
+        if(gp.gameState == GamePanel.dialogueState){
+            direction[0] = false;
+            direction[1] = false;
+            direction[2] = false;
+            direction[3] = false;
+        }
     }
     public void draw(Graphics2D g2) {
         super.draw(g2);
