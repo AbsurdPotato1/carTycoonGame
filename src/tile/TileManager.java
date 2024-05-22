@@ -38,7 +38,7 @@ public class TileManager {
         tile = new Tile[fileNames.size()];
         getTileImage();
 
-        is = getClass().getClassLoader().getResourceAsStream("maps/map07.txt");
+        is = getClass().getClassLoader().getResourceAsStream("maps/map08.txt");
         br = new BufferedReader(new InputStreamReader(is));
 
         try{
@@ -54,12 +54,8 @@ public class TileManager {
             e.printStackTrace();
         }
 
-        loadMap("maps/map07.txt");
+        loadMap("maps/map08.txt");
 
-//        mapTileNum = new int[gp.maxWorldRow][gp.maxWorldCol];
-
-//        getTileImage();
-//        loadMap("maps/map03.txt");
     }
 
     public void getTileImage(){
