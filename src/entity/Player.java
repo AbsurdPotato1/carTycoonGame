@@ -3,16 +3,10 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 import object.IdToObject;
-import object.ObjectCopperOre;
-import object.SuperObject;
-import object.ToolPickaxe;
 
 import java.awt.Graphics2D;
-import javax.imageio.ImageIO;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player extends Entity{
@@ -72,10 +66,10 @@ public class Player extends Entity{
     }
 
     public void getPlayerImage(){
-        up1 = getImage("player/boy_up_1.png");
-        right1 = getImage("player/boy_right_1.png");
-        down1 = getImage("player/boy_down_1.png");
-        left1 = getImage("player/boy_left_1.png");
+        up1 = getImage("player/player_up_1.png");
+        right1 = getImage("player/player_right_1.png");
+        down1 = getImage("player/player_down_1.png");
+        left1 = getImage("player/player_left_1.png");
     }
 
     public void getPlayerAttackImage(){

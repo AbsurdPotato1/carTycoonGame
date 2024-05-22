@@ -1,7 +1,9 @@
 package main;
 
 import object.IdToObject;
+import object.ObjectChest;
 import object.ObjectCopperOre;
+import object.ObjectStick;
 import object.ToolPickaxe;
 
 import java.awt.Graphics2D;
@@ -26,6 +28,8 @@ public class Quests {
     public void loadInitialQuests(){
         questList.put("Get a pickaxe", 0);
         questList.put("Mine some ore", 0);
+        questList.put("Break some trees", 0);
+        questList.put("Craft a chest", 0);
     }
     public void draw(Graphics2D g2){
         if(!inQuestMenu){
@@ -53,6 +57,12 @@ public class Quests {
         }
         if(gp.player.inInventory(ObjectCopperOre.class, 5)) {
             questList.replace("Mine some ore", 1);
+        }
+        if(gp.player.inInventory(ObjectStick.class, 10)){
+            questList.replace("Break some trees", 1);
+        }
+        if(gp.player.inInventory(ObjectChest.class, 1)){
+            questList.replace("Craft a chest", 1);
         }
     }
     public boolean isClicked() {
