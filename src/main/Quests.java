@@ -27,7 +27,7 @@ public class Quests {
         this.gp = gp;
     }
     public void loadInitialQuests(){
-        questList.put("Get a pickaxe", 0);
+        questList.put("Get a pickaxe by talking to the miner", 0);
         questList.put("Mine some ore", 0);
         questList.put("Break some trees with your pickaxe", 0);
         questList.put("Craft a chest", 0);
@@ -55,7 +55,7 @@ public class Quests {
             inQuestMenu = false;
         }
         if(gp.player.inInventory(ToolPickaxe.class, 1)) {
-            questList.replace("Get a pickaxe", 1); // replace only replaces if the key is already present
+            questList.replace("Get a pickaxe by talking to the miner", 1); // replace only replaces if the key is already present
         }
         if(gp.player.inInventory(ObjectCopperOre.class, 5)) {
             questList.replace("Mine some ore", 1);

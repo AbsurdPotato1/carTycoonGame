@@ -198,22 +198,22 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
 
-            if(gameState == dialogueState || gameState == interactingState) {
+            if(gameState == dialogueState) {
+                for (int i = 0; i < iTile.size(); i++) {
+                    iTile.get(i).draw(g2);
+                }
                 //NPCs
                 for (int i = 0; i < npc.size(); i++) {
                     npc.get(i).draw(g2);
                 }
-                for (int i = 0; i < iTile.size(); i++) {
-                    iTile.get(i).draw(g2);
-                }
 
             }
-            else if(gameState == playerState){
-                for (int i = 0; i < iTile.size(); i++) {
-                    iTile.get(i).draw(g2);
-                }
+            else if(gameState != titleState){
                 for (int i = 0; i < npc.size(); i++) {
                     npc.get(i).draw(g2);
+                }
+                for (int i = 0; i < iTile.size(); i++) {
+                    iTile.get(i).draw(g2);
                 }
             }
 

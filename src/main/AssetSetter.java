@@ -56,7 +56,7 @@ public class AssetSetter {
         }
 
         gp.iTile.add(new shippingBay(gp, 28 * GamePanel.tileSize, 21 * GamePanel.tileSize));
-        gp.iTile.add(new craftingBench(gp, 25 * GamePanel.tileSize, 21 * GamePanel.tileSize));
+        gp.iTile.add(new craftingBench(gp, 23 * GamePanel.tileSize, 26 * GamePanel.tileSize));
     }
 
     public void setNPC(){
