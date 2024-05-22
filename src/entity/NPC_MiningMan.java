@@ -57,6 +57,10 @@ public class NPC_MiningMan extends NPC {
     @Override
     public void doDialogue(Graphics2D g2){
         long talkInterval = 30; // Minimum time between dialogue transition
+        if(gp.keyH.escapePressed){
+            talking = false;
+            gp.gameState = GamePanel.playerState;
+        }
         if(isCloseTo(gp.player)){ // allow dialogue
             if ((System.nanoTime() - lastTalkTime) / (1000000000 / gp.FPS) >= talkInterval && !talking && isClicked() && System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)) { // first time talked
                 gp.gameState = GamePanel.dialogueState;

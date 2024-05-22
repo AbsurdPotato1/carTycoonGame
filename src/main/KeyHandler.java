@@ -51,8 +51,10 @@ public class KeyHandler implements KeyListener {
             } else if (code == KeyEvent.VK_S) {
                 downPressed = true;
             }
-            if (code == KeyEvent.VK_E) {
-                inventoryPressed = true;
+            if(gp.gameState != GamePanel.dialogueState) {
+                if (code == KeyEvent.VK_E) {
+                    inventoryPressed = true;
+                }
             }
             if(code == KeyEvent.VK_F){
                 questPressed = true;

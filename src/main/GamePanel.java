@@ -169,6 +169,9 @@ public class GamePanel extends JPanel implements Runnable {
             }
             quest.update();
         }
+        if(gameState == dialogueState){
+            keyH.inventoryPressed = false;
+        }
     }
 
     public void paintComponent(Graphics g) {

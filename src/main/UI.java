@@ -20,9 +20,12 @@ public class UI {
     public int inventoryWidth, inventoryHeight, inventoryFrameX, inventoryFrameY;
     public int craftingWidth, craftingHeight, craftingFrameX, craftingFrameY;
     public int sellWidth, sellHeight, sellFrameX, sellFrameY;
+    public int questBoxX, questBoxY, questBoxWidth, questBoxHeight;
+    public BufferedImage questExclamation;
 
     public UI(GamePanel gp){
         this.gp = gp;
+        questExclamation = UtilityTool.getImage("ui/exclamationmark.png");
     }
 
 
@@ -305,10 +308,13 @@ public class UI {
         g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
         Color outerColor = new Color(216, 178, 129, 200);
         Color innerColor = new Color(0, 0, 0);
-        int x = gp.screenWidth - 96;
-        int y = 180;
-        drawSubWindow(x, y, 72, 72, g2, outerColor, innerColor);
-        g2.drawString("!", x+20, y+48);
+        questBoxX = gp.screenWidth - 96;
+        questBoxY = 180;
+        questBoxWidth = 72;
+        questBoxHeight = 72;
+        drawSubWindow(questBoxX, questBoxY, questBoxWidth, questBoxHeight, g2, outerColor, innerColor);
+//        g2.drawString("!", x, y);
+        g2.drawImage(questExclamation, questBoxX+12, questBoxY+12, 48, 48, null);
     }
     public void drawQuests(Graphics2D g2){
         Color outerColor = new Color(0,139, 139, 127);
@@ -321,19 +327,20 @@ public class UI {
         int stringX = x + 20;
         int stringY = y + 40;
         g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
-        for(int i = 0; i < gp.quest.questList.size(); i++){
-            String text = gp.quest.questList.get(i);
-            String[] textArr = text.split(" ");
-            int textLength = getStringSize(text, g2) ;
-            int j = 0;
-            while(j != textArr.length) {
-                String strToDraw = "";
-                while (j < textArr.length && stringX + getStringSize(strToDraw + textArr[j] + " ", g2) < gp.screenWidth) {
-                    strToDraw += textArr[j] + " ";
-                    j++;
+        for(String key : gp.quest.questList.keySet()){
+            if(gp.quest.questList.get(key) == 0) {
+                String text = key;
+                String[] textArr = text.split(" "); // this block of code automatically formats text with newlines without \n
+                int j = 0;
+                while (j != textArr.length) {
+                    String strToDraw = "";
+                    while (j < textArr.length && stringX + getStringSize(strToDraw + textArr[j] + " ", g2) < gp.screenWidth) {
+                        strToDraw += textArr[j] + " ";
+                        j++;
+                    }
+                    g2.drawString(strToDraw, stringX, stringY);
+                    stringY += 40;
                 }
-                g2.drawString(strToDraw, stringX, stringY);
-                stringY += 40;
             }
         }
     }

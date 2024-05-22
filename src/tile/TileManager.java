@@ -44,7 +44,7 @@ public class TileManager {
             tile[3].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/sand.png"));
 
             tile[4] = new Tile();
-            tile[4].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tiles/tree.png"));
+            tile[4].image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("objects/tree.png"));
             tile[4].collision = true;
 
             tile[5] = new Tile();
