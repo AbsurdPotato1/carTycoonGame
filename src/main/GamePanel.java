@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int maxWorldCol;
     public int maxWorldRow;
 
-    public int FPS = 30;
+    public int FPS = 60;
     public boolean gameStarted = false;
     // SYSTEM
     public TileManager tileM = new TileManager(this);
@@ -178,9 +178,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         Graphics2D g2 = (Graphics2D) g; // just adds some useful functions
-
         if (gameState == GamePanel.titleState) {
             ts.draw(g2);
 
@@ -228,10 +226,13 @@ public class GamePanel extends JPanel implements Runnable {
                 quest.draw(g2);
             }
         }
-        g2.dispose();
+        ui.drawCursor(g2);
         if(gameState == dialogueState){
             quest.inQuestMenu = false;
         }
+        g2.dispose();
+
+
     }
 
     public void playMusic(int i){

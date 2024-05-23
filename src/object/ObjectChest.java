@@ -3,6 +3,7 @@ package object;
 import main.GamePanel;
 
 import javax.imageio.ImageIO;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,5 +32,38 @@ public class ObjectChest extends SuperObject {
     }
     public void setCraftingRecipe(){
         craftingRecipe.put(IdToObject.getIdFromClass(ObjectStick.class), 10);
+    }
+    public void update(){
+//        if(isCloseTo(gp.player)){
+//            if(isClicked()){
+//                crafting = true; // sets crafting status to true
+////                gp.gameState = GamePanel.interactingState;
+//            }
+//        }else {
+//            crafting = false;
+////            gp.gameState = GamePanel.interactingState;
+//        }
+//        if(crafting){
+////            gp.gameState = GamePanel.interactingState;
+//            if(!beginCrafting){ // only ran once every time player enters crafting object
+//                gp.keyH.unPressAll(); // stops ongoing movement/input
+//            }
+//            beginCrafting = true;
+//            gp.keyH.acceptMovement = false;
+//            gp.drawPlayer = false;
+//            doCrafting();
+//            if(gp.keyH.escapePressed){
+//                crafting = false;
+//                gp.keyH.acceptMovement = true;
+//                gp.drawPlayer = true;
+//            }
+//        }else {
+//            beginCrafting = false; // sets crafting status to false
+//            showDescription = false;
+////            gp.gameState = GamePanel.interactingState;
+//        }
+    }
+    public void draw(Graphics2D g2){
+        super.draw(g2);
     }
 }

@@ -23,18 +23,24 @@ public class UI {
     public int sellWidth, sellHeight, sellFrameX, sellFrameY;
     public int questBoxX, questBoxY, questBoxWidth, questBoxHeight;
     public BufferedImage questExclamation;
+    public BufferedImage cursor;
 
     public UI(GamePanel gp){
         this.gp = gp;
         questExclamation = UtilityTool.getImage("ui/exclamationmark.png");
+        cursor = UtilityTool.getImage("ui/cursor.png");
     }
 
+    public void drawCursor(Graphics2D g2){
+        g2.drawImage(cursor, gp.mouseH.mouseScreenX - 24, gp.mouseH.mouseScreenY - 24, null);
+    }
 
     public void showMessage(String text){
         message = text;
         messageOn = true;
     }
     public void draw(Graphics2D g2){
+
         if(gp.keyH.inventoryPressed){
             drawInventory(g2);
         }else {

@@ -7,18 +7,17 @@ import java.io.IOException;
 
 public class TitleScreen {
     GamePanel gp;
+    BufferedImage image, start1, start2; // Note that start-1 and start-2 are 48x16
+    // `start` stands for the START BUTTON.
 
     public TitleScreen(GamePanel gp) {
         this.gp = gp;
+        image = UtilityTool.getImage("loading_screen/city-bng1.png");
+        start1 = UtilityTool.getImage("loading_screen/start-1.png");
+        start2 = UtilityTool.getImage("loading_screen/start-2.png");
     }
 
     public void draw(Graphics2D g2)  {
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("loading_screen/city-bng1.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         g2.setFont(Fonts.pressStart_2P.deriveFont(30f));
         // b stands for BACKGROUND!!
         int bheight = gp.screenHeight; // Full screen height
@@ -32,15 +31,6 @@ public class TitleScreen {
         opacity = 1f;
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-        BufferedImage start1 = null, start2 = null; // Note that start-1 and start-2 are 48x16
-        try {
-            start1 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("loading_screen/start-1.png"));
-            start2 = ImageIO.read(getClass().getClassLoader().getResourceAsStream("loading_screen/start-2.png"));
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-        // `start` stands for the START BUTTON.
         int starth = start1.getHeight() * 10; // start1 dimensions == start2 dims
         int startw = start1.getWidth() * 10; // Expand by 10
         long time = System.nanoTime();
