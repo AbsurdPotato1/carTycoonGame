@@ -14,7 +14,7 @@ public class craftingBench extends InteractiveTile{
     public static final int objectId = 4;
     public static final boolean craftable = false; // change back to true later
     public static final boolean sellable = false;
-    public static boolean showDescription = false;
+//    public static boolean showDescription = false;
     public static BufferedImage inventoryImage;
     public Class displayCraft;
     public boolean curClicking = false;
@@ -29,7 +29,8 @@ public class craftingBench extends InteractiveTile{
         // make a list of all sellables in the future in assetsetter or setupgame(), then just access with % like in UI.inventory. In the future just use 2D array bruh. Refactoring will come later on.
         return IdToObject.craftables[slotX + slotY * 9];
     }
-    public void doCrafting(){
+    @Override
+    public void customInteraction(){
         if(gp.mouseH.mouseInsideScreen(gp.ui.craftingFrameX + 16, gp.ui.craftingFrameX + gp.ui.craftingWidth - 16, gp.ui.craftingFrameY + 16, gp.ui.craftingFrameY + gp.ui.craftingHeight - 16)){
             int hoverSlotX, hoverSlotY;
             hoverSlotX = (gp.mouseH.mouseScreenX - (gp.ui.craftingFrameX + 16)) / 48;
@@ -84,38 +85,11 @@ public class craftingBench extends InteractiveTile{
         }
     }
     public void update(){
-        if(isCloseTo(gp.player)){
-            if(isClicked()){
-                crafting = true; // sets crafting status to true
-//                gp.gameState = GamePanel.interactingState;
-            }
-        }else {
-            crafting = false;
-//            gp.gameState = GamePanel.interactingState;
-        }
-        if(crafting){
-//            gp.gameState = GamePanel.interactingState;
-            if(!beginCrafting){ // only ran once every time player enters crafting object
-                gp.keyH.unPressAll(); // stops ongoing movement/input
-            }
-            beginCrafting = true;
-            gp.keyH.acceptMovement = false;
-            gp.drawPlayer = false;
-            doCrafting();
-            if(gp.keyH.escapePressed){
-                crafting = false;
-                gp.keyH.acceptMovement = true;
-                gp.drawPlayer = true;
-            }
-        }else {
-            beginCrafting = false; // sets crafting status to false
-            showDescription = false;
-//            gp.gameState = GamePanel.interactingState;
-        }
+        interactWithInterface(true);
     }
     public void draw(Graphics2D g2){
         super.draw(g2);
-        if(crafting){
+        if(interacting){
             gp.ui.drawCraftScreen(g2);
         }
         if(showDescription){

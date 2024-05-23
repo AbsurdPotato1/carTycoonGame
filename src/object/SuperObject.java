@@ -27,7 +27,6 @@ public class SuperObject { // WHEN CREATING A NEW SUPEROBJECT OR INTERACTIVE TIL
     public int objectWidth, objectHeight; // width and height of object image (often same as collisionWidth and collisionHeight)
     public int collisionXOffset = 0; // horizontal offset into the tile for an object - usually 0
     public int collisionYOffset = 0; // vertical offset into the tile for an object
-    public String description = "";
     public int objectId;
 
     public SuperObject(GamePanel gp, int x, int y){
