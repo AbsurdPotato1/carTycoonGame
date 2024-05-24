@@ -147,19 +147,6 @@ public class UI {
         y += 55;
 
         ArrayList<String> formattedString = UtilityTool.getFitFormatString(g2, currentDialogue, width - GamePanel.tileSize); // margins of 24 on each side
-//        String text = currentDialogue;
-//        String[] textArr = text.split(" ");
-//        int textLength = getStringSize(text, g2) ;
-//        int j = 0;
-//        while(j != textArr.length) {
-//            String strToDraw = "";
-//            while (j < textArr.length && x + getStringSize(strToDraw + textArr[j] + " ", g2) < x + width) {
-//                strToDraw += textArr[j] + " ";
-//                j++;
-//            }
-//            g2.drawString(strToDraw, x, y);
-//            y += 40;
-//        }
         for(String str : formattedString){
             g2.drawString(str, x, y);
             y += 40;
@@ -323,18 +310,25 @@ public class UI {
         String text = (String)IdToObject.getStaticVariable(objId, "description");
         int frameX = gp.mouseH.mouseScreenX;
         int frameY = gp.mouseH.mouseScreenY;
-        int width = 160;
+        int width = 320;
+        int margin = 24;
         ArrayList<String> formattedString = UtilityTool.getFitFormatString(g2, text, width - 2 * 20);
-        int height = UtilityTool.getStringArrHeight(g2, formattedString, 10);
+        while(formattedString.size() > 4){
+            width += 64;
+            formattedString = UtilityTool.getFitFormatString(g2, text, width - 2 * 20);
+        }
+        int topBotMargins = 20;
+        int height = UtilityTool.getStringArrHeight(g2, formattedString, 8) + topBotMargins * 2;
         Color outerColor = new Color(0, 0, 0, 127);
         Color innerColor = new Color(255, 255, 255, 255);
         drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
         int stringX = frameX + 20;
-        int stringY = frameY + 40;
+        int stringY = frameY + topBotMargins + UtilityTool.getStringHeight(g2, formattedString.get(0));
+        // accounts for top and bottom margins
         g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
         for(String str : formattedString){
             g2.drawString(str, stringX, stringY);
-            stringY += 48;
+            stringY += 24;
         }
     }
 

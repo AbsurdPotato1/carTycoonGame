@@ -16,7 +16,7 @@ public class ToolPickaxe extends SuperObject {
     public static final boolean sellable = true;
     public static int sellPrice = 10;
     public static String sellDescription = "Sells for $" + sellPrice;
-    public static String description = "used to mine oresasdfsadf";
+    public static String description = "Used to mine ores";
     public static BufferedImage inventoryImage;
     public static HashMap<Integer, Integer> craftingRecipe = new HashMap<>();
     public void setCraftingRecipe(){

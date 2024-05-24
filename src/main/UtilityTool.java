@@ -26,7 +26,7 @@ public class UtilityTool {
         for(String str : text){
             width += getStringHeight(g2, str);
         }
-        return width + text.size() * (margin - 1);
+        return width + (text.size()-1) * (margin);
     }
 
     public static ArrayList<String> getFitFormatString(Graphics2D g2, String text, int maxWidth){

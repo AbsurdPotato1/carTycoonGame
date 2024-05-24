@@ -57,6 +57,7 @@ public class ObjectChest extends InteractiveTile {
         }else {
             showDescription = false;
         }
+//        if(gp.mouseH.mouseInsideScreen())
 //        if(!gp.mouseH.mouseClicked)curClicking = false;
 //        if(gp.mouseH.mouseClicked && System.nanoTime() - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS)){ // if clicked less than one frame ago
 //            if(!curClicking) {
