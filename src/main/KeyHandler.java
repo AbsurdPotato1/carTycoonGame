@@ -13,7 +13,7 @@ public class KeyHandler implements KeyListener {
      * *///
 
     public boolean leftPressed, rightPressed, jumpPressed, downPressed,
-            inventoryPressed, escapePressed, questPressed;
+            inventoryPressed, escapePressed, questPressed, shiftPressed;
 
     public boolean acceptMovement = true;
     public GamePanel gp;
@@ -34,12 +34,6 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
-        /* TODO:
-         *   UPDATE necessary data (sprite positions, attributes, etc.)
-         *   DRAW: redraw screens with new info (frame updating)
-         * */
-
         int code = e.getKeyCode();
         if(acceptMovement){
             if (code == KeyEvent.VK_D) {
@@ -110,6 +104,9 @@ public class KeyHandler implements KeyListener {
         });
         if(code == KeyEvent.VK_ESCAPE){
             escapePressed = true;
+        }
+        if(code == KeyEvent.VK_SHIFT){
+            shiftPressed = true;
         }
 
     }

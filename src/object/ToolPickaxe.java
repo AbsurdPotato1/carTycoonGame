@@ -1,6 +1,7 @@
 package object;
 
 import main.GamePanel;
+import main.UtilityTool;
 import tile_interactive.copperOreNode;
 
 import javax.imageio.ImageIO;
@@ -15,6 +16,7 @@ public class ToolPickaxe extends SuperObject {
     public static final boolean sellable = true;
     public static int sellPrice = 10;
     public static String sellDescription = "Sells for $" + sellPrice;
+    public static String description = "Used to mine ores";
     public static BufferedImage inventoryImage;
     public static HashMap<Integer, Integer> craftingRecipe = new HashMap<>();
     public void setCraftingRecipe(){
@@ -31,12 +33,8 @@ public class ToolPickaxe extends SuperObject {
         collisionYOffset = 0;
 //        objectId = 0;
         solidArea = new Rectangle(collisionXOffset, collisionYOffset, collisionWidth, collisionHeight);
-        try {
-            image = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tools/pickaxe.png")); // image provides the location where the object is drawn.
-            inventoryImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("tools/pickaxe.png"));
-        } catch(IOException e){
-            e.printStackTrace();
-        }
+        image = UtilityTool.getImage("tools/pickaxe.png");
+        inventoryImage = image;
         name = "pickaxe";
         setCraftingRecipe();
     }

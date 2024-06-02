@@ -18,12 +18,13 @@ public class AssetSetter {
     }
 
     public void setObject(){
-        gp.obj.add(new ObjectChest(gp, 26 * GamePanel.tileSize, 21 * GamePanel.tileSize));
+
     }
 
     public void setTool(){
         new ToolPickaxe(gp, 0, 0);
         new ObjectStick(gp, 0, 0);
+        new ObjectCopperOre(gp, 0, 0);
     }
 
     public void setInteractiveTile(){
@@ -57,6 +58,7 @@ public class AssetSetter {
 
         gp.iTile.add(new shippingBay(gp, 28 * GamePanel.tileSize, 21 * GamePanel.tileSize));
         gp.iTile.add(new craftingBench(gp, 23 * GamePanel.tileSize, 26 * GamePanel.tileSize));
+        gp.iTile.add(new ObjectChest(gp, 26 * GamePanel.tileSize, 21 * GamePanel.tileSize));
     }
 
     public void setNPC(){

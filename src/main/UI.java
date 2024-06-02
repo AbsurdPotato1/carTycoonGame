@@ -5,6 +5,7 @@ import object.IdToObject;
 import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UI {
@@ -22,6 +23,7 @@ public class UI {
     public int craftingWidth, craftingHeight, craftingFrameX, craftingFrameY;
     public int sellWidth, sellHeight, sellFrameX, sellFrameY;
     public int questBoxX, questBoxY, questBoxWidth, questBoxHeight;
+    public int chestWidth, chestHeight, chestFrameX, chestFrameY;
     public BufferedImage questExclamation;
     public BufferedImage cursor;
 
@@ -32,7 +34,7 @@ public class UI {
     }
 
     public void drawCursor(Graphics2D g2){
-        g2.drawImage(cursor, gp.mouseH.mouseScreenX - 24, gp.mouseH.mouseScreenY - 24, null);
+        g2.drawImage(cursor, gp.mouseH.mouseScreenX, gp.mouseH.mouseScreenY, null);
     }
 
     public void showMessage(String text){
@@ -144,17 +146,9 @@ public class UI {
         x += GamePanel.tileSize / 2;
         y += 55;
 
-        String text = currentDialogue;
-        String[] textArr = text.split(" ");
-        int textLength = getStringSize(text, g2) ;
-        int j = 0;
-        while(j != textArr.length) {
-            String strToDraw = "";
-            while (j < textArr.length && x + getStringSize(strToDraw + textArr[j] + " ", g2) < x + width) {
-                strToDraw += textArr[j] + " ";
-                j++;
-            }
-            g2.drawString(strToDraw, x, y);
+        ArrayList<String> formattedString = UtilityTool.getFitFormatString(g2, currentDialogue, width - GamePanel.tileSize); // margins of 24 on each side
+        for(String str : formattedString){
+            g2.drawString(str, x, y);
             y += 40;
         }
         // welp i guess i split it by text directly :shrug
@@ -211,6 +205,7 @@ public class UI {
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
     }
+
     public void drawCraftScreen(Graphics2D g2) {
         // this method does not account for the number of items being greater than the number there is (make second page in the future)
         // scrolling is probably difficult - pages easier lol
@@ -309,6 +304,73 @@ public class UI {
         }
     }
 
+    public void showItemDescription(Graphics2D g2, Class object){
+        g2.setFont(Fonts.pressStart_2P.deriveFont(18f));
+        int objId = IdToObject.getIdFromClass(object);
+        String text = (String)IdToObject.getStaticVariable(objId, "description");
+        int frameX = gp.mouseH.mouseScreenX;
+        int frameY = gp.mouseH.mouseScreenY;
+        int width = 320;
+        int margin = 24;
+        ArrayList<String> formattedString = UtilityTool.getFitFormatString(g2, text, width - 2 * 20);
+        while(formattedString.size() > 4){
+            width += 64;
+            formattedString = UtilityTool.getFitFormatString(g2, text, width - 2 * 20);
+        }
+        int topBotMargins = 20;
+        int height = UtilityTool.getStringArrHeight(g2, formattedString, 8) + topBotMargins * 2;
+        Color outerColor = new Color(0, 0, 0, 127);
+        Color innerColor = new Color(255, 255, 255, 255);
+        drawSubWindow(frameX, frameY, width, height, g2, outerColor, innerColor);
+        int stringX = frameX + 20;
+        int stringY = frameY + topBotMargins + UtilityTool.getStringHeight(g2, formattedString.get(0));
+        // accounts for top and bottom margins
+        g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
+        for(String str : formattedString){
+            g2.drawString(str, stringX, stringY);
+            stringY += 24;
+        }
+    }
+
+    public void drawChestScreen(Graphics2D g2, int[][] inventory){
+        chestWidth = 464; // 9 * 48 + 2 * 16 -- 16 is margins, 48 is tile size
+        chestHeight = 208; // 4 * 16 + 48 * 3
+        chestFrameX = gp.screenWidth / 2 - chestWidth / 2;
+        chestFrameY = gp.screenHeight / 2 - chestHeight / 2;
+        Color outerColor = new Color(216, 178, 129, 127);
+        Color innerColor = new Color(255, 255, 255);
+        drawSubWindow(chestFrameX, chestFrameY, chestWidth, chestHeight, g2, outerColor, innerColor);
+
+        final int slotXstart = chestFrameX + (80 - GamePanel.tileSize) / 2; // 16px margins
+        final int slotYstart = chestFrameY + (80 - GamePanel.tileSize) / 2;
+        int slotX = slotXstart;
+        int slotY = slotYstart;
+
+        for(int curInventorySlot = 0; curInventorySlot < inventory.length; curInventorySlot++) {
+            int objId = inventory[curInventorySlot][0];
+            int amount = inventory[curInventorySlot][1];
+            if (amount == 0) continue;
+            if (curInventorySlot == 9 || curInventorySlot == 18) {
+                slotY += GamePanel.tileSize + 16;
+                slotX = slotXstart;
+            }
+            int numDrawn = 0;
+            g2.drawImage((BufferedImage) IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
+            int numLength = (int) g2.getFontMetrics().getStringBounds(String.valueOf(amount), g2).getWidth();
+            g2.drawString(String.valueOf(amount), slotX + 44 - numLength, slotY + 44);
+            slotX += GamePanel.tileSize;
+        }
+
+        int cursorX = slotXstart + (GamePanel.tileSize * inventoryCol);
+        int cursorY = slotYstart + (GamePanel.tileSize * inventoryRow) + inventoryRow * 16;
+        int cursorWidth = GamePanel.tileSize;
+        int cursorHeight = GamePanel.tileSize;
+
+        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+    }
+
     public void drawQuestBox(Graphics2D g2){
         g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
         Color outerColor = new Color(216, 178, 129, 200);
@@ -321,6 +383,7 @@ public class UI {
 //        g2.drawString("!", x, y);
         g2.drawImage(questExclamation, questBoxX+12, questBoxY+12, 48, 48, null);
     }
+
     public void drawQuests(Graphics2D g2){
         Color outerColor = new Color(0,139, 139, 127);
         Color innerColor = new Color(255, 255, 255, 127);
@@ -339,20 +402,14 @@ public class UI {
             }else{
                 g2.setFont(Fonts.pressStart_2P.deriveFont(20f));
             }
-            String text = key;
-            String[] textArr = text.split(" "); // this block of code automatically formats text with newlines without \n
-            int j = 0;
-            while (j != textArr.length) {
-                String strToDraw = "";
-                while (j < textArr.length && stringX + getStringSize(strToDraw + textArr[j] + " ", g2) < gp.screenWidth) {
-                    strToDraw += textArr[j] + " ";
-                    j++;
-                }
-                g2.drawString(strToDraw, stringX, stringY);
+            ArrayList<String> formattedString = UtilityTool.getFitFormatString(g2, key, gp.screenWidth - stringX);
+            for(String str : formattedString){
+                g2.drawString(str, stringX, stringY);
                 stringY += 40;
             }
         }
     }
+
     public int getStringSize(String str, Graphics2D g2){
         return (int)g2.getFontMetrics().getStringBounds(str, g2).getWidth();
     }
