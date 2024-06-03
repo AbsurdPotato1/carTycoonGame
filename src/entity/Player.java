@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import misc.Pair;
 import object.IdToObject;
 
 import java.awt.Graphics2D;
@@ -18,7 +19,7 @@ public class Player extends Entity{
     public long lastMineTime = 0;
     public int mineInterval = 20;
     public int pickUpInterval = 5; // Could be one frame too much possibly
-    public HashMap<Integer, Integer> inventory = new HashMap<>();
+    public HashMap<Integer, Pair<Integer, Integer>> inventory = new HashMap<>(); // id, <inventory location, count>
     public Integer[] inventoryKeysAsArray; // change inventory to use a array, not hashmap in the future - will be simpler and better
     public int maxObjectPerSlot = 99;
     public int money;
@@ -47,17 +48,13 @@ public class Player extends Entity{
         speedVert = 2 * 60.0 / gp.FPS;
     }
     public void addToInventory(Class c, int amount){
-        try {
-            inventory.merge((Integer)c.getField("objectId").get(null), amount, Integer::sum); // increments key (count) of value (SuperObject)
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public void removeOneFromInventory(Class c){
-
+        int id = IdToObject.getIdFromClass(c);
+        Pair<Integer, Integer> pair = inventory.getOrDefault(id, new Pair<>(id, 0));
+        pair.setValue(pair.getValue() + amount);
+        inventory.put(id, pair);
     }
     public boolean inInventory(Class c, int amount){
-        return inventory.getOrDefault((int)IdToObject.getIdFromClass(c), 0) >= amount;
+        return inventory.getOrDefault(IdToObject.getIdFromClass(c), new Pair<>(0, 0)).getValue() >= amount;
     }
     public void setPlayerStartingItems(){
 //        addOneToInventory(ObjectCopperOre.class);
@@ -164,7 +161,7 @@ public class Player extends Entity{
         }
     }
     public boolean spaceInInventory(int objectId){
-        return gp.ui.inventorySize < 27 || (gp.ui.inventorySize == 27 && inventory.get(objectId) % maxObjectPerSlot > 0);
+        return gp.ui.inventorySize < 27 || (gp.ui.inventorySize == 27 && inventory.get(objectId).getValue() % maxObjectPerSlot > 0);
     }
     public void pickUpObject(int i) {
         if(i != 99999) {
@@ -258,7 +255,14 @@ public class Player extends Entity{
         gp.cChecker.checkTile(this);
         snapPlayerLoc();
     }
-
+    public int currentlyHolding(int slot){ // precondition: slot <= 8 (0-indexed)
+        for(int id : inventory.keySet()){
+            if(inventory.get(id).getKey() == slot){
+                return id;
+            }
+        }
+        return -1; // if there is nothing in the inventory slot
+    }
 
 
     public void draw(Graphics2D g2){

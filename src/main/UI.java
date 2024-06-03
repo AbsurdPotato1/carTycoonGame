@@ -90,13 +90,13 @@ public class UI {
         int slotY = slotYstart;
         int hotbarSlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
-            if(gp.player.inventory.get(objId) == 0){
+            if(gp.player.inventory.get(objId).getValue() == 0){
                 continue; // if player has 0 of the object
             }
             if(hotbarSlot == 9){
                 break;
             }
-            int numObject = gp.player.inventory.get(objId);
+            int numObject = gp.player.inventory.get(objId).getValue();
             int numDrawn = 0; // number of objects of current object that have been drawn
             for(int i = 0; i < (numObject-1) / gp.player.maxObjectPerSlot + 1; i++){
                 if(hotbarSlot == 9){
@@ -170,14 +170,14 @@ public class UI {
 
         int curInventorySlot = 0;
         for(Integer objId : gp.player.inventory.keySet()){
-            if(gp.player.inventory.get(objId) == 0){
+            if(gp.player.inventory.get(objId).getValue() == 0){
                 continue; // if player has 0 of the object
             }
             if(curInventorySlot == 9 || curInventorySlot == 18){
                 slotY += GamePanel.tileSize + 16;
                 slotX = slotXstart;
             }
-            int numObject = gp.player.inventory.get(objId); // number of objects
+            int numObject = gp.player.inventory.get(objId).getValue(); // number of objects
             int numDrawn = 0; // number of objects of current object that have been drawn
             for(int i = 0; i < (numObject-1) / gp.player.maxObjectPerSlot + 1; i++){
                 if(curInventorySlot == 9 || curInventorySlot == 18){
