@@ -88,28 +88,20 @@ public class UI {
         final int slotYstart = frameY + (80 - GamePanel.tileSize) / 2;
         int slotX = slotXstart;
         int slotY = slotYstart;
-        int hotbarSlot = 0;
-        for(Integer objId : gp.player.inventory.keySet()){
-            if(gp.player.inventory.get(objId).getValue() == 0){
+        for(int i = 0; i < 9; i++){
+            if(gp.player.getInvSlotCount(i) == 0){
                 continue; // if player has 0 of the object
             }
-            if(hotbarSlot == 9){
-                break;
-            }
-            int numObject = gp.player.inventory.get(objId).getValue();
+            int numObject = gp.player.getInvSlotCount(i);
             int numDrawn = 0; // number of objects of current object that have been drawn
-            for(int i = 0; i < (numObject-1) / gp.player.maxObjectPerSlot + 1; i++){
-                if(hotbarSlot == 9){
-                    break;
-                }
+            for(int j = 0; j < (numObject-1) / gp.player.maxObjectPerSlot + 1; j++){
                 g2.setFont(Fonts.pressStart_2P);
-                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
+                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(gp.player.getInvSlotID(j), "inventoryImage"), slotX, slotY, 48, 48, null);
                 int curNumObj = Math.min(gp.player.maxObjectPerSlot, numObject - numDrawn); // number to draw
                 int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(curNumObj), g2).getWidth(); // length of number string to draw
                 g2.drawString(String.valueOf(curNumObj), slotX+44 - numLength, slotY+44); // draw number of objects
                 slotX += GamePanel.tileSize;
                 numDrawn += gp.player.maxObjectPerSlot;
-                hotbarSlot++;
             }
         }
 
@@ -168,33 +160,30 @@ public class UI {
         int slotX = slotXstart;
         int slotY = slotYstart;
 
-        int curInventorySlot = 0;
-        for(Integer objId : gp.player.inventory.keySet()){
-            if(gp.player.inventory.get(objId).getValue() == 0){
+        for(int i = 0; i < gp.player.inventory.length; i++){
+            if(gp.player.getInvSlotCount(i) == 0){
                 continue; // if player has 0 of the object
             }
-            if(curInventorySlot == 9 || curInventorySlot == 18){
+            if(i == 9 || i == 18){
                 slotY += GamePanel.tileSize + 16;
                 slotX = slotXstart;
             }
-            int numObject = gp.player.inventory.get(objId).getValue(); // number of objects
+            int numObject = gp.player.getInvSlotCount(i); // number of objects
             int numDrawn = 0; // number of objects of current object that have been drawn
-            for(int i = 0; i < (numObject-1) / gp.player.maxObjectPerSlot + 1; i++){
-                if(curInventorySlot == 9 || curInventorySlot == 18){
+            for(int j = 0; j < (numObject-1) / gp.player.maxObjectPerSlot + 1; j++){
+                if(i == 9 || i == 18){
                     slotY += GamePanel.tileSize + 16;
                     slotX = slotXstart;
                 }
                 g2.setFont(Fonts.pressStart_2P);
-                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(objId, "inventoryImage"), slotX, slotY, 48, 48, null);
+                g2.drawImage((BufferedImage)IdToObject.getStaticVariable(gp.player.getInvSlotID(j), "inventoryImage"), slotX, slotY, 48, 48, null);
                 int curNumObj = Math.min(gp.player.maxObjectPerSlot, numObject - numDrawn); // number to draw
                 int numLength = (int)g2.getFontMetrics().getStringBounds(String.valueOf(curNumObj), g2).getWidth(); // length of number string to draw
                 g2.drawString(String.valueOf(curNumObj), slotX+44 - numLength, slotY+44); // draw number of objects
                 slotX += GamePanel.tileSize;
                 numDrawn += gp.player.maxObjectPerSlot;
-                curInventorySlot++;
             }
         }
-        inventorySize = Math.max(inventorySize, curInventorySlot);
 
         int cursorX = slotXstart + (GamePanel.tileSize * inventoryCol);
         int cursorY = slotYstart + (GamePanel.tileSize * inventoryRow) + inventoryRow * 16;

@@ -2,6 +2,7 @@ package tile_interactive;
 
 import main.GamePanel;
 import main.UtilityTool;
+import object.IdToObject;
 import object.ObjectCopperOre;
 import object.ToolPickaxe;
 
@@ -33,7 +34,7 @@ public class copperOreNode extends InteractiveTile{
         long currentTime = System.nanoTime();
         if ((currentTime - gp.player.lastMineTime) / (1000000000 / gp.FPS) >= gp.player.mineInterval && // gp.FPS should be changed to 60
                 currentTime - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS) &&
-                gp.ui.hotbarCol < gp.player.inventory.size() && gp.player.inventoryKeysAsArray[gp.ui.hotbarCol] == ToolPickaxe.objectId &&
+                gp.ui.hotbarCol < gp.player.inventory.length && gp.player.currentlyHolding(gp.ui.hotbarCol) == IdToObject.getIdFromClass(ToolPickaxe.class) &&
                 isCloseTo(gp.player) && isClicked()) { // if holding pickaxe and adequate conditions met.
             gp.player.lastMineTime = currentTime;
             gp.obj.add(new ObjectCopperOre(gp, worldX, worldY)); // drop copper ore

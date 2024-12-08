@@ -65,7 +65,7 @@ public class shippingBay extends InteractiveTile {
                         if (item != null) { // if item is present at that location
                             if (gp.player.inInventory(item, 1)) {
                                 gp.player.money += (int) IdToObject.getStaticVariable(IdToObject.getIdFromClass(item), "sellPrice"); // increase money
-                                gp.player.addToInventory(item, -1); // remove from inventory
+                                gp.player.removeFromInventory(item, 1);
                             }
                         }
                     }

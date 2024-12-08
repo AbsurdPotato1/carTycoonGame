@@ -14,9 +14,10 @@ import java.util.LinkedHashMap;
 
 public class Quests {
     GamePanel gp;
-    public int pressInterval = 15;
-    public long lastPressTime = 0;
+//    public int pressInterval = 15;
+//    public long lastPressTime = 0;
     public boolean inQuestMenu = false;
+    public boolean curHolding = false; // stores whether or not player is holding the F key
     public static int questIncomplete = 0;
     public static int questComplete = 1;
 //    public ArrayList<String> questList = new ArrayList<>(); // stores current quests
@@ -44,13 +45,20 @@ public class Quests {
         if(isClicked()){
             inQuestMenu = true;
         }
-        if(gp.keyH.questPressed){
-            long currentTime = System.nanoTime();
-            if((currentTime - lastPressTime) / (1000000000 / gp.FPS) >= pressInterval){
-                lastPressTime = System.nanoTime();
-                inQuestMenu = !inQuestMenu;
-            }
+        if(!gp.keyH.questPressed){
+            curHolding = false;
         }
+        if(!curHolding && gp.keyH.questPressed) { // !curHolding means F key has been released
+            inQuestMenu = !inQuestMenu;
+            curHolding = true;
+        }
+//        if(gp.keyH.questPressed){ --> this used to allow holding F to open and close menu
+//            long currentTime = System.nanoTime();
+//            if((currentTime - lastPressTime) / (1000000000 / gp.FPS) >= pressInterval){
+//                lastPressTime = System.nanoTime();
+//                inQuestMenu = true;
+//            }
+//        }
         if(gp.keyH.escapePressed){
             inQuestMenu = false;
         }

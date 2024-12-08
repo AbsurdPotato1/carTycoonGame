@@ -28,7 +28,7 @@ public class choppableTree extends InteractiveTile{
         long currentTime = System.nanoTime();
         if ((currentTime - gp.player.lastMineTime) / (1000000000 / gp.FPS) >= gp.player.mineInterval && // gp.FPS should be changed to 60
                 currentTime - gp.mouseH.timeClicked <= 2 * (1000000000 / gp.FPS) &&
-                gp.ui.hotbarCol < gp.player.inventory.size() && gp.player.currentlyHolding(gp.ui.hotbarCol) == IdToObject.getIdFromClass(ToolPickaxe.class) &&
+                gp.ui.hotbarCol < gp.player.inventory.length && gp.player.currentlyHolding(gp.ui.hotbarCol) == IdToObject.getIdFromClass(ToolPickaxe.class) &&
                 isCloseTo(gp.player) && isClicked()) { // if holding pickaxe and adequate conditions met.
             gp.player.lastMineTime = currentTime;
             gp.obj.add(new ObjectStick(gp, worldX, worldY)); // drop 3 stick

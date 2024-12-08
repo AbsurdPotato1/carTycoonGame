@@ -68,8 +68,9 @@ public class craftingBench extends InteractiveTile{
                             int objId = IdToObject.getIdFromClass(item);
                             HashMap<Integer, Integer> recipe = (HashMap<Integer, Integer>)IdToObject.getStaticVariable(objId, "craftingRecipe");
                             for(Integer recipeObjId : recipe.keySet()){
-                                if(gp.player.inventory.getOrDefault(recipeObjId, new Pair<>(0, 0)).getValue() < recipe.get(recipeObjId)){ // if player does not have enough npcs
+                                if(gp.player.invHasItems(recipeObjId, recipe.get(recipeObjId))){ // if player does not have enough objs
                                     hasAllItems = false;
+                                    break;
                                 }
                             }
                             if (hasAllItems) { // if player has all items

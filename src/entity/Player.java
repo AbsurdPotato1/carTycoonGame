@@ -19,8 +19,9 @@ public class Player extends Entity{
     public long lastMineTime = 0;
     public int mineInterval = 20;
     public int pickUpInterval = 5; // Could be one frame too much possibly
-    public HashMap<Integer, Pair<Integer, Integer>> inventory = new HashMap<>(); // id, <inventory location, count>
-    public Integer[] inventoryKeysAsArray; // change inventory to use a array, not hashmap in the future - will be simpler and better
+    public Integer[][] inventory = new Integer[27][2]; // index is inv pos., [2] is <id, count>.
+//    public HashMap<Integer, Pair<Integer, Integer>> inventory = new HashMap<>(); // id, <inventory location, count>
+//    public Integer[] inventoryKeysAsArray; // change inventory to use a array, not hashmap in the future - will be simpler and better
     public int maxObjectPerSlot = 99;
     public int money;
 //    public int[] inventory = new int[255]; // size is number of objects.
@@ -47,21 +48,83 @@ public class Player extends Entity{
         speedHor = 2 * 60.0 / gp.FPS;
         speedVert = 2 * 60.0 / gp.FPS;
     }
-    public void addToInventory(Class c, int amount){
+    public int addToInventory(Class c, int amount){ // returns 0 if everything placed in inventory, amount not placed if it cannot
         int id = IdToObject.getIdFromClass(c);
-        Pair<Integer, Integer> pair = inventory.getOrDefault(id, new Pair<>(id, 0));
-        pair.setValue(pair.getValue() + amount);
-        inventory.put(id, pair);
+        if(spaceInInventory(id)){
+            for (int i = 0; i < inventory.length; i++) { // adds to existing stacks
+                if (amount == 0) break;
+                int numFree = maxObjectPerSlot - getInvSlotCount(i);
+                if (getInvSlotID(i) == id && getInvSlotCount(i) <= maxObjectPerSlot) {
+                    if (amount <= numFree) {
+                        inventory[i][1] += amount;
+                        amount = 0;
+                    } else {
+                        inventory[i][1] += numFree; // this sets inventory[i][1] (the # of objects) to maxObjectPerSlot;
+                        amount -= numFree;
+                    }
+                }
+            }
+            if (amount >= 0) { // adds to empty inv slots.
+                for (int i = 0; i < inventory.length; i++) {
+                    if (getInvSlotCount(i) == 0) {
+                        if (amount <= maxObjectPerSlot) {
+                            inventory[i][1] += amount;
+                            inventory[i][0] = id;
+                            break;
+                        } else { // if amount to add is still > maxObjectPerSlot
+                            inventory[i][1] += amount;
+                            inventory[i][0] = id;
+                            amount -= maxObjectPerSlot;
+                        }
+                    }
+                }
+            }
+            if (amount > 0) return amount;
+        }
+        return 0;
+    }
+    public void removeFromInventory(Class c, int amount){ // precondition - you have enough in inventory
+        int id = IdToObject.getIdFromClass(c);
+        for(int i = 0; i < inventory.length; i++){
+            if(getInvSlotID(i) == id){
+                if(amount == 0)break;
+                if(getInvSlotCount(i) > amount){
+                    inventory[i][1] -= amount;
+                }
+                else{
+                    amount -= getInvSlotCount(i);
+                    inventory[i][1] = 0;
+                    inventory[i][0] = -1; // slot becomes empty
+                }
+            }
+        }
     }
     public boolean inInventory(Class c, int amount){
-        return inventory.getOrDefault(IdToObject.getIdFromClass(c), new Pair<>(0, 0)).getValue() >= amount;
+        int objId = IdToObject.getIdFromClass(c);
+        for(int i = 0; i < inventory.length; i++){
+            if(getInvSlotID(i) == objId && getInvSlotCount(i) >= amount){
+                return true;
+            }
+        }
+        return false;
     }
     public void setPlayerStartingItems(){
 //        addOneToInventory(ObjectCopperOre.class);
 //        addOneToInventory(ObjectCopperOre.class);
 //        addOneToInventory(ObjectCopperOre.class);
     }
-
+    public Integer getInvSlotID(int i){
+        return inventory[i][0];
+    }
+    public Integer getInvSlotCount(int i){
+        return inventory[i][1];
+    }
+    public boolean invHasItems(int id, int amount){
+        for(int i = 0; i < inventory.length; i++){
+            if(getInvSlotID(i) == id && getInvSlotCount(i) >= amount)return true;
+        }
+        return false;
+    }
     public void getPlayerImage(){
         up1 = getImage("player/player_up_1.png");
         right1 = getImage("player/player_right_1.png");
@@ -161,7 +224,12 @@ public class Player extends Entity{
         }
     }
     public boolean spaceInInventory(int objectId){
-        return gp.ui.inventorySize < 27 || (gp.ui.inventorySize == 27 && inventory.get(objectId).getValue() % maxObjectPerSlot > 0);
+        for(int i = 0; i < inventory.length; i++){
+            if(getInvSlotCount(i) == 0 || (getInvSlotID(i) == objectId && getInvSlotCount(i) <= maxObjectPerSlot)){
+                return true;
+            }
+        }
+        return false;
     }
     public void pickUpObject(int i) {
         if(i != 99999) {
@@ -179,7 +247,6 @@ public class Player extends Entity{
         }
     }
     public void update(){
-        inventoryKeysAsArray = inventory.keySet().toArray(new Integer[0]);
         if(keyH.jumpPressed){
             direction[0] = true;
         }else{
@@ -255,15 +322,14 @@ public class Player extends Entity{
         gp.cChecker.checkTile(this);
         snapPlayerLoc();
     }
-    public int currentlyHolding(int slot){ // precondition: slot <= 8 (0-indexed)
-        for(int id : inventory.keySet()){
-            if(inventory.get(id).getKey() == slot){
-                return id;
-            }
-        }
-        return -1; // if there is nothing in the inventory slot
+    public int currentlyHolding(int slot){ // precondition: slot <= 8 (0-indexed) - returns id of object
+        return inventory[slot][0]; // id == 0 if not holding anything.
     }
-
+    public void setInventory(){ // default setup used when starting the game
+        for(int i = 0; i < inventory.length; i++){
+            inventory[i] = new Integer[]{-1, 0};
+        }
+    }
 
     public void draw(Graphics2D g2){
 
